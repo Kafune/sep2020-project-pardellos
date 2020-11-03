@@ -102,3 +102,14 @@ dist
 
 # TernJS port file
 .tern-port
+
+############# My Additions
+
+# macOS hidden file
+.DS_Store
+
+# JetBrains IDE 
+.idea
+
+# MSOffice temp files
+~$*
