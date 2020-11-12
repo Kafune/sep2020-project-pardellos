@@ -3,10 +3,10 @@ const ws = require("ws");
 const cors = require("cors");
 const http = require("http");
 const path = require("path");
-const Lezer = require("./api/models/userSchema");
-const logger = require("./api/modules/logger");
-const database = require("./api/modules/dbConnector");
 const fs = require("fs");
+const Lezer = require("./api/models/userSchema");
+const logger = require("./api/middleware/logger");
+const database = require("./api/modules/dbConnector");
 
 // Init servers
 const expressApp = express();
