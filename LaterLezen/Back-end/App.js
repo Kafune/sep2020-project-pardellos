@@ -1,79 +1,57 @@
-const express = require("express");
-const ws = require("ws");
-const cors = require("cors");
-const http = require("http");
 const path = require("path");
-const fs = require("fs");
-const Lezer = require("./api/models/userSchema");
-const logger = require("./api/middleware/logger");
-const database = require("./api/modules/dbConnector");
+const express = require("express");
+const dotenv = require("dotenv");
+const morgan = require("morgan");
+const mongoose = require("mongoose");
+const exphbs = require("express-handlebars");
+const passport = require("passport");
+const session = require("express-session");
+const MongoStore = require("connect-mongo")(session);
+const connectDB = require("./config/db");
 
-// Init servers
-const expressApp = express();
-const httpServer = http.createServer();
-const webSocketServer = new ws.Server({
-  server: httpServer,
-});
+// Load config
+dotenv.config({ path: "./config/config.env" });
 
-// Init CORS
-expressApp.use(cors());
+// Passport config
+require("./config/passport")(passport);
 
-// Init middleware
-expressApp.use(logger);
+connectDB();
 
-// Set static folder
-expressApp.use(express.static(path.join(__dirname, "client-side")));
+const app = express();
 
-// Init all express routing files
-function recursiveRoutes(folderName) {
-  fs.readdirSync(folderName).forEach(function (file) {
-    let fullName = path.join(folderName, file);
-    let stat = fs.lstatSync(fullName);
-
-    if (stat.isDirectory()) {
-      recursiveRoutes(fullName);
-    } else if (file.toLowerCase().indexOf(".js")) {
-      require("./" + fullName)(expressApp);
-      console.log("require('" + fullName + "')");
-    }
-  });
+// Logging
+if (process.env.NODE_ENV === "development") {
+  app.use(morgan("dev"));
 }
-recursiveRoutes("api/routes");
 
-// Development Routes
-expressApp.put("/dev/add/:name", async (req, res) => {
-  
-  const user = new Lezer({
-      name: req.params.name
-  });
-  user.save()
-  res.sendStatus(201)
-});
+// Handlebars
+app.engine(".hbs", exphbs({ defaultLayout: "main", extname: ".hbs" }));
+app.set("view engine", ".hbs");
 
-expressApp.get("/dev/viewall/", async (req, res) => {
-    res.JSON(await Lezer.find({}))
-})
-// End of Development routes
+// Sessions
+app.use(
+  session({
+    secret: "hello12",
+    resave: false,
+    saveUninitialized: false,
+    store: new MongoStore({ mongooseConnection: mongoose.connection }),
+  })
+);
 
-// Code to setup the websockets
-webSocketServer.on("connection", (websocket) => {
-  console.log("WEBSOCKET CONNECTION CREATED");
-  websocket.on("message", (message) => {
-    message = JSON.parse(message);
-    console.log(message);
-  });
+// Passport middleware
+app.use(passport.initialize());
+app.use(passport.session());
 
-  websocket.on("close", () => {
-    console.log("CONNECTION FOR " + websocket.userName + " CLOSED.");
-    if (websocket.timeoutObject) {
-      clearTimeout(websocket.timeoutObject);
-    }
-  });
-});
+// Static folder
+app.use(express.static(path.join(__dirname, "public")));
 
-// Connect the Express App to all incoming requests on the HTTP server
-httpServer.on("request", expressApp);
+// Routes
+app.use("/", require("./routes/index"));
+app.use("/auth", require("./routes/auth"));
+
 const PORT = process.env.PORT || 4000;
-httpServer.listen(PORT, () =>
-  console.log(`The Server is listening on port ${PORT}.`)
+
+app.listen(
+  PORT,
+  console.log(`Server running in ${process.env.NODE_ENV} mode on port ${PORT}`)
 );
