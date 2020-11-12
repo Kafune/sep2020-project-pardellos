@@ -12,6 +12,7 @@ Aangezien het lezen van de code van de LaterLezer niet het hele verhaal verteld 
 7. [Infrastructuur-architectuur](#Infrastructuur-architectuur)
 8. [Deployment](#Deployment)
 9. [Werking en ondersteuning](#Werking-en-ondersteuning)
+10. [Keuze onderbouwing](#Keuze-onderbouwing)
 
 
 ## Context
@@ -58,3 +59,6 @@ ook hier staan voorbeelden in de guidebook
 (beantwoord de vragen in het software guidebook)
 ## Werking en ondersteuning
 (beantwoord de vragen in het software guidebook)
+
+## Keuze onderbouwing
+onderbouw hier onze keuzes tijdens het maken van de app. 
