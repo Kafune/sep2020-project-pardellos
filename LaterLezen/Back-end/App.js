@@ -1,5 +1,7 @@
 const path = require("path");
 const express = require("express");
+const cors = require('cors');
+const bodyParser = require('body-parser');
 const dotenv = require("dotenv");
 const morgan = require("morgan");
 const mongoose = require("mongoose");
@@ -7,6 +9,7 @@ const exphbs = require("express-handlebars");
 const passport = require("passport");
 const session = require("express-session");
 const MongoStore = require("connect-mongo")(session);
+
 const connectDB = require("./config/db");
 
 // Load config
@@ -19,6 +22,10 @@ connectDB();
 
 const app = express();
 
+app.use(cors({ origin: true, credentials: true }));
+app.options("*", cors({ origin: true, credentials: true }));
+
+app.use(bodyParser.json());
 // Logging
 if (process.env.NODE_ENV === "development") {
   app.use(morgan("dev"));
