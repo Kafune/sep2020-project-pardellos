@@ -8,8 +8,7 @@ const passport = require("passport");
 const session = require("express-session");
 const MongoStore = require("connect-mongo")(session);
 const connectDB = require("./config/db");
-const cors = require('cors');
-
+const cors = require("cors");
 
 // Load config
 dotenv.config({ path: "./config/config.env" });
@@ -21,8 +20,13 @@ connectDB();
 
 const app = express();
 
-app.use(cors({ origin: true, credentials: true }));
-app.options("*", cors({ origin: true, credentials: true }));
+app.use(
+  cors({
+    origin: "http://localhost:3000",
+    methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+    credentials: true,
+  })
+);
 
 // Logging
 if (process.env.NODE_ENV === "development") {

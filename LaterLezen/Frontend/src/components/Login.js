@@ -1,17 +1,17 @@
-import React from "react";
+import React, { useState, useEffect } from 'react'
 const axios = require('axios');
 export default function Login(props) {
-
+    const [username, setUsername] = useState('');
+    const [password, setPassword] = useState('')
     function handleLogin () {
         // fetch('http://localhost:4000/login')
-        // console.log(props.loggedIn)
         props.setLoggedIn(true);
     }
 
     function handleGoogleLogin () {
     //     try {
     //         axios.get('http://localhost:4000/auth/google').then(() => {
-    //             console.log('login succesfull')
+
     //         })
     //     }
     //    catch (err){
@@ -19,6 +19,14 @@ export default function Login(props) {
     //    }
     }
 
+    function handleUsernameChange (e) {
+        console.log(username)
+        setUsername(e.target.value)
+    }
+
+    function handlePasswordChange (e) {
+        setPassword(e.target.value)
+    }
 
   return (
     <div>
@@ -28,11 +36,15 @@ export default function Login(props) {
         type="text"
         id="username"
         placeholder="Please enter your username here.."
+        value={username}
+        onChange={(e) => handleUsernameChange(e)}
       ></input>
       <h5>Password</h5>
       <input
-        type="text"
+        type="password"
         id="username"
+        onChange={(e) => handlePasswordChange(e)}
+        value={password}
         placeholder="Please enter your password here.."
       ></input>
       <br></br>
