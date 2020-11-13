@@ -11,16 +11,18 @@ module.exports = function (passport) {
         callbackURL: "/auth/google/callback",
       },
       async (accessToken, refreshToken, profile, done) => {
+        console.log(profile);
         const newUser = {
           "Google.googleId": profile.id,
           "Google.displayName": profile.displayName,
           "Google.firstName": profile.name.givenName,
           "Google.lastName": profile.name.familyName,
           "Google.image": profile.photos[0].value,
+          
         };
 
         try {
-          let user = await User.findOne({ googleId: profile.id });
+          let user = await User.findOne({ 'Google.googleId': profile.id });
           if (user) {
             done(null, user);
           } else {
