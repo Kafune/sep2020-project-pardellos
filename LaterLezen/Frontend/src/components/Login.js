@@ -4,20 +4,19 @@ export default function Login(props) {
 
     function handleLogin () {
         // fetch('http://localhost:4000/login')
-        console.log(props.loggedIn)
+        // console.log(props.loggedIn)
         props.setLoggedIn(true);
     }
 
     function handleGoogleLogin () {
-        console.log("YO")
-        try {
-            axios.get('http://localhost:4000/auth/google').then(() => {
-                console.log('login succesfull')
-            })
-        }
-       catch (err){
-        console.log('test')
-       }
+    //     try {
+    //         axios.get('http://localhost:4000/auth/google').then(() => {
+    //             console.log('login succesfull')
+    //         })
+    //     }
+    //    catch (err){
+    //     console.log('test')
+    //    }
     }
 
 
