@@ -4,6 +4,7 @@
   "description": "back end quizzer",
   "main": "app.js",
   "dependencies": {
+    "article-parser": "^4.2.5",
     "bcrypt": "^5.0.0",
     "connect-mongo": "^3.2.0",
     "cors": "^2.8.5",
