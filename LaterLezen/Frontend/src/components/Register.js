@@ -34,7 +34,7 @@ export default function Register(props) {
                         password: password
                     }
                 })
-                .then(response => console.log(response))
+                .then(response => console.log(response.data))
                 .catch(error => console.error('Something went wrong while registering'))
             } else {
                 alert("Password is not matching")
