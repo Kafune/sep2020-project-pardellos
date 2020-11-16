@@ -3,7 +3,7 @@ const router = express.Router();
 var request = require("request");
 
 
-router.get("/", async function (req, res){
+router.get("/", async function (req, res,next){
     request.get( 'https://www.nu.nl/economie/6090164/ing-nederlander-pint-voor-bijna-10-procent-minder-sinds-vierde-kwartaal.html', function(error, response, body){
         if( error )
           return next(error);
@@ -13,7 +13,7 @@ router.get("/", async function (req, res){
         // parse = JSON.parse(content);
         
         // console.log(parse)
-        console.log(body)
+        // console.log(body)
         res.send(body);
 
       });

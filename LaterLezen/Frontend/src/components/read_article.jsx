@@ -1,27 +1,28 @@
+
 import React from 'react';
+const parser = new DOMParser()
 
-export default class ReadArticle extends React.Component {
+class ReadArticle extends React.Component {
 
+  async componentDidMount() {
+    this.getHTML();
+  }
 
- 
-    render() {
-      function getHTML() {
-        fetch('http://localhost:4000/article', {
-          method: 'GET',
-          mode: 'cors', 
-          credentials: 'include', 
-          headers: {
-            'Content-Type': 'application/json'
-          },
-        })
-        .then(result => console.log(result))
-    }
+  getContent(data) {
+    const parsedDocument = parser.parseFromString(data, "text/html")
+    // const something = parsedDocument.body.textContent;
+    console.dir(parsedDocument.body.textContent);
+  }
 
-    function getContent(data) {
-    const test = data.getElementsByTagName("P")[0].innerHTML;
-     console.log(test)
-    }
+  async getHTML() {
+    await fetch('http://localhost:4000/article', )
+    .then(result => result.text())
+    .then(result => this.getContent(result))
     
-    return <button onClick={getHTML}>Test</button>
+}
+  render() {
+
+    return <button onClick={this.getHTML}>Test</button>
   }
 }
+export default ReadArticle;
