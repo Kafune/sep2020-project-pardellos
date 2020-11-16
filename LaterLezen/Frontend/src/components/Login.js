@@ -4,7 +4,9 @@ export default function Login(props) {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('')
     function handleLogin () {
-        // fetch('http://localhost:4000/login')
+        // fetch('http://localhost:4000/login').then(() => {
+        //     console.log('hoi')
+        // })
         props.setLoggedIn(true);
     }
 

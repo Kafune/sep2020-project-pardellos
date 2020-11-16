@@ -1,7 +1,9 @@
 import React from 'react';
+import Article_item from './Article_item';
 
 export default function Home () {
     return <div>
-        <h1>TESTTTTTTTTTTT</h1>
+        <Article_item/>
+
     </div>
 }
