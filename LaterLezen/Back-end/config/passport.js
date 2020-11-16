@@ -11,18 +11,17 @@ module.exports = function (passport) {
         callbackURL: "/auth/google/callback",
       },
       async (accessToken, refreshToken, profile, done) => {
-        console.log(profile);
         const newUser = {
           "Google.googleId": profile.id,
+          "Google.email": profile.emails[0].value,
           "Google.displayName": profile.displayName,
           "Google.firstName": profile.name.givenName,
           "Google.lastName": profile.name.familyName,
           "Google.image": profile.photos[0].value,
-          
         };
 
         try {
-          let user = await User.findOne({ 'Google.googleId': profile.id });
+          let user = await User.findOne({ "Google.googleId": profile.id });
           if (user) {
             done(null, user);
           } else {
@@ -30,7 +29,7 @@ module.exports = function (passport) {
             done(null, user);
           }
         } catch (err) {
-            console.log(err);
+          console.log(err);
         }
       }
     )
