@@ -1,8 +1,30 @@
 const mongoose = require("mongoose");
 
 const UserSchema = new mongoose.Schema({
+  Local :{
+    email: {
+      type: String,
+      required: true,
+    },
+    voornaam: {
+      type: String,
+      required: true,
+    },
+    achternaam: {
+      type: String,
+      required: true
+    },
+    password: {
+      type: String,
+      required: true,
+    }
+  },
   Google: {
     googleId: {
+      type: String,
+      required: true,
+    },
+    email: {
       type: String,
       required: true,
     },
@@ -23,9 +45,9 @@ const UserSchema = new mongoose.Schema({
     },
   },
   createdAt: {
-      type: Date,
-      default: Date.now
-  }
+    type: Date,
+    default: Date.now,
+  },
 });
 
-module.exports = mongoose.model('User', UserSchema)
+module.exports = mongoose.model("User", UserSchema);

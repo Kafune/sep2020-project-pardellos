@@ -3,7 +3,7 @@ const express = require("express");
 const dotenv = require("dotenv");
 const morgan = require("morgan");
 const mongoose = require("mongoose");
-const exphbs = require("express-handlebars");
+const bodyParser = require("body-parser")
 const passport = require("passport");
 const session = require("express-session");
 const MongoStore = require("connect-mongo")(session);
@@ -20,22 +20,17 @@ connectDB();
 
 const app = express();
 
-app.use(
-  cors({
-    origin: "http://localhost:3000",
-    methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
-    credentials: true,
-  })
-);
+// Initialize cors
+app.use(cors({ origin: true, credentials: true }));
+app.options("*", cors({ origins: true, credentials: true }));
 
 // Logging
 if (process.env.NODE_ENV === "development") {
   app.use(morgan("dev"));
 }
 
-// Handlebars
-app.engine(".hbs", exphbs({ defaultLayout: "main", extname: ".hbs" }));
-app.set("view engine", ".hbs");
+// Init bodyParser
+app.use(bodyParser.json())
 
 // Sessions
 app.use(
@@ -57,6 +52,7 @@ app.use(express.static(path.join(__dirname, "public")));
 // Routes
 app.use("/", require("./routes/index"));
 app.use("/auth", require("./routes/auth"));
+app.use("/articles", require("./routes/articles"));
 
 const PORT = process.env.PORT || 4000;
 
