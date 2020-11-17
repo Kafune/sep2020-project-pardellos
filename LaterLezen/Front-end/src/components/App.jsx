@@ -28,10 +28,11 @@ export default class App extends React.Component {
     const isLoggedIn = this.state.loggedIn;
     return (
       <div>
-        {isLoggedIn === false
-          ? <Login setLoggedIn={setLoggedIn} loggedIn={this.state.loggedIn} />
+        <ReadArticle></ReadArticle>
+        {/* {isLoggedIn === false
+          ? <p></p>
           : <ReadArticle userid={this.state.userid} appState={this.state} setArticles={this.handleArticleChange}/>
-        }
+        } */}
       </div>
     );
   }
