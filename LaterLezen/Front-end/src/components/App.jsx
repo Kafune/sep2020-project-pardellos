@@ -1,6 +1,7 @@
 import React from 'react';
 // import Login from './components/Login'
 import ReadArticle from './readArticle'
+import 'materialize-css/dist/css/materialize.min.css';
 
 export default class App extends React.Component {
   constructor(props) {
