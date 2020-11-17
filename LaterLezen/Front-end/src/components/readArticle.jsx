@@ -6,38 +6,59 @@ export default function ReadArticle(props) {
   const [url, setUrl] = useState('');
   const [article, setArticle] = useState('')
   const [articles, setArticles] = useState([]);
+  const [hideToggle, setHideToggle] = useState(false);
 
   function handleGetArticle(url) {
     if (new RegExp("([a-zA-Z0-9]+://)?([a-zA-Z0-9_]+:[a-zA-Z0-9_]+@)?([a-zA-Z0-9.-]+\\.[A-Za-z]{2,4})(:[0-9]+)?(/.*)?").test(url)) {
       getArticle(url)
         .then(result => result.json())
-        .then(result => setArticle(result.content))
+        .then(result => { 
+          setHideToggle(true)
+          setArticle(result.content) 
+        })
     } else {
-      alert('Geen geldige URL')
+      M.toast({ html: 'Geen geldige URL' })
     }
   }
 
   function handleGetArticles() {
     getAllArticles()
       .then(result => result.json())
-      .then(result => setArticles(result))
+      .then(result => {
+        setHideToggle(false)
+        setArticles(result)
+      })
   }
 
   return <div className="readArticle">
-    <h1>Read Article</h1>
-    <input type="text" placeholder="URL..." onChange={(e) => setUrl(e.target.value)} value={url} />
-    <button onClick={() => { handleGetArticle(url) }}>Search article</button>
-    <button onClick={() => { handleGetArticles() }}>Get all articles</button>
-    <div>
-    {parse(article)}
-    </div>
-    <ul>
-      {articles.map((data) => {
-        return <li key={data._id}>
-          <ul><b>Title:</b> {data.title}</ul>
-          <ul><b>Description:</b> {data.description}</ul>
-        </li>
-      })}
-    </ul>
+    <div className="container">
+      <h1>LaterLezen</h1>
+      <input type="text" placeholder="URL..." onChange={(e) => setUrl(e.target.value)} value={url} />
+      <button className="waves-effect waves-light btn-small" onClick={() => { handleGetArticle(url) }}>Search article</button>
+      <button className="waves-effect waves-light btn-small" onClick={() => { handleGetArticles() }}>Get all articles</button><td/>
+    {hideToggle
+      ? <div class="flow-text">
+        {parse(article)}
+      </div>
+      : <div class="row">
+        {articles.map((data) => {
+          return <div key={data._id}>
+            <div class="card blue-grey darken-1">
+              <div class="card-image">
+                <img src={data.image} />
+                <span class="card-title">{data.title}</span>
+              </div>
+              <div class="card-content white-text">
+                <p>{data.description}</p>
+              </div>
+              <div class="card-action">
+                <a href={data.url}>See article</a>
+              </div>
+            </div>
+          </div>
+        })}
+      </div>
+    }
+  </div>
   </div>
 }

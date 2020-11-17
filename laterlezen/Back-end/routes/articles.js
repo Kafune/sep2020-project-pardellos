@@ -26,12 +26,16 @@ router.get("/", async (req, res) => {
     const articles = {
       _id: '',
       title: '',
-      description: ''
+      description: '',
+      image: '',
+      url: ''
     };
 
     articles._id = element._id
     articles.title = element.title
     articles.description = element.description
+    articles.image = element.image
+    articles.url = element.url
 
     allArticles.push(articles)
   });
