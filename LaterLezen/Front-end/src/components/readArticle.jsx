@@ -18,7 +18,9 @@ export default function ReadArticle(props) {
           setHideToggle(true)
           setArticle(result.content) 
         })
-    } 
+    } else {
+      M.toast({ html: 'Geen geldige URL' })
+    }
   }
 
   function handleGetArticles() {
