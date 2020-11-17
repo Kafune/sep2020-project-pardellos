@@ -2,12 +2,10 @@ const express = require("express");
 const router = express.Router();
 const Article = require("../models/Article");
 
-
 router.put("/new", (req, res) => {
   const { extract } = require("article-parser");
 
   const url = req.body.url;
-  console.log(url);
 
   extract(url)
     .then((article) => {
@@ -21,8 +19,24 @@ router.put("/new", (req, res) => {
 });
 
 router.get("/", async (req, res) => {
+  const allArticles = [];
   const result = await Article.find({});
-  res.send(result);
+
+  result.forEach(element => {
+    const articles = {
+      _id: '',
+      title: '',
+      description: ''
+    };
+
+    articles._id = element._id
+    articles.title = element.title
+    articles.description = element.description
+
+    allArticles.push(articles)
+  });
+
+  res.send(allArticles);
 });
 
 module.exports = router;
