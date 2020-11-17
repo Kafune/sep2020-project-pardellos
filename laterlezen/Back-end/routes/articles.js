@@ -33,7 +33,8 @@ router.put("/article", async (req, res) => {
   let doesExist = await Article.exists({ links: url });
   if (!doesExist) {
     let processedTags = [];
-    let rawTags = req.body.tags;
+    let rawTags = []
+    rawTags.push(req.body.tags)
     console.log("raw tags: " + rawTags);
     processedTags = rawTags
       .map(function (value) {
@@ -51,7 +52,7 @@ router.put("/article", async (req, res) => {
         newArticle.user_id = userid;
         newArticle.tags = processedTags;
         newArticle.save();
-        res.sendStatus(200);
+        res.send(newArticle)
       })
       .catch((err) => {
         console.log(err);
@@ -70,8 +71,8 @@ router.put("/article", async (req, res) => {
    * @async
    * @memberof app
    */
-router.get("/article", async (req, res) => {
-  id = req.body.article_id;
+router.get("/article/:id", async (req, res) => {
+  id = req.params.id;
   let doesExist = await Article.exists({ _id: id });
 
   if (doesExist) {
@@ -134,8 +135,8 @@ router.get("/tags", async (req, res) => {
    * @async
    * @memberof app
    */
-router.get("/user", async (req, res) => {
-  let userid = req.body.user_id;
+router.get("/user/:id", async (req, res) => {
+  let userid = req.params.id
   console.log(userid);
 
   let allArticles = await Article.find({ user_id: userid });

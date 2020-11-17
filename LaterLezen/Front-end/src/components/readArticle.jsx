@@ -8,18 +8,17 @@ export default function ReadArticle(props) {
   const [article, setArticle] = useState('')
   const [articles, setArticles] = useState([]);
   const [hideToggle, setHideToggle] = useState(false);
+  const [tags, setTags] = useState('');
 
-  function handleGetArticle(url) {
+  function handleGetArticle(url, tags) {
     if (new RegExp("([a-zA-Z0-9]+://)?([a-zA-Z0-9_]+:[a-zA-Z0-9_]+@)?([a-zA-Z0-9.-]+\\.[A-Za-z]{2,4})(:[0-9]+)?(/.*)?").test(url)) {
-      getArticle(url, userID)
+      getArticle(url, tags, userID)
         .then(result => result.json())
         .then(result => { 
           setHideToggle(true)
           setArticle(result.content) 
         })
-    } else {
-      M.toast({ html: 'Geen geldige URL' })
-    }
+    } 
   }
 
   function handleGetArticles() {
@@ -35,10 +34,11 @@ export default function ReadArticle(props) {
     <div className="container">
       <h1>LaterLezen</h1>
       <input type="text" placeholder="URL..." onChange={(e) => setUrl(e.target.value)} value={url} />
-      <button className="waves-effect waves-light btn-small" onClick={() => { handleGetArticle(url) }}>Search article</button>
+      <input type="text" placeholder="tags..." onChange={(e) => setTags(e.target.value)} value={tags} />
+      <button className="waves-effect waves-light btn-small" onClick={() => { handleGetArticle(url, tags) }}>Search article</button>
       <button className="waves-effect waves-light btn-small" onClick={() => { handleGetArticles() }}>Get all articles</button><td/>
     {hideToggle
-      ? <div class="flow-text">
+      ? <div class="container flow-text">
         {parse(article)}
       </div>
       : <div class="row">
