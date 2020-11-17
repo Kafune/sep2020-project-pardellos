@@ -43,4 +43,10 @@ router.get("/", async (req, res) => {
   res.send(allArticles);
 });
 
+router.get("/user/:postid", async (req, res) => {
+  let userid = req.params.postid
+  let allArticles = await Article.find({user_id : userid})
+  res.send(allArticles)
+});
+
 module.exports = router;

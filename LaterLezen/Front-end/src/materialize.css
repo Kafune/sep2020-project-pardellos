@@ -9084,8 +9084,17 @@ input[type=range]::-ms-thumb {
   }
 }
 
-/* Own added css */
-.flex {
-  display: flex;
-  flex-wrap: wrap;
+/* Custom added css */
+.row .col {
+  float: none !important;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.banner-img {
+  height: 240px;
+}
+
+#menu {
+  background-color: #EBEBEB;
 }
