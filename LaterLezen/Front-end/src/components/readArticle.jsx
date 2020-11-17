@@ -1,16 +1,17 @@
 import React, { useState } from 'react';
 import { getArticle, getAllArticles } from '../serverCommunication'
+import parse from 'html-react-parser';
 
 export default function ReadArticle(props) {
   const [url, setUrl] = useState('');
-  const [article, setArticle] = useState([])
+  const [article, setArticle] = useState('')
   const [articles, setArticles] = useState([]);
 
   function handleGetArticle(url) {
     if (new RegExp("([a-zA-Z0-9]+://)?([a-zA-Z0-9_]+:[a-zA-Z0-9_]+@)?([a-zA-Z0-9.-]+\\.[A-Za-z]{2,4})(:[0-9]+)?(/.*)?").test(url)) {
       getArticle(url)
         .then(result => result.json())
-        .then(result => setArticle(result))
+        .then(result => setArticle(result.content))
     } else {
       alert('Geen geldige URL')
     }
@@ -28,7 +29,7 @@ export default function ReadArticle(props) {
     <button onClick={() => { handleGetArticle(url) }}>Search article</button>
     <button onClick={() => { handleGetArticles() }}>Get all articles</button>
     <div>
-      {article.content} 
+    {parse(article)}
     </div>
     <ul>
       {articles.map((data) => {
