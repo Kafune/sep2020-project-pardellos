@@ -29,10 +29,15 @@ const ArticleSchema = new mongoose.Schema({
   ttr: {
     type: String,
   },
+  tags: [],
   status: {
     type: String,
     default: "public",
     enum: ["public", "private"],
+  },
+  read: {
+    type: Boolean,
+    default: false
   },
   user_id: {
     type: mongoose.Schema.Types.ObjectId,
