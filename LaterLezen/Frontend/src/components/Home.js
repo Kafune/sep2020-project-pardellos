@@ -6,7 +6,7 @@ import Articles from './Articles';
 export default function Home(props) {
     return <div>
         <Menu/>
-        <Articles/>
+        <Articles appState={props.appState} setArticles={props.setArticles}/>
 
     </div>
 }

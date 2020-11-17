@@ -6,30 +6,31 @@ import banner from './../img/wallpaper.jpg';
 
 
 export default function Articles(props) {
-
-
     useEffect(() => {
         // Fetch alle artikelen hierin
-    })
+        console.log(props.appState.userid)
+
+        axios({
+            url: 'http://localhost:4000/articles/user/' + props.appState.userid ,
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            }
+        })
+        // getArticles();
+        .then(response => props.setArticles(response.data))
+    }, props.appState.articles.length)
+
 
     return (
         <div>
-            {/* voor elke artikel loopen */}
-            {/* <Article_item image="" title="" description=""/> */}
+            {/* voor elke artikel loopen, voor nu hard-coded */}
             <div id="articles" className="container">
-                <div class="row">
-                    <div class="col s5">
-                        <div class="card">
-                            <div class="card-image">
-                                <img src={banner} />
-                            </div>
-                            <div class="card-content">
-                                <span class="card-title">Artikel titel</span>
-                                <p>Artikel text</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                {console.log(props.appState.articles)}
+                {props.appState.articles.map(article => {
+                    return <Article_item key={article._id} image={article.image} title={article.title} description={article.description} />
+                })}
             </div>
         </div>
     )
