@@ -29,15 +29,19 @@ const ArticleSchema = new mongoose.Schema({
   ttr: {
     type: String,
   },
+  tags: [],
   status: {
     type: String,
     default: "public",
     enum: ["public", "private"],
   },
-  // user: {
-  //   type: mongoose.Schema.Types.ObjectId,
-  //   ref: "User",
-  // },
+  read: {
+    type: Boolean,
+    default: false
+  },
+  user_id: {
+    type: mongoose.Schema.Types.ObjectId,
+  },
   createdAt: {
     type: Date,
     default: Date.now,

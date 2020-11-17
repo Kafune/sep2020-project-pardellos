@@ -3,7 +3,6 @@ const express = require("express");
 const dotenv = require("dotenv");
 const morgan = require("morgan");
 const mongoose = require("mongoose");
-const exphbs = require("express-handlebars");
 const bodyParser = require("body-parser")
 const passport = require("passport");
 const session = require("express-session");
