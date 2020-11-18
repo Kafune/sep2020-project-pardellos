@@ -1,7 +1,7 @@
 import React from 'react';
 // import Login from './components/Login'
 import ReadArticle from './readArticle'
-import Register from './Register'
+import Login from './Login'
 import 'materialize-css/dist/css/materialize.min.css';
 
 export default class App extends React.Component {
@@ -32,7 +32,7 @@ export default class App extends React.Component {
       <div>
         {/* <ReadArticle userid={this.state.userid}></ReadArticle> */}
         {isLoggedIn === false
-          ? <Register/>
+          ? <Login/>
           : <ReadArticle userid={this.state.userid} appState={this.state} setArticles={this.handleArticleChange}/>
         }
       </div>
