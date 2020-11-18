@@ -47,4 +47,8 @@ export async function getArticleByUser(id) {
   return fetch(serverFetchBase + `/articles/user/${id}`, fetchOptions)
 }
 
+export async function loginUser(username,password) {
+
+}
+
 
