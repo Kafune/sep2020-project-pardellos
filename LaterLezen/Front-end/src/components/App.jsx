@@ -4,7 +4,8 @@ import Dashboard from './Dashboard'
 import SaveArticle from './saveArticle'
 import SaveArticlePdf from './saveArticlePdf'
 import SearchArticle from './searchArticle'
-
+import Login from './Login'
+import Register from './Register'
 
 export default class App extends React.Component {
   constructor(props) {
@@ -23,11 +24,12 @@ export default class App extends React.Component {
     document.addEventListener('DOMContentLoaded', function () {
       var elems = document.querySelectorAll('.fixed-action-btn');
       var instances = M.FloatingActionButton.init(elems, {
-          hoverEnabled: false
+        hoverEnabled: false
       });
-  });
+    });
+
     return (
-      <div class="container">
+      <div className="container">
         <div class="fixed-action-btn">
           <a class="btn-floating btn-large grey">
             <i class="large material-icons">menu</i>
@@ -68,16 +70,22 @@ export default class App extends React.Component {
             <Dashboard userid={this.state.userid} articles={this.state.articles} />
           </Route>
           <Route path="/save/web">
-            <SaveArticle userid={this.state.userid}/>
+            <SaveArticle userid={this.state.userid} />
           </Route>
           <Route path="/save/pdf">
-            <SaveArticlePdf userid={this.state.userid}/>
+            <SaveArticlePdf userid={this.state.userid} />
           </Route>
           <Route path="/search">
-            <SearchArticle userid={this.state.userid}/>
+            <SearchArticle userid={this.state.userid} />
+          </Route>
+          <Route path="/login">
+            <Login />
+          </Route>
+          <Route path="/register">
+            <Register />
           </Route>
         </Switch>
-      </div>
+      </div >
     );
   }
 }

@@ -23,7 +23,6 @@ export default function SaveArticle(props) {
     }
 
     return <div className="readArticle">
-        <div className="container">
             <h1>LaterLezen</h1>
             <input type="text" placeholder="URL..." onChange={(e) => setUrl(e.target.value)} value={url} />
             <input type="text" placeholder="Tags..." onChange={(e) => setTags(e.target.value)} value={tags} />
@@ -32,5 +31,4 @@ export default function SaveArticle(props) {
                 {parse(article)}
             </div>
         </div>
-    </div>
 }

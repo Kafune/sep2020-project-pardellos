@@ -19,7 +19,6 @@ export default function Dashboard(props) {
       })
   }
   return <div className="readArticle">
-    <div className="container">
       <h1>LaterLezen</h1>
       <h2>All saved articles of {userID}</h2>
       <div class="row">
@@ -41,5 +40,4 @@ export default function Dashboard(props) {
         })}
       </div>
     </div>
-  </div>
 }
