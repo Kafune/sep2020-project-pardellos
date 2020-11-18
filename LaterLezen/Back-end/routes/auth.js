@@ -18,21 +18,17 @@ router.get("/google/callback", passport.authenticate('google', { failureRedirect
     res.redirect('/dashboard')
 })
 
-router.post("/register", (req, res) => {
+router.post("/register", async (req, res) => {
     const saltRounds = 10;
 
     let email = req.body.email;
     let username = req.body.username;
-    let hashedPassword = '';
 
-    bcrypt.hash(req.body.password, saltRounds, (err, hash) => {
-        if(err) throw err;
-        hashedPassword = hash;
-
-        let query = {
+    await bcrypt.hash(req.body.password, saltRounds, (err, hash) => {
+        if (err) throw err;
+        let conditions = {
             Local: {
-                email: email,
-                username: username
+                email: email
             }
         }
     
@@ -40,22 +36,21 @@ router.post("/register", (req, res) => {
             $setOnInsert: {
                 email: email,
                 username: username,
-                password: hashedPassword
+                password: hash
             }
         }
     
         let options = {
-            upsert: true,
-            new: true
+            upsert: true
+            // new: true
         }
     
-        console.log(email, username)
-    
-        User.findOneAndUpdate(query, update, options).exec((err, user) => {
-            if (err) throw err;
+        User.findOneAndUpdate(conditions, update, options).exec()
+        .then(user => {
             res.send(user);
         })
     })
+
 
 
 })
