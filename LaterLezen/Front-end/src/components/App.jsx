@@ -35,6 +35,20 @@ export default class App extends React.Component {
             <i class="large material-icons">menu</i>
           </a>
           <ul>
+          <li>
+              <Link to="/login">
+                <a class="btn-floating black">
+                  <i class="material-icons">person</i>
+                </a>
+              </Link>
+            </li>
+            <li>
+              <Link to="/register">
+                <a class="btn-floating black">
+                  <i class="material-icons">perm_identity</i>
+                </a>
+              </Link>
+            </li>
             <li>
               <Link to="/dashboard">
                 <a class="btn-floating red">
