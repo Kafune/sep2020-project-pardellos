@@ -47,41 +47,38 @@ export default function Register(props) {
     }
 
     return (
-        <div id="register">
-            <div className="title">
-                <h1>Laterlezen</h1>
+            <div id="register">
+                <div className="form">
+                    <form onSubmit={onSubmitForm}>
+                        <div className="row">
+                            <div className="input-field col s4">
+                                <p>Email</p>
+                                {setEmail}
+                            </div>
+                            <div className="input-field col s4">
+                                <p>First Name</p>
+                                {setfirstName}
+                            </div>
+                            <div className="input-field col s4">
+                                <p>Last Name</p>
+                                {setLastName}
+                            </div>
+                        </div>
+                        <div className="row">
+                            <div className="input-field col s6">
+                                <p>Password</p>
+                                {setPassword}
+                            </div>
+                            <div className="input-field col s6">
+                                <p>Confirm password</p>
+                                {setConfirmPassword}
+                            </div>
+                        </div>
+                        <div className="row">
+                            <input className="waves-effect waves-light btn-small blue" type="submit" name="register" value="Register" />
+                        </div>
+                    </form>
+                </div>
             </div>
-            <div className="form">
-                <form onSubmit={onSubmitForm}>
-                    <div className="row">
-                        <div className="input-field col s4">
-                            <p>Email</p>
-                            {setEmail}
-                        </div>
-                        <div className="input-field col s4">
-                            <p>First Name</p>
-                            {setfirstName}
-                        </div>
-                        <div className="input-field col s4">
-                            <p>Last Name</p>
-                            {setLastName}
-                        </div>
-                    </div>
-                    <div className="row">
-                        <div className="input-field col s6">
-                            <p>Password</p>
-                            {setPassword}
-                        </div>
-                        <div className="input-field col s6">
-                            <p>Confirm password</p>
-                            {setConfirmPassword}
-                        </div>
-                    </div>
-                    <div className="row">
-                        <input className="waves-effect waves-light btn-small blue" type="submit" name="register" value="Register" />
-                    </div>
-                </form>
-            </div>
-        </div>
     );
 }

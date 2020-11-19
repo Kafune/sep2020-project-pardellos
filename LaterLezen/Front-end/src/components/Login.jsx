@@ -14,7 +14,6 @@ export default function Login(props) {
 
     return (
         <div className="container">
-            <h1>LaterLezen</h1>
             <div className="row">
                 <div className="col s6">
                     <h5>Username</h5>
@@ -23,26 +22,39 @@ export default function Login(props) {
                         id="username"
                         placeholder="Please enter your username here.."
                     ></input>
+                </div>
+                <div className="col s6">
                     <h5>Password</h5>
                     <input
                         type="text"
                         id="username"
                         placeholder="Please enter your password here.."
                     ></input>
-                    <div className="center-align">
+                </div>
+                <div class="row">
+                    <div className="col">
                         <a className="waves-effect waves-light btn-small blue">
                             Log in
                         </a>
-                        <h6>No account? Register here!</h6>
+                    </div>
+                    <div className="col">
                         <a className="waves-effect waves-light btn-small blue">
                             <i class="fab fa-google left"></i>Log in with Google
-                        </a>
+                    </a>
                     </div>
                 </div>
-                <div className="col s6">
-                    <div className="background"></div>
+                <div className="col">
+                    <h5>No account?</h5><a className="waves-effect waves-light btn-small blue">
+                        Register here!
+                    </a>
                 </div>
             </div>
-        </div>
+
+
+
+            <div className="col s6">
+                <div className="background"></div>
+            </div>
+        </div >
     );
 }

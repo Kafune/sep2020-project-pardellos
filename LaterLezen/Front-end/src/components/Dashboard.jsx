@@ -3,6 +3,7 @@ import { getArticle, getAllArticles, getArticleByUser } from '../serverCommunica
 
 export default function Dashboard(props) {
   const [userID, setUserID] = useState(props.userid)
+  const [username, setUsername] = useState(props.username)
   const [url, setUrl] = useState('');
   const [articles, setArticles] = useState(props.articles);
   const [tags, setTags] = useState('');
@@ -19,8 +20,7 @@ export default function Dashboard(props) {
       })
   }
   return <div className="readArticle">
-      <h1>LaterLezen</h1>
-      <h2>All saved articles of {userID}</h2>
+      <h2 class="center">All saved articles of {username}</h2>
       <div class="row">
         {articles.map((data) => {
           return <div key={data._id}>

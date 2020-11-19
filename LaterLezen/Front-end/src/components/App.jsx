@@ -7,11 +7,19 @@ import SearchArticle from './searchArticle'
 import Login from './Login'
 import Register from './Register'
 
+import '../../src/App.css'
+
+import background from '../img/pfp_background.jpg'
+import pfp from '../img/default_pfp.png'
+
 export default class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       userid: '5fae85cf41f32d3618e3f271',
+      username: 'Testuser123',
+      email: 'Testuser@gmail.com',
+      logged_in: false,
       articles: []
     }
   }
@@ -21,6 +29,13 @@ export default class App extends React.Component {
   }
 
   render() {
+    // Materialize Initialization - Side Navbar
+    document.addEventListener('DOMContentLoaded', function () {
+      var elems = document.querySelectorAll('.sidenav');
+      var instances = M.Sidenav.init(elems, {});
+    });
+
+    // Materialize Initialization - Action Buttons
     document.addEventListener('DOMContentLoaded', function () {
       var elems = document.querySelectorAll('.fixed-action-btn');
       var instances = M.FloatingActionButton.init(elems, {
@@ -29,13 +44,68 @@ export default class App extends React.Component {
     });
 
     return (
-      <div className="container">
+      <div className="App">
+        <nav>
+          <div class="nav-wrapper blue accent-2">
+            <div class="container">
+              <Link to="/dashboard"><a class="brand-logo center">LaterLezen</a></Link>
+            </div>
+            {this.state.logged_in
+              ? <a data-target="slide-out" class="sidenav-trigger show-on-large "><i class="material-icons">menu</i></a>
+              : <ul class="right hide-on-med-and-down">
+                <li><Link to="/login">Login</Link></li>
+                <li><Link to="register">Register</Link></li>
+              </ul>}
+          </div>
+        </nav>
+
+        <ul id="slide-out" class="sidenav sidenav-close">
+          <li>
+            <div class="user-view">
+              <div class="background">
+                <img src={background} />
+              </div>
+              <a><img class="circle" src={pfp} /></a>
+              <a><span class="white-text name">{this.state.username}</span></a>
+              <a><span class="white-text email">{this.state.email}</span></a>
+            </div>
+          </li>
+          <Link to="/dashboard">
+            <li>
+              <a><i class="material-icons">home</i>Dashboard</a>
+            </li>
+          </Link>
+          <Link to="/save/web">
+            <li>
+              <a><i class="material-icons">web</i>Save Web Article</a>
+            </li>
+          </Link>
+          <Link to="/save/pdf">
+            <li>
+              <a><i class="material-icons">picture_as_pdf</i>Save PDF Article</a>
+            </li>
+          </Link>
+          <Link to="/search">
+            <li>
+              <a><i class="material-icons">search</i>Search Article</a>
+            </li>
+          </Link>
+          <div class="inner-content">
+            <li>
+              <a><i class="material-icons">settings</i>Settings</a>
+            </li>
+            <li>
+              <a><i class="material-icons">exit_to_app</i>Logout</a>
+            </li>
+          </div>
+        </ul>
+
         <div class="fixed-action-btn">
-          <a class="btn-floating btn-large grey">
+          <a class="btn-floating btn-large blue accent-2">
             <i class="large material-icons">menu</i>
           </a>
           <ul>
-          <li>
+            <li>
               <Link to="/login">
                 <a class="btn-floating black">
                   <i class="material-icons">person</i>
@@ -79,27 +149,29 @@ export default class App extends React.Component {
             </li>
           </ul>
         </div>
-        <Switch>
-          <Route path="/dashboard">
-            <Dashboard userid={this.state.userid} articles={this.state.articles} />
-          </Route>
-          <Route path="/save/web">
-            <SaveArticle userid={this.state.userid} />
-          </Route>
-          <Route path="/save/pdf">
-            <SaveArticlePdf userid={this.state.userid} />
-          </Route>
-          <Route path="/search">
-            <SearchArticle userid={this.state.userid} />
-          </Route>
-          <Route path="/login">
-            <Login />
-          </Route>
-          <Route path="/register">
-            <Register />
-          </Route>
-        </Switch>
-      </div >
+        <div class="container">
+          <Switch>
+            <Route path="/dashboard">
+              <Dashboard userid={this.state.userid} username={this.state.username} articles={this.state.articles} />
+            </Route>
+            <Route path="/save/web">
+              <SaveArticle userid={this.state.userid} />
+            </Route>
+            <Route path="/save/pdf">
+              <SaveArticlePdf userid={this.state.userid} />
+            </Route>
+            <Route path="/search">
+              <SearchArticle userid={this.state.userid} />
+            </Route>
+            <Route path="/login">
+              <Login />
+            </Route>
+            <Route path="/register">
+              <Register />
+            </Route>
+          </Switch>
+        </div>
+      </div>
     );
   }
 }
