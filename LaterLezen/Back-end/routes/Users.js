@@ -7,6 +7,6 @@ router.get('/:email/tags' , async (req,res) => {
     let allTags = await User.find({email: email}, {tags: 1})
     let response = JSON.parse(allTags)
     res.json(response)
-  })
+})
 
 module.exports = router

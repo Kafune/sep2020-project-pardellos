@@ -1,7 +1,7 @@
-import React from "react";
+import React, {useState, useEffect} from "react";
 
 export default function Login(props) {
-
+    // const [username, setUsername]
     function handleLogin (e) {
         e.preventDefault();
         props.setLogin(true)
