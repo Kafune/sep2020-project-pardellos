@@ -1,6 +1,8 @@
 const express = require("express");
 const router = express.Router();
 const Article = require("../models/Article");
+const pdfjs = require("pdfjs-dist/es5/build/pdf");
+pdfjs.workerSrc = "../node_modules/pdfjs-dist/build/pdf.worker.min.js"
 
 /**
    * @type ExpressSocket.
@@ -15,6 +17,68 @@ router.get("/", async (req, res) => {
   const result = await Article.find({});
   res.send(result);
 });
+
+router.get("/pdf", async (req, res) => {
+  const PDF_URL = 'http://www.gpslogbook.com/us/Docs/UserManual.pdf'
+
+  function getPageText(pageNum, PDFDocumentInstance) {
+    // Return a Promise that is solved once the text of the page is retrieven
+    return new Promise(function (resolve, reject) {
+      PDFDocumentInstance.getPage(pageNum).then(function (pdfPage) {
+        // The main trick to obtain the text of the PDF page, use the getTextContent method
+        pdfPage.getTextContent().then(function (textContent) {
+          var textItems = textContent.items;
+          var finalString = "";
+
+          // Concatenate the string of the item to the final string
+          for (var i = 0; i < textItems.length; i++) {
+            var item = textItems[i];
+
+            finalString += item.str + " ";
+          }
+
+          // Solve promise with the text retrieven from the page
+          resolve(finalString);
+        });
+      });
+    });
+  }
+
+
+
+  pdfjs.getDocument(PDF_URL).promise
+
+    .then(pdf => {
+      let pdfDocument = pdf;
+
+      let pagesPromises = [];
+    
+      for (let i = 0; i < pdf.numPages; i++) {
+        (pageNumber => {
+          pagesPromises.push(getPageText(pageNumber, pdfDocument))
+        })(i + 1)
+      }
+
+      Promise.all(pagesPromises)
+      .then(pagesText => {
+        res.send(pagesText)
+      })
+
+
+      
+    //   let totalPages = PDFDocumentInstance.numPages;
+    //   let pageNum = 1;
+
+    //   getPageText(pageNum, PDFDocumentInstance)
+    //   .then(textPage => {
+    //     console.log(textPage)
+    //   })
+
+    }, (error) => {
+      console.error(error);
+    }
+    )
+})
 
 /**
    * @type ExpressSocket.
