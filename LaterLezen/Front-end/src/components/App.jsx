@@ -6,6 +6,7 @@ import SaveArticlePdf from './saveArticlePdf'
 import SearchArticle from './searchArticle'
 import Login from './Login'
 import Register from './Register'
+import Logout from './Logout'
 
 import '../../src/App.css'
 
@@ -16,16 +17,25 @@ export default class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      userid: '5fae85cf41f32d3618e3f271',
-      username: 'Testuser123',
-      email: 'Testuser@gmail.com',
+      firstname: 'Mohammed',
+      lastname: 'Hulscher',
+      email: '',
       logged_in: false,
       articles: []
     }
   }
+  handleLoginState(value) {
+    this.setState(() => ({
+      logged_in: value
+    })
+    )
+  }
 
-  handleArticleChange = (data) => {
-    this.setState({ ...this.state.articles, articles: data })
+  handleEmailState(value) {
+    this.setState(() => ({
+      email: value
+    })
+    )
   }
 
   render() {
@@ -43,6 +53,8 @@ export default class App extends React.Component {
       });
     });
 
+    const setLoginStatus = (c) => this.handleLoginState(c)
+    const setEmailState = (c) => this.handleEmailState(c)
     return (
       <div className="App">
         <nav>
@@ -94,9 +106,11 @@ export default class App extends React.Component {
             <li>
               <a><i class="material-icons">settings</i>Settings</a>
             </li>
-            <li>
-              <a><i class="material-icons">exit_to_app</i>Logout</a>
-            </li>
+            <Link to="/logout">
+              <li>
+                <a><i class="material-icons">exit_to_app</i>Logout</a>
+              </li>
+            </Link>
           </div>
         </ul>
 
@@ -152,26 +166,29 @@ export default class App extends React.Component {
         <div class="container">
           <Switch>
             <Route path="/dashboard">
-              <Dashboard userid={this.state.userid} username={this.state.username} articles={this.state.articles} />
+              <Dashboard email={this.state.email} firstname={this.state.firstname} lastname={this.state.lastname} articles={this.state.articles} />
             </Route>
             <Route path="/save/web">
-              <SaveArticle userid={this.state.userid} />
+              <SaveArticle />
             </Route>
             <Route path="/save/pdf">
-              <SaveArticlePdf userid={this.state.userid} />
+              <SaveArticlePdf/>
             </Route>
             <Route path="/search">
-              <SearchArticle userid={this.state.userid} />
+              <SearchArticle/>
             </Route>
             <Route path="/login">
-              <Login />
+              <Login email={this.state.email} handleLoginState={setLoginStatus} handleEmailState={setEmailState} />
             </Route>
             <Route path="/register">
               <Register />
             </Route>
+            <Route path="/logout">
+              <Logout handleLoginState={setLoginStatus} />
+            </Route>
           </Switch>
         </div>
-      </div>
+      </div >
     );
   }
 }

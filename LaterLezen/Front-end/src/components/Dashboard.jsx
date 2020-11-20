@@ -3,7 +3,8 @@ import { getArticle, getAllArticles, getArticleByUser } from '../serverCommunica
 
 export default function Dashboard(props) {
   const [userID, setUserID] = useState(props.userid)
-  const [username, setUsername] = useState(props.username)
+  const [firstname, setFirstname] = useState(props.firstname)
+  const [lastname, setLastname] = useState(props.lastname)
   const [url, setUrl] = useState('');
   const [articles, setArticles] = useState(props.articles);
   const [tags, setTags] = useState('');
@@ -13,24 +14,25 @@ export default function Dashboard(props) {
   }, [])
 
   function handleGetArticles(id) {
-    getArticleByUser(id)
+    getAllArticles()
       .then(result => result.json())
       .then(result => {
-        setArticles(result)
+        console.log(result.articles)
+        setArticles(result.articles)
       })
   }
   return <div className="readArticle">
-      <h2 class="center">All saved articles of {username}</h2>
+      <h2 class="center">All saved articles of {firstname} {lastname}</h2>
       <div class="row">
         {articles.map((data) => {
           return <div key={data._id}>
             <div class="card blue-grey darken-1">
-              <div class="card-image">
-                <img src={data.image} />
+              {/* <div class="card-image">
+                <img src={data.image} /> */}
                 <span class="card-title">{data.title}</span>
-              </div>
+              {/* </div> */}
               <div class="card-content white-text">
-                <p>{data.description}</p>
+                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Nihil iusto ab libero adipisci ullam eius odio aliquid inventore nisi aut quaerat odit autem obcaecati non delectus cumque, perferendis, numquam ducimus corrupti! Expedita iste libero fuga praesentium velit illo cumque id quia fugit. Dolorum veritatis praesentium necessitatibus nostrum laudantium quod similique.</p>
               </div>
               <div class="card-action">
                 <a href={data.url}>See article</a>
