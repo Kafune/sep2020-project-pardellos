@@ -1,17 +1,31 @@
-import React from 'react'
+import React from "react";
+import Login from "./Login";
+import Article from "./Article";
 
 export default class App extends React.Component {
-    constructor(props) {
-      super(props);
-      this.state = {
-          test: "This is a test application"
-      }
-    }
-    render(){
-        return(
-            <div>
-                <h1>{this.state.test}</h1>
-            </div>
-        )
-    }
+  constructor(props) {
+    super(props);
+    this.state = {
+      isLoggedIn: false,
+    };
+  }
+
+  setLogin(value) {
+    this.setState(() => ({
+      isLoggedIn: value,
+    }));
+  }
+
+  render() {
+    console.log(this.state.isLoggedIn)
+    const setIsLoggedIn = (c) => this.setLogin(c);
+    return (
+        <div>
+            {this.state.isLoggedIn === true
+            ? <Article></Article>
+            : <Login setLogin={setIsLoggedIn}></Login>
+            }
+        </div>
+    )
+  }
 }

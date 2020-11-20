@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const Article = require("../models/Article");
+const User = require("../models/User")
 
 /**
    * @type ExpressSocket.
@@ -142,5 +143,24 @@ router.get("/user/:id", async (req, res) => {
   let allArticles = await Article.find({ user_id: userid });
   res.send(allArticles);
 });
+
+
+// TODO add in add article to check for duplicate tag names
+// router.post('/user/:email/tags', async (req,res) => {
+//   let email = req.params.email;
+//   const tagName = req.body.tagName
+//   await User.findOneAndUpdate(
+//     {email: email},
+//     {$push: {tags: {tagName}}}
+//   )
+//   res.json('OK')
+// })
+
+router.get('/user/:email/tags' , async (req,res) => {
+  let email = req.params.email;
+  let allTags = await User.find({email: email}, {tags: 1})
+  let response = JSON.parse(allTags)
+  res.json(response)
+})
 
 module.exports = router;
