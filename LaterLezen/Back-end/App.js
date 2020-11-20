@@ -1,57 +1,31 @@
+// Import node_moduels
 const path = require("path");
 const express = require("express");
+const app = express();
 const dotenv = require("dotenv");
 const morgan = require("morgan");
-const mongoose = require("mongoose");
-const bodyParser = require("body-parser")
-const passport = require("passport");
-const session = require("express-session");
-const MongoStore = require("connect-mongo")(session);
+const bodyParser = require("body-parser");
 const connectDB = require("./config/db");
-const cors = require("cors");
+const cookieParser = require("cookie-parser");
+app.use(cookieParser());
+app.use(express.json());
 
 // Load config
 dotenv.config({ path: "./config/config.env" });
 
-// Passport config
-require("./config/passport")(passport);
-
+// Load DB connection
 connectDB();
 
-const app = express();
-
-// Initialize cors
-app.use(cors({ origin: true, credentials: true }));
-app.options("*", cors({ origins: true, credentials: true }));
-
-// Logging
+// Logging function
 if (process.env.NODE_ENV === "development") {
   app.use(morgan("dev"));
 }
-
 // Init bodyParser
-app.use(bodyParser.json())
-
-// Sessions
-app.use(
-  session({
-    secret: "hello12",
-    resave: false,
-    saveUninitialized: false,
-    store: new MongoStore({ mongooseConnection: mongoose.connection }),
-  })
-);
-
-// Passport middleware
-app.use(passport.initialize());
-app.use(passport.session());
-
-// Static folder
-app.use(express.static(path.join(__dirname, "public")));
+app.use(bodyParser.json());
 
 // Routes
 app.use("/", require("./routes/index"));
-app.use("/auth", require("./routes/auth"));
+app.use("/user", require("./routes/user"));
 app.use("/articles", require("./routes/articles"));
 
 const PORT = process.env.PORT || 4000;
