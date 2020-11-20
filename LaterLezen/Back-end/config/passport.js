@@ -1,43 +1,43 @@
-const GoogleStrategy = require("passport-google-oauth20").Strategy;
-const mongoose = require("mongoose");
+const passport = require("passport");
+const LocalStrategy = require("passport-local").Strategy;
+const JwtStrategy = require("passport-jwt").Strategy;
 const User = require("../models/User");
 
-module.exports = function (passport) {
-  passport.use(
-    new GoogleStrategy(
-      {
-        clientID: process.env.GOOGLE_CLIENT_ID,
-        clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-        callbackURL: "/auth/google/callback",
-      },
-      async (accessToken, refreshToken, profile, done) => {
-        const newUser = {
-          "Google.googleId": profile.id,
-          "Google.email": profile.emails[0].value,
-          "Google.displayName": profile.displayName,
-          "Google.firstName": profile.name.givenName,
-          "Google.lastName": profile.name.familyName,
-          "Google.image": profile.photos[0].value,
-        };
-
-        try {
-          let user = await User.findOne({ "Google.googleId": profile.id });
-          if (user) {
-            done(null, user);
-          } else {
-            user = await User.create(newUser);
-            done(null, user);
-          }
-        } catch (err) {
-          console.log(err);
-        }
-      }
-    )
-  );
-  passport.serializeUser((user, done) => {
-    done(null, user.id);
-  });
-  passport.deserializeUser((id, done) => {
-    User.findById(id, (err, user) => done(err, user));
-  });
+const cookieExtractor = (req) => {
+  let token = null;
+  if (req && req.cookies) {
+    token = req.cookies["access_token"];
+  }
+  return token;
 };
+
+// authorization for protected resources
+passport.use(
+  new JwtStrategy(
+    {
+      jwtFromRequest: cookieExtractor,
+      secretOrKey: "LaterLezen",
+    },
+    (payload, done) => {
+      User.findById({ _id: payload.sub }, (err, user) => {
+        if (err) return done(err, false);
+        if (user) return done(null, user);
+        else return done(null, false);
+      });
+    }
+  )
+);
+
+// authentication local strategy using username and password
+passport.use(
+  new LocalStrategy((username, password, done) => {
+    User.findOne({ username }, (err, user) => {
+      // Something wrong with DB
+      if (err) return done(err);
+      // No user found
+      if (!user) return done(null, false);
+      // User found, check password
+      user.comparePassword(password, done);
+    });
+  })
+);
