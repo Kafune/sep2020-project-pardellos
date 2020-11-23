@@ -29,7 +29,7 @@ router.post("/register", (req, res) => {
         message: { msgBody: "Username already taken", msgError: true },
       });
     else {
-      console.log(username + password);
+      console.log(username + " " + password);
       const newUser = new User({ username, password });
       newUser.save((err) => {
         if (err)
@@ -53,6 +53,7 @@ router.post(
   passport.authenticate("local", { session: false }),
   (req, res) => {
     if (req.isAuthenticated()) {
+      console.log('Login succesful')
       const { _id, username } = req.user;
       const token = signToken(_id);
       res.cookie("access_token", token, { httpOnly: true, sameSite: true });
@@ -120,9 +121,9 @@ router.get(
   }
 );
 
-router.get('/authenticated', passport.authenticate('jwt', {session:false}), (req,res)=>{
-    const {username} = req.user
-    res.status(200).json({isAuthenticated: true, user: {username}})
+router.get('/authenticated', passport.authenticate('jwt', { session: false }), (req, res) => {
+  const { username } = req.user
+  res.status(200).json({ isAuthenticated: true, user: { username } })
 })
 
 module.exports = router;

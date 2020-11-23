@@ -23,12 +23,12 @@ export default function SaveArticle(props) {
     }
 
     return <div className="readArticle">
-            <h2 class="center">Save Web Article</h2>
-            <input type="text" placeholder="URL..." onChange={(e) => setUrl(e.target.value)} value={url} />
-            <input type="text" placeholder="Tags..." onChange={(e) => setTags(e.target.value)} value={tags} />
-            <button className="waves-effect waves-light btn-small blue accent-2" onClick={() => { handleGetArticle(url, tags) }}>Save</button>
-            <div class=" flow-text">
-                {parse(article)}
-            </div>
+        <h2 class="center">Save Web Article</h2>
+        <input type="text" placeholder="URL..." onChange={(e) => setUrl(e.target.value)} value={url} />
+        <input type="text" placeholder="Tags..." onChange={(e) => setTags(e.target.value)} value={tags} />
+        <button className="waves-effect waves-light btn-small blue accent-2" onClick={() => { handleGetArticle(url, tags) }}>Save</button>
+        <div class=" flow-text">
+            {parse(article)}
         </div>
+    </div>
 }

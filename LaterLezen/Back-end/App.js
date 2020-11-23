@@ -7,8 +7,13 @@ const morgan = require("morgan");
 const bodyParser = require("body-parser");
 const connectDB = require("./config/db");
 const cookieParser = require("cookie-parser");
+const cors = require('cors');
 app.use(cookieParser());
 app.use(express.json());
+
+// Initialize CORS
+app.use(cors({ origin: true, credentials: true}));
+app.options("*", cors({origin: true, credentials: true}))
 
 // Load config
 dotenv.config({ path: "./config/config.env" });
