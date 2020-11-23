@@ -10,7 +10,7 @@ export async function getArticle(url, tags, id) {
   };
 
   const fetchOptions = {
-    method: 'PUT',
+    method: 'POST',
     headers: {
       'Content-Type': 'application/json'
     },
@@ -19,7 +19,7 @@ export async function getArticle(url, tags, id) {
     body: JSON.stringify(body)
   }
 
-  return fetch(serverFetchBase + `/articles/article`, fetchOptions)
+  return fetch(serverFetchBase + `/user/article`, fetchOptions)
 }
 
 export async function getAllArticles() {
@@ -35,7 +35,7 @@ export async function getAllArticles() {
   return fetch(serverFetchBase + `/user/articles`, fetchOptions)
 }
 
-export async function getArticleByUser(id) {
+export async function getArticleByUser() {
   const fetchOptions = {
     method: 'GET',
     headers: {
@@ -44,12 +44,12 @@ export async function getArticleByUser(id) {
     credentials: 'include',
     mode: 'cors',
   }
-  return fetch(serverFetchBase + `/articles/user/${id}`, fetchOptions)
+  return fetch(serverFetchBase + `/user/articles`, fetchOptions)
 }
 
 export async function loginUser(email, password) {
   const body = {
-    username: email,
+    email: email,
     password: password
   }
 
@@ -79,7 +79,7 @@ export async function logoutUser() {
 
 export async function registerUser(email, password, firstname, lastname) {
   const body = {
-    username: email,
+    email: email,
     password: password,
     firstname: firstname,
     lastname: lastname
@@ -94,4 +94,16 @@ export async function registerUser(email, password, firstname, lastname) {
     body: JSON.stringify(body)
   }
   return fetch(serverFetchBase + `/user/register`, fetchOptions)
+}
+
+export async function checkAuthenticated() {
+  const fetchOptions = {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    credentials: 'include',
+    mode: 'cors'
+  }
+  return fetch(serverFetchBase + `/user/authenticated`, fetchOptions)
 }

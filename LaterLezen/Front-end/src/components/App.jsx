@@ -1,5 +1,5 @@
-import React from 'react';
-import { Link, Switch, Route } from 'react-router-dom'
+import React  from 'react';
+import { Link, Switch, Route  } from 'react-router-dom'
 import Dashboard from './Dashboard'
 import SaveArticle from './saveArticle'
 import SaveArticlePdf from './saveArticlePdf'
@@ -13,17 +13,38 @@ import M from 'materialize-css'
 import background from '../img/pfp_background.jpg'
 import pfp from '../img/default_pfp.png'
 
+import { checkAuthenticated } from '../serverCommunication'
+
 export default class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      firstname: 'Mohammed',
-      lastname: 'Hulscher',
+      userid: '',
+      firstname: '',
+      lastname: '',
       email: '',
       logged_in: false,
-      articles: []
+      articles: [],
+      tags: {}
     }
   }
+
+  componentDidMount() {
+    checkAuthenticated()
+      .then((response) => response.json())
+      .then((response) => {
+        if (response.isAuthenticated === true) {
+          this.handleLoginState(true)
+          this.handleEmailState(response.user.email)
+          this.handleFirstnameState(response.user.firstname)
+          this.handleLastnameState(response.user.lastname)
+        }
+      })
+      .catch((e) => {
+        M.toast({ html: 'Unauthorized user, please login first' })
+      });
+  }
+
   handleLoginState(value) {
     this.setState(() => ({
       logged_in: value
@@ -38,7 +59,36 @@ export default class App extends React.Component {
     )
   }
 
+  handleFirstnameState(value) {
+    this.setState(() => ({
+      firstname: value
+    })
+    )
+  }
+
+  handleLastnameState(value) {
+    this.setState(() => ({
+      lastname: value
+    })
+    )
+  }
+
+  handleTagsState(value) {
+    this.setState(() => ({
+      tags: value
+    })
+    )
+  }
+
+  handleIDState(value) {
+    this.setState(() => ({
+      userid: value
+    })
+    )
+  }
+
   render() {
+
     // Materialize Initialization - Side Navbar
     document.addEventListener('DOMContentLoaded', function () {
       var elems = document.querySelectorAll('.sidenav');
@@ -55,6 +105,10 @@ export default class App extends React.Component {
 
     const setLoginStatus = (c) => this.handleLoginState(c)
     const setEmailState = (c) => this.handleEmailState(c)
+    const setFirstnameState = (c) => this.handleFirstnameState(c)
+    const setLastnameState = (c) => this.handleLastnameState(c)
+    const setTagsState = (c) => this.handleTagsState(c)
+    const setIDState = (c) => this.handleIDState(c)
     return (
       <div className="App">
         <nav>
@@ -78,7 +132,7 @@ export default class App extends React.Component {
                 <img src={background} />
               </div>
               <a><img class="circle" src={pfp} /></a>
-              <a><span class="white-text name">{this.state.username}</span></a>
+              <a><span class="white-text name">{this.state.firstname} {this.state.lastname}</span></a>
               <a><span class="white-text email">{this.state.email}</span></a>
             </div>
           </li>
@@ -166,19 +220,19 @@ export default class App extends React.Component {
         <div class="container">
           <Switch>
             <Route path="/dashboard">
-              <Dashboard email={this.state.email} firstname={this.state.firstname} lastname={this.state.lastname} articles={this.state.articles} />
+              <Dashboard userid={this.state.userid} email={this.state.email} firstname={this.state.firstname} lastname={this.state.lastname} articles={this.state.articles} />
             </Route>
             <Route path="/save/web">
               <SaveArticle />
             </Route>
             <Route path="/save/pdf">
-              <SaveArticlePdf/>
+              <SaveArticlePdf tags={this.state.tags} />
             </Route>
             <Route path="/search">
-              <SearchArticle/>
+              <SearchArticle />
             </Route>
             <Route path="/login">
-              <Login email={this.state.email} handleLoginState={setLoginStatus} handleEmailState={setEmailState} />
+              <Login handleLoginState={setLoginStatus} handleEmailState={setEmailState} handleFirstnameState={setFirstnameState} handleLastnameState={setLastnameState} handleTagsState={setTagsState} handleIDState={setIDState} />
             </Route>
             <Route path="/register">
               <Register />

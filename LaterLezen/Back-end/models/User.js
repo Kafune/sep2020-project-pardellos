@@ -2,14 +2,14 @@ const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
 
 const UserSchema = new mongoose.Schema({
-  username: {
+  email: {
     type: String,
     required: true,
   },
-  voornaam: {
+  firstname: {
     type: String,
   },
-  achternaam: {
+  lastname: {
     type: String,
   },
   password: {
@@ -21,6 +21,9 @@ const UserSchema = new mongoose.Schema({
     default: Date.now,
   },
   articles: [{ type: mongoose.Schema.Types.ObjectId, ref: "Article" }],
+  tags: {
+    type: [String]
+  }
 });
 
 UserSchema.pre("save", function (next) {

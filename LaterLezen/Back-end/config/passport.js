@@ -30,8 +30,10 @@ passport.use(
 
 // authentication local strategy using username and password
 passport.use(
-  new LocalStrategy((username, password, done) => {
-    User.findOne({ username }, (err, user) => {
+  new LocalStrategy({
+    usernameField: 'email',
+  }, (email, password, done) => {
+    User.findOne({ email }, (err, user) => {
       // Something wrong with DB
       if (err) return done(err);
       // No user found
