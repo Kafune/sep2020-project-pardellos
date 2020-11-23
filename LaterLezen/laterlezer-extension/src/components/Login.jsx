@@ -6,7 +6,6 @@ export default function Login(props) {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
 
-
     function handleLoginUser(email, password) {
         loginUser(email, password)
             .then((response) => response.json())
@@ -23,7 +22,7 @@ export default function Login(props) {
     <div>
       <input type="text" placeholder="username/email" onChange={(e) => setEmail(e.target.value)} value={props.username}/>
       <input type="password" placeholder="password" onChange={(e) => setPassword(e.target.value)} value={props.password}/>
-      <button value="Log in" onClick={(e) => handleLoginUser(email, password)}>Log in</button>
+      <button value="Log in" onClick={() => { handleLoginUser(email, password) }}>Log in</button>
     </div>
   );
 }
