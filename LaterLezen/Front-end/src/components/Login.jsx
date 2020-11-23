@@ -6,6 +6,7 @@ import { loginUser } from '../serverCommunication'
 export default function Login(props) {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
+    const [tags, setTags] = useState([])
     const history = useHistory();
 
     function handleLoginUser(email, password) {
@@ -15,12 +16,31 @@ export default function Login(props) {
                 if (response.isAuthenticated === true) {
                     props.handleLoginState(true)
                     props.handleEmailState(email)
+                    props.handleFirstnameState(response.firstname)
+                    props.handleLastnameState(response.lastname)
+                    props.handleIDState(response._id)
+                    handleTags(response.tags)
                     history.push('/dashboard')
                 }
             })
+            .catch(() => {
+                M.toast({ html: 'Email or password incorrect' })
+            })
+    }
+
+    function handleTags(tagsArray) {
+        let dict = [];
+        tagsArray.forEach((element) => {
+            dict.push(
+                `${element}: null`
+            );
+        });
+        console.log(dict)
+        props.handleTagsState(dict)
     }
 
     return (
+
         <div className="container">
             <div className="row">
                 <div className="col s6">

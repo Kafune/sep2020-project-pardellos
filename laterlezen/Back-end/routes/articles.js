@@ -26,25 +26,25 @@ router.get("/", async (req, res) => {
    * @memberof app
    */
 router.put("/article", async (req, res) => {
-  const { extract } = require("article-parser");
-  let url = String(req.body.url);
+  
   let userid = req.body.user_id;
 
   let doesExist = await Article.exists({ links: url });
   if (!doesExist) {
     let processedTags = [];
     let rawTags = []
-    rawTags.push(req.body.tags)
-    console.log("raw tags: " + rawTags);
+
+    rawTags = req.body.tags
+
     processedTags = rawTags
       .map(function (value) {
         return value.toLowerCase();
       })
       .sort();
-    console.log("lowecase and sorted tags: " + processedTags);
+    // console.log("lowecase and sorted tags: " + processedTags);
     const uniqueTags = new Set(processedTags);
     processedTags = [...uniqueTags];
-    console.log("Lowercase, sorted and unique tags: " + processedTags);
+    // console.log("Lowercase, sorted and unique tags: " + processedTags);
 
     extract(url)
       .then((article) => {
@@ -105,26 +105,7 @@ router.delete("/article", async (req, res) => {
   }
 });
 
-/**
-   * @type ExpressSocket.
-   * @description Retrieves all articles with given tag(s), tags are OR not AND
-   * @param empty
-   * @body tags
-   * @returns [{article}, {article}, ...]
-   * @async
-   * @memberof app
-   */
-router.get("/tags", async (req, res) => {
-  let rawTags = req.body.tags;
-  processedTags = rawTags
-    .map(function (value) {
-      return value.toLowerCase();
-    })
-    .sort();
 
-  const result = await Article.find({ tags: { $in: processedTags } });
-  res.send(result);
-});
 
 /**
    * @type ExpressSocket.
@@ -139,7 +120,7 @@ router.get("/user/:id", async (req, res) => {
   let userid = req.params.id
   console.log(userid);
 
-  let allArticles = await Article.find({ user_id: userid });
+  let allArticles = await Article.find({ _id: userid });
   res.send(allArticles);
 });
 

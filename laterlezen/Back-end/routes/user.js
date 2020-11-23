@@ -18,8 +18,8 @@ const signToken = (userID) => {
 };
 
 router.post("/register", (req, res) => {
-  const { username, password } = req.body;
-  User.findOne({ username }, (err, user) => {
+  const { email, password, firstname, lastname } = req.body;
+  User.findOne({ email }, (err, user) => {
     if (err)
       res
         .status(500)
@@ -29,8 +29,7 @@ router.post("/register", (req, res) => {
         message: { msgBody: "Username already taken", msgError: true },
       });
     else {
-      console.log(username + " " + password);
-      const newUser = new User({ username, password });
+      const newUser = new User({ email, password, firstname, lastname });
       newUser.save((err) => {
         if (err)
           res.status(500).json({
@@ -53,11 +52,11 @@ router.post(
   passport.authenticate("local", { session: false }),
   (req, res) => {
     if (req.isAuthenticated()) {
-      console.log('Login succesful')
-      const { _id, username } = req.user;
+      const { _id, email, firstname, lastname } = req.user;
       const token = signToken(_id);
+      console.log(req.user);
       res.cookie("access_token", token, { httpOnly: true, sameSite: true });
-      res.status(200).json({ isAuthenticated: true, user: { username } });
+      res.status(200).json({ isAuthenticated: true, email, firstname, lastname, tags: req.user.tags, _id });
     }
   }
 );
@@ -67,7 +66,7 @@ router.get(
   passport.authenticate("jwt", { session: false }),
   (req, res) => {
     res.clearCookie("access_token");
-    res.json({ user: { username: "" }, succes: true });
+    res.json({ user: { email: "" }, succes: true });
   }
 );
 
@@ -75,27 +74,53 @@ router.post(
   "/article",
   passport.authenticate("jwt", { session: false }),
   (req, res) => {
+    const { extract } = require("article-parser");
+    let url = String(req.body.url);
     const article = new Article(req.body);
+    console.log(article);
     article.save((err) => {
       if (err)
         res.status(500).json({
           message: { msgBody: "Error 3 has occured", msgError: true },
         });
       else {
-        req.user.articles.push(article);
-        req.user.save((err) => {
-          if (err)
-            res.status(500).json({
-              message: { msgBody: "Error 4 has occured", msgError: true },
-            });
-          else
-            res.status(200).json({
-              message: {
-                msgBody: "succesfully saved article",
-                msgError: false,
-              },
-            });
-        });
+        let processedTags = [];
+        let rawTags = req.body.tags
+        processedTags = rawTags
+          .map(function (value) {
+            return value.toLowerCase();
+          })
+          .sort();
+        console.log("lowecase and sorted tags: " + processedTags);
+        const uniqueTags = new Set(processedTags);
+        processedTags = [...uniqueTags];
+        console.log("Lowercase, sorted and unique tags: " + processedTags);
+
+        extract(url)
+          .then((article) => {
+            let newArticle = new Article(article);
+            newArticle.tags = processedTags;
+            newArticle.save((err) => {
+              if (err)
+                res.status(500).json({
+                  message: { msgBody: "Error 3 has occured", msgError: true },
+                });
+              else {
+                req.user.articles.push(newArticle);
+                req.user.save((err) => {
+                  if (err)
+                    res.status(500).json({
+                      message: { msgBody: "Error 4 has occured", msgError: true },
+                    });
+                  else
+                  res.send(newArticle)
+                });
+              }
+            })
+          })
+          .catch((err) => {
+            console.log(err);
+          });
       }
     });
   }
@@ -121,9 +146,35 @@ router.get(
   }
 );
 
+router.put("/tag", passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    User.updateOne({ _id: req.user._id }, {})
+  });
+
+/**
+   * @type ExpressSocket.
+   * @description Retrieves all articles with given tag(s), tags are OR not AND
+   * @param empty
+   * @body tags
+   * @returns [{article}, {article}, ...]
+   * @async
+   * @memberof app
+   */
+router.get("/tags", passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    let rawTags = req.body.tags;
+    processedTags = rawTags
+      .map(function (value) {
+        return value.toLowerCase();
+      })
+      .sort();
+    const result = Article.find({ _id: req.user._id }, { tags: { $in: processedTags } });
+    res.send(result);
+  });
+
 router.get('/authenticated', passport.authenticate('jwt', { session: false }), (req, res) => {
-  const { username } = req.user
-  res.status(200).json({ isAuthenticated: true, user: { username } })
+  const { firstname, lastname, email } = req.user
+  res.status(200).json({ isAuthenticated: true, user: { email, firstname, lastname } })
 })
 
 module.exports = router;
