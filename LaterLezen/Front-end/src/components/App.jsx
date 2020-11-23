@@ -12,6 +12,7 @@ import '../../src/App.css'
 
 import background from '../img/pfp_background.jpg'
 import pfp from '../img/default_pfp.png'
+import Preferences from './Preferences';
 
 export default class App extends React.Component {
   constructor(props) {
@@ -21,7 +22,9 @@ export default class App extends React.Component {
       lastname: 'Hulscher',
       email: '',
       logged_in: false,
-      articles: []
+      articles: [],
+      font_size: 'small'
+
     }
   }
   handleLoginState(value) {
@@ -38,6 +41,10 @@ export default class App extends React.Component {
     )
   }
 
+  handleFontState(value) {
+    this.setState({font_size: value})
+  }
+
   render() {
     // Materialize Initialization - Side Navbar
     document.addEventListener('DOMContentLoaded', function () {
@@ -52,6 +59,16 @@ export default class App extends React.Component {
         hoverEnabled: false
       });
     });
+
+    document.addEventListener('DOMContentLoaded', function() {
+      var dropdown1 = document.querySelector('.dropdown-trigger');
+      var dropdownOptions = {
+          'closeOnClick': false,
+          'hover':true,
+          'constrainWidth': false
+      }
+      var instanceDropdown = M.Dropdown.init(dropdown1, dropdownOptions);
+  });
 
     const setLoginStatus = (c) => this.handleLoginState(c)
     const setEmailState = (c) => this.handleEmailState(c)
@@ -169,6 +186,7 @@ export default class App extends React.Component {
               <Dashboard email={this.state.email} firstname={this.state.firstname} lastname={this.state.lastname} articles={this.state.articles} />
             </Route>
             <Route path="/save/web">
+            <Preferences fontSize={this.state.font_size} handleFontState={this.handleFontState}></Preferences>
               <SaveArticle />
             </Route>
             <Route path="/save/pdf">

@@ -9098,3 +9098,68 @@ input[type=range]::-ms-thumb {
 #menu {
   background-color: #EBEBEB;
 }
+
+
+
+.bg-white{
+  background-color: #fff;
+}
+
+.bg-yellow{
+  background-color: beige;
+}
+.bg-black{
+  background-color: #000;
+}
+
+.text-x-small p {
+  font-size: x-small;
+}
+.text-x-small h1 {
+  font-size: x-large;
+}
+
+.text-small p {
+  font-size: small;
+}
+
+.text-small h1 {
+  font-size: x-large;
+}
+
+.text-medium p {
+  font-size: medium;
+}
+.text-medium h1 {
+  font-size: x-large;
+}
+
+.text-large p {
+  font-size: large;
+}
+.text-large h1 {
+  font-size: xx-large;
+}
+
+.text-x-large p  {
+  font-size: x-large;
+}
+
+.round-icon{
+  border-radius: 50%;
+  margin-left: 5%;
+  margin-right: 5%;
+}
+
+.round-icon .white {
+  background-color: #fff;
+ 
+}
+
+.round-icon .yellow {
+  background-color: #fffbc6;
+}
+
+.round-icon .black {
+  background-color: #000;
+}
