@@ -4,11 +4,11 @@ export default function TagList(props) {
   
   return (
     <div>
-      {/* {props.tags.map((data) => {
-        return <div>
-            <button>{data}</button>
-        </div>;
-      })} */}
+        {props.tags.map((element) => {
+          return <li key={element.title} onClick={() => props.handleTagSelect(element.title)}>
+            {element.title}
+          </li>
+        })}
     </div>
   );
 }

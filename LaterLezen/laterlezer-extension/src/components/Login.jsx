@@ -7,15 +7,16 @@ export default function Login(props) {
     const [password, setPassword] = useState('')
 
     function handleLoginUser(email, password) {
-        loginUser(email, password)
-            .then((response) => response.json())
-            .then((response) => {
-                console.log(response)
-                if (response.isAuthenticated === true) {
-                    props.handleLoginState(true)
-                    props.handleEmailState(email)
-                }
-            })
+        // loginUser(email, password)
+        //     .then((response) => response.json())
+        //     .then((response) => {
+        //         console.log(response)
+        //         if (response.isAuthenticated === true) {
+        //             props.handleLoginState(true)
+        //             props.handleEmailState(email)
+        //         }
+        //     })
+        props.handleLoginState(true)
     }
 
   return (
