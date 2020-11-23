@@ -7,6 +7,7 @@ import SearchArticle from './searchArticle'
 import Login from './Login'
 import Register from './Register'
 import Logout from './Logout'
+import M from 'materialize-css'
 
 import '../../src/App.css'
 
@@ -21,12 +22,27 @@ export default class App extends React.Component {
       firstname: 'Mohammed',
       lastname: 'Hulscher',
       email: '',
-      logged_in: false,
+      logged_in: true,
       articles: [],
-      font_size: 'small'
-
+      font_size: 'small',
+      background: 'white'
     }
   }
+
+  // handleFontState(value) {
+  //   this.setState({font_size: value})
+  // }
+
+
+
+
+  handleBackground(value) {
+    this.setState(() => ({
+      background: value
+    })
+    )
+  }
+
   handleLoginState(value) {
     this.setState(() => ({
       logged_in: value
@@ -41,9 +57,6 @@ export default class App extends React.Component {
     )
   }
 
-  handleFontState(value) {
-    this.setState({font_size: value})
-  }
 
   render() {
     // Materialize Initialization - Side Navbar
@@ -72,6 +85,7 @@ export default class App extends React.Component {
 
     const setLoginStatus = (c) => this.handleLoginState(c)
     const setEmailState = (c) => this.handleEmailState(c)
+    const setBackgroundState = (c) => this.handleBackground(c)
     return (
       <div className="App">
         <nav>
@@ -186,7 +200,7 @@ export default class App extends React.Component {
               <Dashboard email={this.state.email} firstname={this.state.firstname} lastname={this.state.lastname} articles={this.state.articles} />
             </Route>
             <Route path="/save/web">
-            <Preferences fontSize={this.state.font_size} handleFontState={this.handleFontState}></Preferences>
+            <Preferences fontSize={this.state.font_size} handleBackgroundState={setBackgroundState} handleFontState={this.handleFontState}></Preferences>
               <SaveArticle />
             </Route>
             <Route path="/save/pdf">

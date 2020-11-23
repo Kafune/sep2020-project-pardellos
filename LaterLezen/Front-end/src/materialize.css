@@ -9137,9 +9137,6 @@ input[type=range]::-ms-thumb {
 .text-large p {
   font-size: large;
 }
-.text-large h1 {
-  font-size: xx-large;
-}
 
 .text-x-large p  {
   font-size: x-large;
