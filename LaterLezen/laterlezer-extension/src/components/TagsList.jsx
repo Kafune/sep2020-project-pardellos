@@ -5,9 +5,9 @@ export default function TagList(props) {
   return (
     <div>
         {props.tags.map((element) => {
-          return <li key={element.title} onClick={() => props.handleTagSelect(element.title)}>
+          return <span key={element.title} className="tag retrieved-tag" onClick={() => props.handleTagSelect(element.title)}>
             {element.title}
-          </li>
+          </span>
         })}
     </div>
   );

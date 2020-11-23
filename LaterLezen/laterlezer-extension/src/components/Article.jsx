@@ -41,14 +41,16 @@ export default function Article(props) {
     console.log(filter);
   }
 
-  function handleTagSelect(value) {
+  async function handleTagSelect(value) {
     if (selectedTags.includes(value)) {
-      const index = selectedTags.indexOf(value);
-      if(index > -1) {
-        selectedTags.splice(index,1)
-      }
+      // const index = selectedTags.indexOf(value);
+      // if (index > -1) {
+      //   selectedTags.splice(index, 1)
+      // }
+      setSelectedTags(oldArray => oldArray.filter(val => val !== value))
     } else {
       setSelectedTags(oldArray => [...oldArray, value]);
+      // selectedTags.push(value)
     }
     console.log(selectedTags);
   }
@@ -64,6 +66,7 @@ export default function Article(props) {
       <input
         type="text"
         placeholder="url"
+        className="input"
         onChange={(e) => handleUrlChange(e)}
         value={url}
       ></input>
@@ -71,11 +74,15 @@ export default function Article(props) {
       <input
         type="text"
         placeholder="find tag.."
+        className="input"
         onChange={(e) => handleFilterChange(e)}
         value={filter}
       ></input>
       <button>Search</button>
-      <br></br>
+      <br/>
+      {selectedTags.map(element => {
+        return <span key={element} className="tag selected-tag">{element}</span>
+      })}
       <TagList handleTagSelect={handleTagSelect} tags={data}></TagList>
       <button onClick={saveArticle}>Save</button>
     </div>
