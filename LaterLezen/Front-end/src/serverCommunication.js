@@ -32,7 +32,7 @@ export async function getAllArticles() {
     mode: 'cors',
   }
 
-  return fetch(serverFetchBase + `/articles/article`, fetchOptions)
+  return fetch(serverFetchBase + `/user/articles`, fetchOptions)
 }
 
 export async function getArticleByUser(id) {
@@ -47,8 +47,51 @@ export async function getArticleByUser(id) {
   return fetch(serverFetchBase + `/articles/user/${id}`, fetchOptions)
 }
 
-export async function loginUser(username,password) {
+export async function loginUser(email, password) {
+  const body = {
+    username: email,
+    password: password
+  }
 
+  const fetchOptions = {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    credentials: 'include',
+    mode: 'cors',
+    body: JSON.stringify(body)
+  }
+  return fetch(serverFetchBase + `/user/login`, fetchOptions)
 }
 
+export async function logoutUser() {
+  const fetchOptions = {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    credentials: 'include',
+    mode: 'cors'
+  }
+  return fetch(serverFetchBase + `/user/logout`, fetchOptions)
+}
 
+export async function registerUser(email, password, firstname, lastname) {
+  const body = {
+    username: email,
+    password: password,
+    firstname: firstname,
+    lastname: lastname
+  }
+  const fetchOptions = {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    credentials: 'include',
+    mode: 'cors',
+    body: JSON.stringify(body)
+  }
+  return fetch(serverFetchBase + `/user/register`, fetchOptions)
+}

@@ -1,48 +1,66 @@
-import React from "react";
+import React, { useState } from "react";
+import { useHistory, Link } from 'react-router-dom'
 import { loginUser } from '../serverCommunication'
+
+
 export default function Login(props) {
-  function handleLogin() {
-    // fetch('http://localhost:4000/login')
-    console.log(props.loggedIn);
-    props.setLoggedIn(true);
-    loginUser('username', 'password');
-  }
+    const [email, setEmail] = useState('')
+    const [password, setPassword] = useState('')
+    const history = useHistory();
 
-  function handleGoogleLogin() {
-      console.log("Login google")
+    function handleLoginUser(email, password) {
+        loginUser(email, password)
+            .then((response) => response.json())
+            .then((response) => {
+                if (response.isAuthenticated === true) {
+                    props.handleLoginState(true)
+                    props.handleEmailState(email)
+                    history.push('/dashboard')
+                }
+            })
+    }
 
-  }
-
-  return (
-    <div className="container">
-      <div className="row">
-      <div className="col s6">
-        <h5>Username</h5>
-        <input
-          type="text"
-          id="username"
-          placeholder="Please enter your username here.."
-        ></input>
-        <h5>Password</h5>
-        <input
-          type="text"
-          id="username"
-          placeholder="Please enter your password here.."
-        ></input>
-        <div className="center-align">
-        <a onClick={handleLogin} class="btn indigo darken-1">
-          Log in
-        </a>
-        <h6>No account? Register here!</h6>
-        <a onClick={handleGoogleLogin} class="btn indigo darken-1">
-          <i class="fab fa-google left"></i>Log in with Google
-        </a>
-        </div>
-        </div>
-        <div className="col s6">
-            <div className="background"></div>
-        </div> 
-      </div>
-    </div>
-  );
+    return (
+        <div className="container">
+            <div className="row">
+                <div className="col s6">
+                    <h5>Email</h5>
+                    <input
+                        type="text"
+                        id="Email"
+                        placeholder="Please enter your email here.."
+                        onChange={(e) => setEmail(e.target.value)} value={email}
+                    ></input>
+                </div>
+                <div className="col s6">
+                    <h5>Password</h5>
+                    <input
+                        type="password"
+                        id="password"
+                        placeholder="Please enter your password here.."
+                        onChange={(e) => setPassword(e.target.value)} value={password}
+                    ></input>
+                </div>
+                <div class="row">
+                    <div className="col">
+                        <a className="waves-effect waves-light btn-small blue" onClick={() => { handleLoginUser(email, password) }}>
+                            Log in
+                        </a>
+                    </div>
+                    <div className="col">
+                        <a className="waves-effect waves-light btn-small blue">
+                            <i class="fab fa-google left"></i>Log in with Google
+                    </a>
+                    </div>
+                </div>
+                <div className="col">
+                    <h5>No account?</h5>
+                    <Link to="/register"><a className="waves-effect waves-light btn-small blue">
+                        Register here!
+                    </a>
+                    </Link>
+                </div>
+            </div>
+        </div >
+    );
 }

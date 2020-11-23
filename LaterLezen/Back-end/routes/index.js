@@ -1,12 +1,10 @@
 const express = require("express");
 const router = express.Router();
-const { ensureAuth, ensureGuest } = require("../middleware/auth");
-
 const Article = require("../models/Article");
 
 // @desc    Login/Landing page
 // @route   Get /
-router.get("/", ensureGuest, (req, res) => {
+router.get("/", (req, res) => {
   res.render("login", {
     layout: "login",
   });
@@ -14,7 +12,7 @@ router.get("/", ensureGuest, (req, res) => {
 
 // @desc    Dashboard
 // @route   Get /dashboard
-router.get("/dashboard", ensureAuth, async (req, res) => {
+router.get("/dashboard",  async (req, res) => {
   try {
     const articles = await Article.find({ user: req.user.id }).lean();
     res.render("dashboard", {
