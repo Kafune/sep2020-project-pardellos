@@ -7,39 +7,35 @@ export default class App extends React.Component {
     super(props);
     this.state = {
       isLoggedIn: false,
-      username: '',
-      password: ''
+      email: ''
     };
   }
 
-  setUsername (value) {
-      this.setState(() => ({
-          username: value
-      }))
-  }
-
-  setPassword (value) {
-      this.setState(() => ({
-          password: value
-      }))
-  }
-
-  setLogin(value) {
+  handleLoginState(value) {
     this.setState(() => ({
-      isLoggedIn: value,
-    }));
+      isLoggedIn: value
+    })
+    )
   }
+
+  handleEmailState(value) {
+    this.setState(() => ({
+      email: value
+    })
+    )
+  }
+
 
   render() {
-    console.log(this.state.isLoggedIn)
-    const setIsLoggedIn = (c) => this.setLogin(c);
-    const setPass = (c) => this.setPassword(c);
-    const setUser = (c) => this.setUsername(c);
+
+    const handleLoginState = (c) => this.handleLoginState(c);
+    const handleEmailState = (c) => this.handleEmailState(c);
+
     return (
         <div>
             {this.state.isLoggedIn === true
-            ? <Article username={this.state.username} password={this.state.password}></Article>
-            : <Login setLogin={setIsLoggedIn} setPass={setPass} setUser={setUser} username={this.state.username} password={this.state.password}></Login>
+            ? <Article username={this.state.username}></Article>
+            : <Login handleLoginState={handleLoginState} handleEmailState={handleEmailState} email={this.state.email}></Login>
             }
         </div>
     )
