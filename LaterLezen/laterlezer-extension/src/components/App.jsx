@@ -2,6 +2,9 @@ import React from "react";
 import Login from "./Login";
 import Article from "./Article";
 
+import './../../src/materialize.css';
+import './../../src/App.css';
+
 export default class App extends React.Component {
   constructor(props) {
     super(props);
