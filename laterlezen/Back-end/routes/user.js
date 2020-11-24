@@ -118,7 +118,7 @@ router.post(
                       message: { msgBody: "Error 4 has occured", msgError: true },
                     });
                   else
-                  res.send(newArticle)
+                    res.send(newArticle)
                 });
               }
             })
@@ -165,21 +165,27 @@ router.put("/tag", passport.authenticate("jwt", { session: false }),
    * @async
    * @memberof app
    */
-router.get("/tags", passport.authenticate("jwt", { session: false }),
+router.put("/tags", passport.authenticate("jwt", { session: false }),
   (req, res) => {
-    let rawTags = req.body.tags;
-    processedTags = rawTags
-      .map(function (value) {
-        return value.toLowerCase();
-      })
-      .sort();
-    const result = Article.find({ _id: req.user._id }, { tags: { $in: processedTags } });
-    res.send(result);
+    let tags = req.body.tags
+    User.findById({ _id: req.user._id })
+    .populate({ path: "articles", match: { tags: { $all: tags } } })
+    .exec((err, document) => {
+      if (err)
+        res.status(500).json({
+          message: { msgBody: "Error has occured", msgError: true },
+        });
+      else {
+        res
+          .status(200)
+          .json({ articles: document.articles, authenticated: true });
+      }
+    });
   });
 
 router.get('/authenticated', passport.authenticate('jwt', { session: false }), (req, res) => {
-  const { firstname, lastname, email } = req.user
-  res.status(200).json({ isAuthenticated: true, user: { email, firstname, lastname } })
+  const { firstname, lastname, email, tags } = req.user
+  res.status(200).json({ isAuthenticated: true, user: { email, firstname, lastname, tags } })
 })
 
 module.exports = router;

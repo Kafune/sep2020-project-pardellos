@@ -6,7 +6,6 @@ import { loginUser } from '../serverCommunication'
 export default function Login(props) {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
-    const [tags, setTags] = useState([])
     const history = useHistory();
 
     function handleLoginUser(email, password) {
@@ -19,7 +18,8 @@ export default function Login(props) {
                     props.handleFirstnameState(response.firstname)
                     props.handleLastnameState(response.lastname)
                     props.handleIDState(response._id)
-                    handleTags(response.tags)
+                    // handleTags(response.tags)
+                    props.handleTagsState(response.tags)
                     history.push('/dashboard')
                 }
             })
@@ -28,16 +28,16 @@ export default function Login(props) {
             })
     }
 
-    function handleTags(tagsArray) {
-        let dict = [];
-        tagsArray.forEach((element) => {
-            dict.push(
-                `${element}: null`
-            );
-        });
-        console.log(dict)
-        props.handleTagsState(dict)
-    }
+    // function handleTags(tagsArray) {
+    //     let dict = [];
+    //     tagsArray.forEach((element) => {
+    //         dict.push(
+    //             `${element}: null`
+    //         );
+    //     });
+    //     console.log(dict)
+    //     props.handleTagsState(dict)
+    // }
 
     return (
 

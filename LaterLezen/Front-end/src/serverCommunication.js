@@ -107,3 +107,32 @@ export async function checkAuthenticated() {
   }
   return fetch(serverFetchBase + `/user/authenticated`, fetchOptions)
 }
+
+export async function searchArticleByTags(tags){
+  const body = {
+    tags: tags
+  }
+
+  const fetchOptions = {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    credentials: 'include',
+    mode: 'cors',
+    body: JSON.stringify(body)
+  }
+  return fetch(serverFetchBase + `/user/tags`, fetchOptions)
+}
+
+export async function searchArticleByID(id){
+  const fetchOptions = {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    credentials: 'include',
+    mode: 'cors'
+  }
+  return fetch(serverFetchBase + `/articles/article/${id}`, fetchOptions)
+}
