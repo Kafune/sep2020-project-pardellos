@@ -5,10 +5,8 @@ const serverFetchBase = `${window.location.protocol}//${serverHostname}`
 
 export async function loginUser(email, password) {
 
-
-    console.timeLog(serverFetchBase)
   const body = {
-    username: email,
+    email: email,
     password: password
   }
 
