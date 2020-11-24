@@ -71,14 +71,14 @@ router.put("/article", async (req, res) => {
    * @async
    * @memberof app
    */
-router.get("/article/:id", async (req, res) => {
-  id = req.params.id;
-  let doesExist = await Article.exists({ _id: id });
-
+router.get("/article/:id", (req, res) => {
+  const id = req.params.id
+  let doesExist = Article.exists({ _id: id });
+  console.log(doesExist)
   if (doesExist) {
-    let article = await Article.find({ _id: id });
+    let article = Article.findById({ id });
+    // console.log(article);
     res.send(article);
-    await Article.updateOne({ _id: id }, { read: true });
   } else {
     res.sendStatus(409);
   }
@@ -104,8 +104,6 @@ router.delete("/article", async (req, res) => {
     res.sendStatus(409);
   }
 });
-
-
 
 /**
    * @type ExpressSocket.

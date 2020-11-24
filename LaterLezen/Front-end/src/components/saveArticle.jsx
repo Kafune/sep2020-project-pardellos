@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { getArticle, getAllArticles, getArticleByUser } from '../serverCommunication'
-import parse from 'html-react-parser';
+
 
 export default function SaveArticle(props) {
     const [userID, setUserID] = useState(props.userid)
     const [url, setUrl] = useState('');
-    const [article, setArticle] = useState('')
     const [hideToggle, setHideToggle] = useState(false);
     const [tags, setTags] = useState(props.tags);
 
@@ -50,11 +49,7 @@ export default function SaveArticle(props) {
                 })
                 if (noErrors === true) {
                     getArticle(url, tagArray, userID)
-                        .then(result => result.json())
-                        .then(result => {
-                            setHideToggle(true)
-                            setArticle(result.content)
-                        })
+                        .then(() => M.toast({ html: 'Article succesfully saved' }))
                 }
             }
             else {
@@ -70,9 +65,5 @@ export default function SaveArticle(props) {
         <input type="text" placeholder="URL..." onChange={(e) => setUrl(e.target.value)} value={url} />
         <div class="chips chips-placeholder chips-autocomplete tooltipped" data-position="bottom" data-tooltip="[Tag requirements] Allow chars: A-Z / 0-9 / _  / - / Max length: 15 chars" ></div>
         <button className="waves-effect waves-light btn-small blue accent-2" onClick={() => { handleGetArticle(url, tags) }}>Save</button>
-
-        <div class="container flow-text">
-            {parse(article)}
-        </div>
     </div >
 }

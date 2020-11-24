@@ -7,6 +7,7 @@ import SearchArticle from './searchArticle'
 import Login from './Login'
 import Register from './Register'
 import Logout from './Logout'
+import DisplayArticle from './displayArticle'
 
 import '../../src/App.css'
 
@@ -19,17 +20,37 @@ export default class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      userid: '',
       firstname: '',
       lastname: '',
       email: '',
       logged_in: false,
       articles: [],
-      tags: {}
+      article_id: '',
+      tags: []
     }
   }
 
   componentDidMount() {
+        // Materialize Initialization - Side Navbar
+        document.addEventListener('DOMContentLoaded', function () {
+          var elems = document.querySelectorAll('.sidenav');
+          var instances = M.Sidenav.init(elems, {});
+        });
+    
+        // Materialize Initialization - Action Buttons
+        document.addEventListener('DOMContentLoaded', function () {
+          var elems = document.querySelectorAll('.fixed-action-btn');
+          var instances = M.FloatingActionButton.init(elems, {
+            hoverEnabled: false
+          });
+        });
+    
+        // Materialize Initialization - Tooltips
+        document.addEventListener('DOMContentLoaded', function() {
+          var elems = document.querySelectorAll('.tooltipped');
+          var instances = M.Tooltip.init(elems, {});
+        });
+
     checkAuthenticated()
       .then((response) => response.json())
       .then((response) => {
@@ -38,6 +59,8 @@ export default class App extends React.Component {
           this.handleEmailState(response.user.email)
           this.handleFirstnameState(response.user.firstname)
           this.handleLastnameState(response.user.lastname)
+          this.handleTagsState(response.user.tags)
+          
         }
       })
       .catch((e) => {
@@ -82,34 +105,12 @@ export default class App extends React.Component {
 
   handleIDState(value) {
     this.setState(() => ({
-      userid: value
+      article_id: value
     })
     )
   }
 
   render() {
-
-    // Materialize Initialization - Side Navbar
-    document.addEventListener('DOMContentLoaded', function () {
-      var elems = document.querySelectorAll('.sidenav');
-      var instances = M.Sidenav.init(elems, {});
-    });
-
-    // Materialize Initialization - Action Buttons
-    document.addEventListener('DOMContentLoaded', function () {
-      var elems = document.querySelectorAll('.fixed-action-btn');
-      var instances = M.FloatingActionButton.init(elems, {
-        hoverEnabled: false
-      });
-    });
-
-    // Materialize Initialization - Tooltips
-    document.addEventListener('DOMContentLoaded', function() {
-      var elems = document.querySelectorAll('.tooltipped');
-      var instances = M.Tooltip.init(elems, {});
-    });
-  
-
     const setLoginStatus = (c) => this.handleLoginState(c)
     const setEmailState = (c) => this.handleEmailState(c)
     const setFirstnameState = (c) => this.handleFirstnameState(c)
@@ -227,7 +228,7 @@ export default class App extends React.Component {
         <div class="container">
           <Switch>
             <Route path="/dashboard">
-              <Dashboard userid={this.state.userid} email={this.state.email} firstname={this.state.firstname} lastname={this.state.lastname} articles={this.state.articles} />
+              <Dashboard email={this.state.email} firstname={this.state.firstname} lastname={this.state.lastname} articles={this.state.articles} />
             </Route>
             <Route path="/save/web">
               <SaveArticle />
@@ -236,7 +237,7 @@ export default class App extends React.Component {
               <SaveArticlePdf tags={this.state.tags} />
             </Route>
             <Route path="/search">
-              <SearchArticle />
+              <SearchArticle tags={this.state.tags} articles={this.state.articles} handleIDState={setIDState}/>
             </Route>
             <Route path="/login">
               <Login handleLoginState={setLoginStatus} handleEmailState={setEmailState} handleFirstnameState={setFirstnameState} handleLastnameState={setLastnameState} handleTagsState={setTagsState} handleIDState={setIDState} />
@@ -246,6 +247,9 @@ export default class App extends React.Component {
             </Route>
             <Route path="/logout">
               <Logout handleLoginState={setLoginStatus} />
+            </Route>
+            <Route path="/article/:id">
+              <DisplayArticle articleID={this.state.article_id}/>
             </Route>
           </Switch>
         </div>
