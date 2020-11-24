@@ -35,18 +35,31 @@ export default function SaveArticle(props) {
     }
 
     function handleGetArticle(url, tags) {
-        var tagArray = []
-        tags.forEach((element) => {
-            tagArray.push(element.tag)
-        })
+        let noErrors = true
 
         if (new RegExp("([a-zA-Z0-9]+://)?([a-zA-Z0-9_]+:[a-zA-Z0-9_]+@)?([a-zA-Z0-9.-]+\\.[A-Za-z]{2,4})(:[0-9]+)?(/.*)?").test(url)) {
-            getArticle(url, tagArray, userID)
-                .then(result => result.json())
-                .then(result => {
-                    setHideToggle(true)
-                    setArticle(result.content)
+            if (tags !== undefined) {
+                var tagArray = []
+                tags.forEach((element) => {
+                    if (new RegExp("^[a-zA-Z0-9_.-]{1,15}$").test(element.tag)) {
+                        tagArray.push(element.tag)
+                    } else {
+                        M.toast({ html: 'Geen geldige tag: ' + element.tag })
+                        noErrors = false
+                    }
                 })
+                if (noErrors === true) {
+                    getArticle(url, tagArray, userID)
+                        .then(result => result.json())
+                        .then(result => {
+                            setHideToggle(true)
+                            setArticle(result.content)
+                        })
+                }
+            }
+            else {
+                M.toast({ html: 'Please enter atleast one tag' })
+            }
         } else {
             M.toast({ html: 'Geen geldige URL' })
         }
@@ -55,7 +68,7 @@ export default function SaveArticle(props) {
     return <div className="readArticle">
         <h2 class="center">Save Web Article</h2>
         <input type="text" placeholder="URL..." onChange={(e) => setUrl(e.target.value)} value={url} />
-        <div class="chips chips-placeholder chips-autocomplete" ></div>
+        <div class="chips chips-placeholder chips-autocomplete tooltipped" data-position="bottom" data-tooltip="[Tag requirements] Allow chars: A-Z / 0-9 / _  / - / Max length: 15 chars" ></div>
         <button className="waves-effect waves-light btn-small blue accent-2" onClick={() => { handleGetArticle(url, tags) }}>Save</button>
 
         <div class="container flow-text">

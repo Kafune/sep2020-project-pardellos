@@ -103,6 +103,13 @@ export default class App extends React.Component {
       });
     });
 
+    // Materialize Initialization - Tooltips
+    document.addEventListener('DOMContentLoaded', function() {
+      var elems = document.querySelectorAll('.tooltipped');
+      var instances = M.Tooltip.init(elems, {});
+    });
+  
+
     const setLoginStatus = (c) => this.handleLoginState(c)
     const setEmailState = (c) => this.handleEmailState(c)
     const setFirstnameState = (c) => this.handleFirstnameState(c)

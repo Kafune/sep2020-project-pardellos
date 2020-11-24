@@ -84,8 +84,9 @@ router.post(
           message: { msgBody: "Error 3 has occured", msgError: true },
         });
       else {
-        let processedTags = [];
         let rawTags = req.body.tags
+        let userTags = req.user.tags
+        let processedTags = [];
         processedTags = rawTags
           .map(function (value) {
             return value.toLowerCase();
@@ -106,6 +107,10 @@ router.post(
                   message: { msgBody: "Error 3 has occured", msgError: true },
                 });
               else {
+                let allTags = userTags.concat(processedTags)
+                const allUniqueTags = new Set(allTags);
+                allTags = [...allUniqueTags];
+                req.user.tags = allTags
                 req.user.articles.push(newArticle);
                 req.user.save((err) => {
                   if (err)
