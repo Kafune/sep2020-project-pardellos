@@ -10,8 +10,6 @@ export default function Logout(props) {
             props.handleLoginState(false)
             history.push('/login')
         })
-
     return <div>
-
     </div>
 }

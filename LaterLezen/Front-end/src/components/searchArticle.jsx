@@ -36,16 +36,12 @@ export default function SearchArticle(props) {
         }
     }
 
-    function handleSelectArticle(id){
-        props.handleIDState(id)
-    }
-
     return <div>
         <h2 class="center">Search Article</h2>
         <div class="row">
             <h3>Select your tag(s)</h3>
             {tags.map((data) => {
-                return <div class="col">
+                return <div class="col" key={data}>
                     <p>
                         <label>
                             <input type="checkbox" name={data} checked={isChecked[data]} onClick={handleCheckBox} />
@@ -71,7 +67,7 @@ export default function SearchArticle(props) {
                         </div>
                         <div class="card-action">
                             <Link to={`/article/${data._id}`}>
-                                <a onClick={() => handleSelectArticle(data._id)}>See article</a>
+                                <a>See article</a>
                             </Link>
                             <p>Tags: {data.tags.map((data) => {
                                 return data + " "

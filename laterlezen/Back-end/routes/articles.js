@@ -26,7 +26,7 @@ router.get("/", async (req, res) => {
    * @memberof app
    */
 router.put("/article", async (req, res) => {
-  
+
   let userid = req.body.user_id;
 
   let doesExist = await Article.exists({ links: url });
@@ -73,15 +73,15 @@ router.put("/article", async (req, res) => {
    */
 router.get("/article/:id", (req, res) => {
   const id = req.params.id
-  let doesExist = Article.exists({ _id: id });
-  console.log(doesExist)
-  if (doesExist) {
-    let article = Article.findById({ id });
-    // console.log(article);
-    res.send(article);
-  } else {
-    res.sendStatus(409);
-  }
+  Article.findOne({ _id: id }, (err, article) => {
+    if (!article)
+      res.status(400).json({
+        error: true,
+      });
+    else {
+      res.send(article)
+    }
+  })
 });
 
 /**
