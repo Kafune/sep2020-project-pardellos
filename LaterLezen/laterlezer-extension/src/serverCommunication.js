@@ -2,6 +2,7 @@ const port = 4000;
 const serverHostname = `${window.location.hostname}:${port}`
 const serverFetchBase = `${window.location.protocol}//${serverHostname}`
 
+const baseurl = `http://localhost:4000`
 
 export async function loginUser(email, password) {
 
@@ -19,7 +20,7 @@ export async function loginUser(email, password) {
     mode: 'cors',
     body: JSON.stringify(body)
   }
-  return fetch(serverFetchBase + `/user/login`, fetchOptions)
+  return fetch(baseurl + `/user/login`, fetchOptions)
 }
 
 export async function logoutUser() {
@@ -34,3 +35,21 @@ export async function logoutUser() {
   return fetch(serverFetchBase + `/user/logout`, fetchOptions)
 }
 
+export async function saveArticle(url, tags ) {
+
+  const body = {
+    url: url,
+    tags: [tags]
+  }
+
+  const fetchOptions = {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    credentials: 'include',
+    mode: 'cors',
+    body: JSON.stringify(body)
+  }
+  return fetch(baseurl + `/articles/article`, fetchOptions)
+}

@@ -21,7 +21,7 @@ router.get("/", async (req, res) => {
    * @type ExpressSocket.
    * @description Saves a new article from a given link
    * @param empty
-   * @body link, user_id
+   * @body link, user_id, tags
    * @returns nothing
    * @async
    * @memberof app
