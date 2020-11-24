@@ -58,7 +58,7 @@ export default function SaveArticle(props) {
         <div class="chips chips-placeholder chips-autocomplete" ></div>
         <button className="waves-effect waves-light btn-small blue accent-2" onClick={() => { handleGetArticle(url, tags) }}>Save</button>
 
-        <div class="container flow-text">
+        <div class={'container flow-text text-' + props.font_size}>
             {parse(article)}
         </div>
     </div >

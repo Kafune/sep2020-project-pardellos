@@ -7,6 +7,8 @@ import SearchArticle from './searchArticle'
 import Login from './Login'
 import Register from './Register'
 import Logout from './Logout'
+import Preferences from './Preferences'
+import ReadArticle from './readArticle'
 
 import '../../src/App.css'
 
@@ -25,7 +27,9 @@ export default class App extends React.Component {
       email: '',
       logged_in: false,
       articles: [],
-      tags: {}
+      tags: {},
+      font_size: 'small',
+      background: 'white'
     }
   }
 
@@ -87,6 +91,21 @@ export default class App extends React.Component {
     )
   }
 
+  handleFontSize(value) {
+    this.setState(() => ({
+      font_size: value
+    })
+    )
+  }
+
+
+  handleBackground(value) {
+    this.setState(() => ({
+      background: value
+    })
+    )
+  }
+
   render() {
 
     // Materialize Initialization - Side Navbar
@@ -109,6 +128,8 @@ export default class App extends React.Component {
     const setLastnameState = (c) => this.handleLastnameState(c)
     const setTagsState = (c) => this.handleTagsState(c)
     const setIDState = (c) => this.handleIDState(c)
+    const setBackgroundState = (c) => this.handleBackground(c)
+    const setFontSizeState = (c) => this.handleFontSize(c)
     return (
       <div className="App">
         <nav>
@@ -218,12 +239,14 @@ export default class App extends React.Component {
           </ul>
         </div>
         <div class="container">
+        <Preferences fontSize={this.state.font_size} handleBackgroundState={setBackgroundState} handleFontState={setFontSizeState}></Preferences>
           <Switch>
             <Route path="/dashboard">
               <Dashboard userid={this.state.userid} email={this.state.email} firstname={this.state.firstname} lastname={this.state.lastname} articles={this.state.articles} />
             </Route>
             <Route path="/save/web">
-              <SaveArticle />
+              <ReadArticle font_size={this.state.font_size}></ReadArticle>
+              {/* <SaveArticle font_size={this.state.font_size} /> */}
             </Route>
             <Route path="/save/pdf">
               <SaveArticlePdf tags={this.state.tags} />
