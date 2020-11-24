@@ -34,16 +34,14 @@ export async function logoutUser() {
   }
   return fetch(serverFetchBase + `/user/logout`, fetchOptions)
 }
-
-export async function saveArticle(url, tags ) {
-
+export async function saveArticle(url, tags) {
   const body = {
     url: url,
-    tags: [tags]
-  }
+    tags: tags
+  };
 
   const fetchOptions = {
-    method: 'PUT',
+    method: 'POST',
     headers: {
       'Content-Type': 'application/json'
     },
@@ -51,5 +49,6 @@ export async function saveArticle(url, tags ) {
     mode: 'cors',
     body: JSON.stringify(body)
   }
-  return fetch(baseurl + `/articles/article`, fetchOptions)
+
+  return fetch(serverFetchBase + `/user/article`, fetchOptions)
 }

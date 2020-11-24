@@ -5,19 +5,8 @@ export default function Article(props) {
   const [url, setUrl] = useState("");
   const [filter, setFilter] = useState("");
   const [selectedTags, setSelectedTags] = useState([]);
-  const [tags, setTags] = useState([]);
-
-  const data = [
-    {
-      title: "hoihoasfasdf",
-    },
-    {
-      title: "test123123",
-    },
-    {
-      title: "kachung is baas",
-    },
-  ];
+  const [filteredTags, setFilteredTags] = useState([props.tags])
+  
 
   function handleUrlChange(e) {
     e.preventDefault();
@@ -28,7 +17,9 @@ export default function Article(props) {
   function handleFilterChange(e) {
     e.preventDefault();
     setFilter(e.target.value);
-    console.log(filter);
+
+    let filtered = props.tags.filter((name) => name.includes(filter))
+    setFilteredTags(filtered);
   }
 
   function handleTagSelect(value) {
@@ -51,7 +42,9 @@ export default function Article(props) {
   }
 
   return (
+    
     <div className="container extension-bg">
+      {console.log(props.tags)}
       <h3 className="login-title">LaterLezer</h3>
       <h4 className="login-title">Add articles here!!</h4>
       <div className="row input-form">
@@ -80,7 +73,7 @@ export default function Article(props) {
         <h5>Available tags: </h5>
         <TagList
           handleTagSelect={handleTagSelect}
-          tags={data}
+          tags={filteredTags}
           selectedTags={selectedTags}
         ></TagList>
         <button className="waves-effect waves-light btn" onClick={saveArticles}>

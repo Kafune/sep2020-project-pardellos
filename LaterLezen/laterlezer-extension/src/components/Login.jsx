@@ -12,10 +12,11 @@ export default function Login(props) {
       .then((response) => response.json())
       .then((response) => {
         if (response.isAuthenticated === true) {
-          console.log(response);
+          console.log(response)
           props.handleLoginState(true);
           props.handleEmailState(email);
         }
+        props.setTags(response.tags)
       })
       .catch(() => {
         M.toast({ html: "User not found, please enter the correct username and password in order to login!" });

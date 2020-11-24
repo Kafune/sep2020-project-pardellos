@@ -10,8 +10,15 @@ export default class App extends React.Component {
     super(props);
     this.state = {
       isLoggedIn: false,
-      email: ''
+      email: '',
+      tags: []
     };
+  }
+
+  SetTags (value) {
+    this.setState({
+      tags: value
+    })
   }
 
   handleLoginState(value) {
@@ -33,12 +40,13 @@ export default class App extends React.Component {
 
     const handleLoginState = (c) => this.handleLoginState(c);
     const handleEmailState = (c) => this.handleEmailState(c);
+    const setTags = (c) => this.SetTags(c);
 
     return (
         <div>
             {this.state.isLoggedIn === true
-            ? <Article username={this.state.username}></Article>
-            : <Login handleLoginState={handleLoginState} handleEmailState={handleEmailState} email={this.state.email}></Login>
+            ? <Article tags={this.state.tags} username={this.state.username}></Article>
+            : <Login setTags={setTags} handleLoginState={handleLoginState} handleEmailState={handleEmailState} email={this.state.email}></Login>
             }
         </div>
     )
