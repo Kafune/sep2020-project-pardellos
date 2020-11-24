@@ -25,11 +25,9 @@ export default class App extends React.Component {
       firstname: '',
       lastname: '',
       email: '',
-      logged_in: false,
+      logged_in: true,
       articles: [],
-      tags: {},
-      font_size: 'small',
-      background: 'white'
+      tags: {}
     }
   }
 
@@ -239,13 +237,13 @@ export default class App extends React.Component {
           </ul>
         </div>
         <div class="container">
-        <Preferences fontSize={this.state.font_size} handleBackgroundState={setBackgroundState} handleFontState={setFontSizeState}></Preferences>
           <Switch>
             <Route path="/dashboard">
               <Dashboard userid={this.state.userid} email={this.state.email} firstname={this.state.firstname} lastname={this.state.lastname} articles={this.state.articles} />
             </Route>
             <Route path="/save/web">
-              <ReadArticle font_size={this.state.font_size}></ReadArticle>
+              <ReadArticle/>
+
               {/* <SaveArticle font_size={this.state.font_size} /> */}
             </Route>
             <Route path="/save/pdf">
