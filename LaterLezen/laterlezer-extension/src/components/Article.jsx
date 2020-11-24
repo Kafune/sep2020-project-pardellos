@@ -1,12 +1,16 @@
 import React, { useState, useEffect } from "react";
 import TagList from "./TagsList";
-import {saveArticle} from '../serverCommunication'
+import { saveArticle } from "../serverCommunication";
 export default function Article(props) {
   const [url, setUrl] = useState("");
   const [filter, setFilter] = useState("");
   const [selectedTags, setSelectedTags] = useState([]);
-  const [filteredTags, setFilteredTags] = useState([props.tags])
-  
+  const [filteredTags, setFilteredTags] = useState([props.tags]);
+
+  useEffect(() => {
+    console.log(filteredTags)
+    setFilteredTags([...props.tags])
+  }, [props.tags]);
 
   function handleUrlChange(e) {
     e.preventDefault();
@@ -17,9 +21,6 @@ export default function Article(props) {
   function handleFilterChange(e) {
     e.preventDefault();
     setFilter(e.target.value);
-
-    let filtered = props.tags.filter((name) => name.includes(filter))
-    setFilteredTags(filtered);
   }
 
   function handleTagSelect(value) {
@@ -34,15 +35,19 @@ export default function Article(props) {
   }
 
   function saveArticles() {
-    saveArticle(url,selectedTags)
-    .then((res) => res.json())
-    .then((response) => {
-      console.log(response)
-    })
+    saveArticle(url, selectedTags)
+      .then((res) => res.json())
+      .then((response) => {
+        console.log(response);
+      });
   }
 
+  useEffect(() => {
+    let filtered = props.tags.filter((name) => name.includes(filter));
+    setFilteredTags(filtered);  
+  }, [filter]);
+
   return (
-    
     <div className="container extension-bg">
       {console.log(props.tags)}
       <h3 className="login-title">LaterLezer</h3>
@@ -64,12 +69,8 @@ export default function Article(props) {
             onChange={(e) => handleFilterChange(e)}
             value={filter}
           ></input>
-          <button className="waves-effect waves-light btn">Search</button>
         </div>
         <br />
-        {/* {selectedTags.map(element => {
-          return <span key={element} className="tag selected-tag">{element}</span>
-        })} */}
         <h5>Available tags: </h5>
         <TagList
           handleTagSelect={handleTagSelect}

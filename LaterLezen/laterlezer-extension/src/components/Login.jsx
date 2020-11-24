@@ -19,7 +19,7 @@ export default function Login(props) {
         props.setTags(response.tags)
       })
       .catch(() => {
-        M.toast({ html: "User not found, please enter the correct username and password in order to login!" });
+        M.toast({ html: "User not found, please enter the correct username and password in order to login!", displayLength: 1650 });
       });
   }
 

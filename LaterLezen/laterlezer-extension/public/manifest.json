@@ -1,11 +1,11 @@
 {
   "manifest_version": 2,
-  "name": "Foobar",
+  "name": "LaterLezer",
   "version": "1.0",
-  "description": "Foobar extension made with React.",
+  "description": "LaterLezer extension.",
   "browser_action": {
     "default_icon": "logo192.png",
-    "default_title": "Foobar",
+    "default_title": "LaterLezer",
     "default_popup": "index.html"
   },
   "icons": {
