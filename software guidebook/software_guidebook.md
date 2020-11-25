@@ -29,9 +29,7 @@ Met deze reader-app hoopt de opdrachtgever dat deze app wel aan zijn eisen voldo
 
 ## Functioneel-overzicht
 
-1. Welke functionaliteiten gaat het systeem bevatten?
-2. Wie gaat het systeem gebruiken?
-3. Hoe voorziet het systeem in de behoeften van de doelgroep?
+De Laterlezer app bestaat uit een mobiele webapplicatie waarin de gebruiker zijn artikelen op kan slaan en kan lezen. Daarnaast bestaat Laterlezer uit een extensie, waarmee gebruikers artikelen snel op kan slaan op een andere website.
 
 De Laterlezer app slaat (wetenschappelijke) artikelen op die vanuit andere websites zijn gehaald. Elk artikel heeft een URL waarvan de artikel vandaan komt, en optioneel een aantal tags om het artikel snel terug te vinden m.b.v. het filtersysteem voor tags. Bij het lezen van een artikel kan de gebruiker een aantal functies gebruiken om het lezen makkelijker te maken, bijvoorbeeld het groter maken van tekst, of het veranderen van de achtergrondskleur. Om een artikel bij een gebruiker, moet deze natuurlijk ook kunnen registreren en inloggen. 
 
@@ -44,15 +42,22 @@ De belangrijkste gebruikers voor de Laterlezer app zijn de onderzoekers. Doordat
 1. Wat zijn de kwaliteits attributen waaraan het product moet voldoen?
 
 voorbeelden staan in het software guidebook
-
-
 (side note probeer de attributen smart te definiëren)
+
+- Laterlezer is 99.9% van de tijd online. Onderhoud kan plaatsvinden, waardoor Laterlezer voor een bepaalde(hoeveel?) tijd niet beschikbaar is.
 
 ## beperkingen
 
 1. Wat waren de beperkingen die ontstonden bij het maken van het eindproduct?
 
 ook hier staan voorbeelden in de guidebook
+
+- Het team heeft 3 sprints om aan Laterlezer te werken. 1 sprint is 2 weken.
+- Het team ontwikkelt Laterlezer d.m.v. Node, Express, MongoDB/Mongoose en React omdat het team daarmee de meeste kennis heeft.
+- Ieder teamlid werkt tijdens het project aan zijn leerdoelen
+- Het team maakt gebruik van onbekende technieken, zoals ontwikkeling van extensies, inloggen met oAuth etc.
+- 
+
 
 ## Principes
 1. Wat zijn de best practices die gebruikt zijn?
