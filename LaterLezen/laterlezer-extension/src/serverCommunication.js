@@ -23,6 +23,18 @@ export async function loginUser(email, password) {
   return fetch(baseurl + `/user/login`, fetchOptions)
 }
 
+export async function checkAuthenticated() {
+  const fetchOptions = {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    credentials: 'include',
+    mode: 'cors'
+  }
+  return fetch(serverFetchBase + `/user/authenticated`, fetchOptions)
+}
+
 export async function logoutUser() {
   const fetchOptions = {
     method: 'GET',
