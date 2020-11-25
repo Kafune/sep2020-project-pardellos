@@ -13,66 +13,108 @@ const signToken = (userID) => {
       sub: userID,
     },
     "LaterLezen",
-    { expiresIn: "1h" }
+    {
+      expiresIn: "1h",
+    }
   );
 };
 
 router.post("/register", (req, res) => {
   const { email, password, firstname, lastname } = req.body;
-  User.findOne({ email }, (err, user) => {
-    if (err)
-      res
-        .status(500)
-        .json({ message: { msgBody: "Error 1 has occured", msgError: true } });
-    if (user)
-      res.status(400).json({
-        message: { msgBody: "Username already taken", msgError: true },
-      });
-    else {
-      const newUser = new User({ email, password, firstname, lastname });
-      newUser.save((err) => {
-        if (err)
-          res.status(500).json({
-            message: { msgBody: "Error 2 has occured", msgError: true },
-          });
-        else
-          res.status(200).json({
-            message: {
-              msgBody: "Account sucessfully created",
-              msgError: false,
-            },
-          });
-      });
+  User.findOne(
+    {
+      email,
+    },
+    (err, user) => {
+      if (err)
+        res.status(500).json({
+          message: {
+            msgBody: "Error 1 has occured",
+            msgError: true,
+          },
+        });
+      if (user)
+        res.status(400).json({
+          message: {
+            msgBody: "Username already taken",
+            msgError: true,
+          },
+        });
+      else {
+        const newUser = new User({
+          email,
+          password,
+          firstname,
+          lastname,
+        });
+        newUser.save((err) => {
+          if (err)
+            res.status(500).json({
+              message: {
+                msgBody: "Error 2 has occured",
+                msgError: true,
+              },
+            });
+          else
+            res.status(200).json({
+              message: {
+                msgBody: "Account sucessfully created",
+                msgError: false,
+              },
+            });
+        });
+      }
     }
-  });
+  );
 });
 
 router.post(
   "/login",
-  passport.authenticate("local", { session: false }),
+  passport.authenticate("local", {
+    session: false,
+  }),
   (req, res) => {
     if (req.isAuthenticated()) {
       const { _id, email, firstname, lastname } = req.user;
       const token = signToken(_id);
       console.log(req.user);
-      res.cookie("access_token", token, { httpOnly: true, sameSite: true });
-      res.status(200).json({ isAuthenticated: true, email, firstname, lastname, tags: req.user.tags, _id });
+      res.cookie("access_token", token, {
+        httpOnly: true,
+        sameSite: true,
+      });
+      res.status(200).json({
+        isAuthenticated: true,
+        email,
+        firstname,
+        lastname,
+        tags: req.user.tags,
+        _id,
+      });
     }
   }
 );
 
 router.get(
   "/logout",
-  passport.authenticate("jwt", { session: false }),
+  passport.authenticate("jwt", {
+    session: false,
+  }),
   (req, res) => {
     res.clearCookie("access_token");
-    res.json({ user: { email: "" }, succes: true });
+    res.json({
+      user: {
+        email: "",
+      },
+      succes: true,
+    });
   }
 );
 
 router.post(
   "/article",
-  passport.authenticate("jwt", { session: false }),
+  passport.authenticate("jwt", {
+    session: false,
+  }),
   (req, res) => {
     const { extract } = require("article-parser");
     let url = String(req.body.url);
@@ -81,11 +123,14 @@ router.post(
     article.save((err) => {
       if (err)
         res.status(500).json({
-          message: { msgBody: "Error 3 has occured", msgError: true },
+          message: {
+            msgBody: "Error 3 has occured",
+            msgError: true,
+          },
         });
       else {
-        let rawTags = req.body.tags
-        let userTags = req.user.tags
+        let rawTags = req.body.tags;
+        let userTags = req.user.tags;
         let processedTags = [];
         processedTags = rawTags
           .map(function (value) {
@@ -104,24 +149,29 @@ router.post(
             newArticle.save((err) => {
               if (err)
                 res.status(500).json({
-                  message: { msgBody: "Error 3 has occured", msgError: true },
+                  message: {
+                    msgBody: "Error 3 has occured",
+                    msgError: true,
+                  },
                 });
               else {
-                let allTags = userTags.concat(processedTags)
+                let allTags = userTags.concat(processedTags);
                 const allUniqueTags = new Set(allTags);
                 allTags = [...allUniqueTags];
-                req.user.tags = allTags
+                req.user.tags = allTags;
                 req.user.articles.push(newArticle);
                 req.user.save((err) => {
                   if (err)
                     res.status(500).json({
-                      message: { msgBody: "Error 4 has occured", msgError: true },
+                      message: {
+                        msgBody: "Error 4 has occured",
+                        msgError: true,
+                      },
                     });
-                  else
-                  res.send(newArticle)
+                  else res.send(newArticle);
                 });
               }
-            })
+            });
           })
           .catch((err) => {
             console.log(err);
@@ -133,53 +183,109 @@ router.post(
 
 router.get(
   "/articles",
-  passport.authenticate("jwt", { session: false }),
+  passport.authenticate("jwt", {
+    session: false,
+  }),
   (req, res) => {
-    User.findById({ _id: req.user._id })
+    User.findById({
+      _id: req.user._id,
+    })
       .populate("articles")
       .exec((err, document) => {
         if (err)
           res.status(500).json({
-            message: { msgBody: "Error has occured", msgError: true },
+            message: {
+              msgBody: "Error has occured",
+              msgError: true,
+            },
           });
         else {
-          res
-            .status(200)
-            .json({ articles: document.articles, authenticated: true });
+          res.status(200).json({
+            articles: document.articles,
+            authenticated: true,
+          });
         }
       });
   }
 );
 
-router.put("/tag", passport.authenticate("jwt", { session: false }),
+router.put(
+  "/tag",
+  passport.authenticate("jwt", {
+    session: false,
+  }),
   (req, res) => {
-    User.updateOne({ _id: req.user._id }, {})
-  });
+    User.updateOne(
+      {
+        _id: req.user._id,
+      },
+      {}
+    );
+  }
+);
 
 /**
-   * @type ExpressSocket.
-   * @description Retrieves all articles with given tag(s), tags are OR not AND
-   * @param empty
-   * @body tags
-   * @returns [{article}, {article}, ...]
-   * @async
-   * @memberof app
-   */
-router.get("/tags", passport.authenticate("jwt", { session: false }),
+ * @type ExpressSocket.
+ * @description Retrieves all articles with given tag(s), tags are OR not AND
+ * @param empty
+ * @body tags
+ * @returns [{article}, {article}, ...]
+ * @async
+ * @memberof app
+ */
+router.put(
+  "/tags",
+  passport.authenticate("jwt", {
+    session: false,
+  }),
   (req, res) => {
-    let rawTags = req.body.tags;
-    processedTags = rawTags
-      .map(function (value) {
-        return value.toLowerCase();
+    let tags = req.body.tags;
+    User.findById({
+      _id: req.user._id,
+    })
+      .populate({
+        path: "articles",
+        match: {
+          tags: {
+            $all: tags,
+          },
+        },
       })
-      .sort();
-    const result = Article.find({ _id: req.user._id }, { tags: { $in: processedTags } });
-    res.send(result);
-  });
+      .exec((err, document) => {
+        if (err)
+          res.status(500).json({
+            message: {
+              msgBody: "Error has occured",
+              msgError: true,
+            },
+          });
+        else {
+          res.status(200).json({
+            articles: document.articles,
+            authenticated: true,
+          });
+        }
+      });
+  }
+);
 
-router.get('/authenticated', passport.authenticate('jwt', { session: false }), (req, res) => {
-  const { firstname, lastname, email } = req.user
-  res.status(200).json({ isAuthenticated: true, user: { email, firstname, lastname } })
-})
+router.get(
+  "/authenticated",
+  passport.authenticate("jwt", {
+    session: false,
+  }),
+  (req, res) => {
+    const { firstname, lastname, email, tags } = req.user;
+    res.status(200).json({
+      isAuthenticated: true,
+      user: {
+        email,
+        firstname,
+        lastname,
+        tags,
+      },
+    });
+  }
+);
 
 module.exports = router;

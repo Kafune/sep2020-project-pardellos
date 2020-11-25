@@ -26,7 +26,7 @@ router.get("/", async (req, res) => {
    * @memberof app
    */
 router.put("/article", async (req, res) => {
-  
+
   let userid = req.body.user_id;
 
   let doesExist = await Article.exists({ links: url });
@@ -71,17 +71,17 @@ router.put("/article", async (req, res) => {
    * @async
    * @memberof app
    */
-router.get("/article/:id", async (req, res) => {
-  id = req.params.id;
-  let doesExist = await Article.exists({ _id: id });
-
-  if (doesExist) {
-    let article = await Article.find({ _id: id });
-    res.send(article);
-    await Article.updateOne({ _id: id }, { read: true });
-  } else {
-    res.sendStatus(409);
-  }
+router.get("/article/:id", (req, res) => {
+  const id = req.params.id
+  Article.findOne({ _id: id }, (err, article) => {
+    if (!article)
+      res.status(400).json({
+        error: true,
+      });
+    else {
+      res.send(article)
+    }
+  })
 });
 
 /**
@@ -104,8 +104,6 @@ router.delete("/article", async (req, res) => {
     res.sendStatus(409);
   }
 });
-
-
 
 /**
    * @type ExpressSocket.
