@@ -27,7 +27,7 @@ export default class App extends React.Component {
       })
   }
 
-  SetTags(value) {
+  setTags(value) {
     this.setState({
       tags: value,
     });
@@ -48,7 +48,7 @@ export default class App extends React.Component {
   render() {
     const handleLoginState = (c) => this.handleLoginState(c);
     const handleEmailState = (c) => this.handleEmailState(c);
-    const setTags = (c) => this.SetTags(c);
+    const setTags = (c) => this.setTags(c);
 
     return (
       <div>
