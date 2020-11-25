@@ -1,3 +1,4 @@
+/*global chrome*/
 import React from "react";
 import Login from "./Login";
 import Article from "./Article";
@@ -17,6 +18,13 @@ export default class App extends React.Component {
   }
 
   componentDidMount() {
+    chrome.storage.local.get(
+      /* String or Array */ ["cookie"],
+      function (items) {
+        console.log(items);
+  
+      }
+    );
     checkAuthenticated()
       .then((response) => response.json())
       .then((response) => {

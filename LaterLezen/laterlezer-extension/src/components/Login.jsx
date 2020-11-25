@@ -1,25 +1,41 @@
+/*global chrome*/
 import React, { useState, useEffect } from "react";
 import { loginUser } from "../serverCommunication";
-import M from 'materialize-css'
-
+import M from "materialize-css";
 
 export default function Login(props) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
+  
+ 
+
   function handleLoginUser(email, password) {
     loginUser(email, password)
       .then((response) => response.json())
       .then((response) => {
+        chrome.storage.local.set({ cookie: response }, function () {
+          //  Data's been saved boys and girls, go on home
+        });
+        chrome.storage.local.get(
+          /* String or Array */ ["cookie"],
+          function (items) {
+
+          }
+        );
+        console.log("hoi");
         if (response.isAuthenticated === true) {
-          console.log(response)
           props.handleLoginState(true);
           props.handleEmailState(email);
         }
-        props.setTags(response.tags)
+        props.setTags(response.tags);
       })
       .catch(() => {
-        M.toast({ html: "User not found, please enter the correct username and password in order to login!", displayLength: 1650 });
+        M.toast({
+          html:
+            "User not found, please enter the correct username and password in order to login!",
+          displayLength: 1650,
+        });
       });
   }
 
