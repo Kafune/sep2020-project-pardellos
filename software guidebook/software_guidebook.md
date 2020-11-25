@@ -14,19 +14,30 @@ Aangezien het lezen van de code van de LaterLezer niet het hele verhaal verteld 
 9. [Werking en ondersteuning](#Werking-en-ondersteuning)
 10.[Keuze onderbouwing](#Keuze-onderbouwing)
 
+- Opslaan van artikelen
+- Verwijderen van artikelen
+- Lezen van artikelen
+- Aanmaken van tags voor artikelen
+- Eerder gebruikte tags aan gebruiker koppelen
+
 
 ## Context
 
-1. Waar gaat het product over?
-2. Wat is het gene dat gebouwd wordt?
-3. Wie gebruikt het?
-4. Waarom wordt het product gemaakt?
+De opdrachtgever is als onderzoeker bij ons langsgekomen met de vraag of wij een reader-app voor hem willen ontwikkelen. De bestaande reader-apps voldoen niet aan de eisen die hij stelt. Hij denkt dat het waard is om een nieuwe reader-app te laten maken die wel aan zijn eisen voldoen. De eisen zijn beschreven in de hoofdstuk Functioneel Overzicht. Deze reader-app is bedoeld om hem en andere onderzoekers te ondersteunen met het opslaan van wetenschappelijke artikelen zodat zij deze later kunnen lezen.
+
+Met deze reader-app hoopt de opdrachtgever dat deze app wel aan zijn eisen voldoet, en dat andere onderzoekers naar deze reader-app overstappen. Dit betekent dat de Laterlezer een concurrent wordt voor de andere reader-apps, zoals instapaper, raindrop, pocket etc. Laterlezer heeft als doel om meer wetenschappelijke artikelen op te slaan, dus Laterlezer is bedoeld voor een ander doelgroep dan de hiervoor genoemde reader-apps.
 
 ## Functioneel-overzicht
 
 1. Welke functionaliteiten gaat het systeem bevatten?
 2. Wie gaat het systeem gebruiken?
 3. Hoe voorziet het systeem in de behoeften van de doelgroep?
+
+De Laterlezer app slaat (wetenschappelijke) artikelen op die vanuit andere websites zijn gehaald. Elk artikel heeft een URL waarvan de artikel vandaan komt, en optioneel een aantal tags om het artikel snel terug te vinden m.b.v. het filtersysteem voor tags. Bij het lezen van een artikel kan de gebruiker een aantal functies gebruiken om het lezen makkelijker te maken, bijvoorbeeld het groter maken van tekst, of het veranderen van de achtergrondskleur. Om een artikel bij een gebruiker, moet deze natuurlijk ook kunnen registreren en inloggen. 
+
+Zonder deze basisfunctionaliteit kan de applicatie niet werken. Het is van belang dat deze functies als eerst zijn uitgevoerd voordat we verder kunnen met de extra functies. De opdrachtgever wilt dat wij een aantal extra functionaliteiten implementeren zodat de app daadwerkelijk zijn eigen functies heeft. Deze extra functionaliteiten zijn beschreven in de Plan van aanpak. Welke functionaliteiten wij implementeren, hangt af van wat de opdrachtgever wilt en hoeveel tijd wij ervoor nodig hebben om dat te realiseren.
+
+De belangrijkste gebruikers voor de Laterlezer app zijn de onderzoekers. Doordat zij gebruik maken van Laterlezer, kunnen zij wetenschappelijke artikelen makkelijker opslaan en lezen door de extra functionaliteiten die de andere reader-apps niet hebben.
 
 ## Kwaliteitsattributen
 
