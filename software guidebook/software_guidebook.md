@@ -38,19 +38,9 @@ Zonder deze basisfunctionaliteit kan de applicatie niet werken. Het is van belan
 De belangrijkste gebruikers voor de Laterlezer app zijn de onderzoekers. Doordat zij gebruik maken van Laterlezer, kunnen zij wetenschappelijke artikelen makkelijker opslaan en lezen door de extra functionaliteiten die de andere reader-apps niet hebben.
 
 ## Kwaliteitsattributen
-
-1. Wat zijn de kwaliteits attributen waaraan het product moet voldoen?
-
-voorbeelden staan in het software guidebook
-(side note probeer de attributen smart te definiëren)
-
-- Laterlezer is 99.9% van de tijd online. Onderhoud kan plaatsvinden, waardoor Laterlezer voor een bepaalde(hoeveel?) tijd niet beschikbaar is.
+Op dit moment hebben wij hier niet over nagedacht
 
 ## Beperkingen
-
-1. Wat waren de beperkingen die ontstonden bij het maken van het eindproduct?
-
-ook hier staan voorbeelden in de guidebook
 
 - Het team heeft 3 sprints om aan Laterlezer te werken. 1 sprint is 2 weken.
 - Het team bestaat uit 5 man
@@ -61,10 +51,7 @@ ook hier staan voorbeelden in de guidebook
 
 
 ## Principes
-1. Wat zijn de best practices die gebruikt zijn?
-
-
-(beantwoord de vragen in het software guidebook)
+Wij hebben op dit moment niet over bepaalde principes nagedacht tijdens het ontwerpen en het bouwen van de Laterlezer app.
 
 ## Software-architectuur
 1. Maak duidelijk hoe de software architectuur er uit ziet.
@@ -76,6 +63,3 @@ ook hier staan voorbeelden in de guidebook
 (beantwoord de vragen in het software guidebook)
 ## Werking en ondersteuning
 (beantwoord de vragen in het software guidebook)
-
-## Keuze onderbouwing
-onderbouw hier onze keuzes tijdens het maken van de app. 
