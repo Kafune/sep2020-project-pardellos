@@ -7,7 +7,7 @@
 const User = require("../models/User");
 const fetch = require("node-fetch");
 
-describe("User auth testing", () => {
+xdescribe("User auth testing", () => {
   afterAll(async () => {
     await fetch("http://localhost:4000/user/test/warning/no/delete");
   });
