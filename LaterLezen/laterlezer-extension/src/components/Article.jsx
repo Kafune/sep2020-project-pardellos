@@ -8,14 +8,17 @@ export default function Article(props) {
   const [filteredTags, setFilteredTags] = useState([props.tags]);
 
   useEffect(() => {
-    console.log(filteredTags)
     setFilteredTags([...props.tags])
   }, [props.tags]);
+
+  useEffect(() => {
+    let filtered = props.tags.filter((name) => name.includes(filter));
+    setFilteredTags(filtered);
+  }, [filter]);
 
   function handleUrlChange(e) {
     e.preventDefault();
     setUrl(e.target.value);
-    console.log(url);
   }
 
   function handleFilterChange(e) {
@@ -31,26 +34,19 @@ export default function Article(props) {
     } else {
       setSelectedTags((oldArray) => [...oldArray, value]);
     }
-    console.log(selectedTags);
   }
 
-  function saveArticles() {
-    console.log(url = "\n" +selectedTags);
-    saveArticle(url, selectedTags)
-      .then((res) => res.json())
+  function handleSaveArticle(url, tags) {
+    saveArticle(url, tags)
+      .then((response) => response.json())
       .then((response) => {
         console.log(response);
+        M.toast({ html: "Article successfully saved" });
       });
   }
 
-  useEffect(() => {
-    let filtered = props.tags.filter((name) => name.includes(filter));
-    setFilteredTags(filtered);  
-  }, [filter]);
-
   return (
     <div className="container extension-bg">
-      {console.log(props.tags)}
       <h3 className="login-title">LaterLezer</h3>
       <h4 className="login-title">Add articles here!!</h4>
       <div className="row input-form">
@@ -78,7 +74,7 @@ export default function Article(props) {
           tags={filteredTags}
           selectedTags={selectedTags}
         ></TagList>
-        <button className="waves-effect waves-light btn" onClick={saveArticles}>
+        <button className="waves-effect waves-light btn" onClick={() => { handleSaveArticle(url, selectedTags) }}>
           Save
         </button>
       </div>

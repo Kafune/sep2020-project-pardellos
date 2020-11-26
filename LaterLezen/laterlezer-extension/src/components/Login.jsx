@@ -11,21 +11,11 @@ export default function Login(props) {
     loginUser(email, password)
       .then((response) => response.json())
       .then((response) => {
-        chrome.storage.local.set({ cookie: response }, function () {
-          //  Data's been saved boys and girls, go on home
-        });
-        chrome.storage.local.get(
-          /* String or Array */ ["cookie"],
-          function (items) {
-
-          }
-        );
-        console.log("hoi");
         if (response.isAuthenticated === true) {
           props.handleLoginState(true);
           props.handleEmailState(email);
+          props.setTags(response.tags);
         }
-        props.setTags(response.tags);
       })
       .catch(() => {
         M.toast({

@@ -58,5 +58,5 @@ export async function saveArticle(url, tags) {
     body: JSON.stringify(body)
   }
 
-  return fetch(baseurl + `/user/article`, fetchOptions)
+  return fetch(baseurl + `/user/articleExtension`, fetchOptions)
 }

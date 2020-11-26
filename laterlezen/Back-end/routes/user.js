@@ -120,64 +120,53 @@ router.post(
     let url = String(req.body.url);
     const article = new Article(req.body);
     console.log(article);
-    article.save((err) => {
-      if (err)
-        res.status(500).json({
-          message: {
-            msgBody: "Error 3 has occured",
-            msgError: true,
-          },
-        });
-      else {
-        let rawTags = req.body.tags;
-        let userTags = req.user.tags;
-        let processedTags = [];
-        processedTags = rawTags
-          .map(function (value) {
-            return value.toLowerCase();
-          })
-          .sort();
-        console.log("lowecase and sorted tags: " + processedTags);
-        const uniqueTags = new Set(processedTags);
-        processedTags = [...uniqueTags];
-        console.log("Lowercase, sorted and unique tags: " + processedTags);
+    let rawTags = req.body.tags;
+    let userTags = req.user.tags;
+    let processedTags = [];
+    processedTags = rawTags
+      .map(function (value) {
+        return value.toLowerCase();
+      })
+      .sort();
+    console.log("lowecase and sorted tags: " + processedTags);
+    const uniqueTags = new Set(processedTags);
+    processedTags = [...uniqueTags];
+    console.log("Lowercase, sorted and unique tags: " + processedTags);
 
-        extract(url)
-          .then((article) => {
-            let newArticle = new Article(article);
-            newArticle.tags = processedTags;
-            newArticle.save((err) => {
+    extract(url)
+      .then((article) => {
+        let newArticle = new Article(article);
+        newArticle.tags = processedTags;
+        newArticle.save((err) => {
+          if (err)
+            res.status(500).json({
+              message: {
+                msgBody: "Error 3 has occured",
+                msgError: true,
+              },
+            });
+          else {
+            let allTags = userTags.concat(processedTags);
+            const allUniqueTags = new Set(allTags);
+            allTags = [...allUniqueTags];
+            req.user.tags = allTags;
+            req.user.articles.push(newArticle);
+            req.user.save((err) => {
               if (err)
                 res.status(500).json({
                   message: {
-                    msgBody: "Error 3 has occured",
+                    msgBody: "Error 4 has occured",
                     msgError: true,
                   },
                 });
-              else {
-                let allTags = userTags.concat(processedTags);
-                const allUniqueTags = new Set(allTags);
-                allTags = [...allUniqueTags];
-                req.user.tags = allTags;
-                req.user.articles.push(newArticle);
-                req.user.save((err) => {
-                  if (err)
-                    res.status(500).json({
-                      message: {
-                        msgBody: "Error 4 has occured",
-                        msgError: true,
-                      },
-                    });
-                  else res.send(newArticle);
-                });
-              }
+              else res.send(newArticle);
             });
-          })
-          .catch((err) => {
-            console.log(err);
-          });
-      }
-    });
+          }
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }
 );
 
@@ -285,6 +274,49 @@ router.get(
         tags,
       },
     });
+  }
+);
+
+router.post(
+  "/articleExtension",
+  (req, res) => {
+    const { extract } = require("article-parser");
+    let url = String(req.body.url);
+    const article = new Article(req.body);
+    console.log(article);
+    let rawTags = req.body.tags;
+    let processedTags = [];
+    processedTags = rawTags
+      .map(function (value) {
+        return value.toLowerCase();
+      })
+      .sort();
+    console.log("lowecase and sorted tags: " + processedTags);
+    const uniqueTags = new Set(processedTags);
+    processedTags = [...uniqueTags];
+    console.log("Lowercase, sorted and unique tags: " + processedTags);
+
+    extract(url)
+      .then((article) => {
+        let newArticle = new Article(article);
+        newArticle.tags = processedTags;
+        newArticle.save((err) => {
+          if (err) {
+            res.status(500).json({
+              message: {
+                msgBody: "Error 3 has occured",
+                msgError: true,
+              },
+            });
+          }
+          else {
+            res.send(newArticle);
+          }
+        })
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }
 );
 

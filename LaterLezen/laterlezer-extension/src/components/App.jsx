@@ -17,23 +17,23 @@ export default class App extends React.Component {
     };
   }
 
-  componentDidMount() {
-    chrome.storage.local.get(
-      /* String or Array */ ["cookie"],
-      function (items) {
-        console.log(items);
+  // componentDidMount() {
+  //   chrome.storage.local.get(
+  //     /* String or Array */ ["cookie"],
+  //     function (items) {
+  //       console.log(items);
   
-      }
-    );
-    checkAuthenticated()
-      .then((response) => response.json())
-      .then((response) => {
-        if (response.isAuthenticated === true) {
-          this.handleLoginState(true);
-          this.setTags(response.user.tags);
-        }
-      })
-  }
+  //     }
+  //   );
+  //   checkAuthenticated()
+  //     .then((response) => response.json())
+  //     .then((response) => {
+  //       if (response.isAuthenticated === true) {
+  //         this.handleLoginState(true);
+  //         this.setTags(response.user.tags);
+  //       }
+  //     })
+  // }
 
   setTags(value) {
     this.setState({
