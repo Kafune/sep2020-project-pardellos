@@ -46,17 +46,18 @@ voorbeelden staan in het software guidebook
 
 - Laterlezer is 99.9% van de tijd online. Onderhoud kan plaatsvinden, waardoor Laterlezer voor een bepaalde(hoeveel?) tijd niet beschikbaar is.
 
-## beperkingen
+## Beperkingen
 
 1. Wat waren de beperkingen die ontstonden bij het maken van het eindproduct?
 
 ook hier staan voorbeelden in de guidebook
 
 - Het team heeft 3 sprints om aan Laterlezer te werken. 1 sprint is 2 weken.
+- Het team bestaat uit 5 man
+- Ieder teamlid werkt tijdens het project ook aan zijn leerdoelen
 - Het team ontwikkelt Laterlezer d.m.v. Node, Express, MongoDB/Mongoose en React omdat het team daarmee de meeste kennis heeft.
-- Ieder teamlid werkt tijdens het project aan zijn leerdoelen
-- Het team maakt gebruik van onbekende technieken, zoals ontwikkeling van extensies, inloggen met oAuth etc.
-- 
+- Het team maakt gebruik van onbekende technieken, zoals ontwikkeling van extensies en login met oAuth
+- De server stuurt en ontvangt berichten van de client in de vorm van JSON
 
 
 ## Principes
