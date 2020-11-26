@@ -72,16 +72,24 @@ hieronder een opsomming een aantal principes en wat we bij deze onderdelen gedaa
 ## Software-architectuur
 Door het lezen van dit hoofdstuk krijg je een beter beeld van hoe de structuur van de software er uit ziet. 
 
-1. The big picture
-    C4 modellen hier invoegen en vertel hoe de interacties hiertussen werkt en waarom dit zo is gedaan. 
-2. Structuur
+1. The big picture (system context)
 
+    ![system_context_diagram.png](system_context_diagram.png)
 
-3. Technologieën
+2. Container view
 
-4. Componenten en interacties
+    ![Container.png](Container.png)
 
-5. interne interfaces
+3. Component views
+
+    ### API component view
+    ![API_component.png](Api_component.png)
+
+    ### LaterLezer app view
+    ![Component_Laterlezer_app.png](Component_Laterlezer_app.png)
+
+    ### Extension view
+    ![Component_extension.png](Component_extension.png)
 
 
 (beantwoord de vragen in het software guidebook)
