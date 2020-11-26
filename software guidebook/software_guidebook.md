@@ -29,9 +29,7 @@ Met deze reader-app hoopt de opdrachtgever dat deze app wel aan zijn eisen voldo
 
 ## Functioneel-overzicht
 
-1. Welke functionaliteiten gaat het systeem bevatten?
-2. Wie gaat het systeem gebruiken?
-3. Hoe voorziet het systeem in de behoeften van de doelgroep?
+De Laterlezer app bestaat uit een mobiele webapplicatie waarin de gebruiker zijn artikelen op kan slaan en kan lezen. Daarnaast bestaat Laterlezer uit een extensie, waarmee gebruikers artikelen snel op kan slaan op een andere website.
 
 De Laterlezer app slaat (wetenschappelijke) artikelen op die vanuit andere websites zijn gehaald. Elk artikel heeft een URL waarvan de artikel vandaan komt, en optioneel een aantal tags om het artikel snel terug te vinden m.b.v. het filtersysteem voor tags. Bij het lezen van een artikel kan de gebruiker een aantal functies gebruiken om het lezen makkelijker te maken, bijvoorbeeld het groter maken van tekst, of het veranderen van de achtergrondskleur. Om een artikel bij een gebruiker, moet deze natuurlijk ook kunnen registreren en inloggen. 
 
@@ -40,48 +38,42 @@ Zonder deze basisfunctionaliteit kan de applicatie niet werken. Het is van belan
 De belangrijkste gebruikers voor de Laterlezer app zijn de onderzoekers. Doordat zij gebruik maken van Laterlezer, kunnen zij wetenschappelijke artikelen makkelijker opslaan en lezen door de extra functionaliteiten die de andere reader-apps niet hebben.
 
 ## Kwaliteitsattributen
+Op dit moment hebben wij hier niet over nagedacht
 
-1. Wat zijn de kwaliteits attributen waaraan het product moet voldoen?
+## Beperkingen
 
-voorbeelden staan in het software guidebook
+- Het team heeft 3 sprints om aan Laterlezer te werken. 1 sprint is 2 weken.
+- Het team bestaat uit 5 man
+- Ieder teamlid werkt tijdens het project ook aan zijn leerdoelen
+- Het team ontwikkelt Laterlezer d.m.v. Node, Express, MongoDB/Mongoose en React omdat het team daarmee de meeste kennis heeft.
+- Het team maakt gebruik van onbekende technieken, zoals ontwikkeling van extensies en login met oAuth
+- De server stuurt en ontvangt berichten van de client in de vorm van JSON
 
-
-(side note probeer de attributen smart te definiëren)
-
-## beperkingen
-
-1. Wat waren de beperkingen die ontstonden bij het maken van het eindproduct?
-
-ook hier staan voorbeelden in de guidebook
 
 ## Principes
-
-In dit hoofdstuk staat beschreven welke principes we in gebruik hebben genomen tijdens het maken van de LaterLezer applicatie. Dit werpt een licht op welke principes door stakeholders zijn bepaald of die we als software development team gebruikt hebben.  
-
-hieronder een opsomming een aantal principes en wat we bij deze onderdelen gedaan hebben.  
-
-1. Wat zijn de best practices die gebruikt zijn?
-
-2. Architecturele lagen strategie
-
-3. 
-
-
-(beantwoord de vragen in het software guidebook)
+Wij hebben op dit moment niet over bepaalde principes nagedacht tijdens het ontwerpen en het bouwen van de Laterlezer app.
 
 ## Software-architectuur
 Door het lezen van dit hoofdstuk krijg je een beter beeld van hoe de structuur van de software er uit ziet. 
 
-1. The big picture
-    C4 modellen hier invoegen en vertel hoe de interacties hiertussen werkt en waarom dit zo is gedaan. 
-2. Structuur
+1. The big picture (system context)
 
+    ![system_context_diagram.png](system_context_diagram.png)
 
-3. Technologieën
+2. Container view
 
-4. Componenten en interacties
+    ![Container.png](Container.png)
 
-5. interne interfaces
+3. Component views
+
+    ### API component view
+    ![API_component.png](Api_component.png)
+
+    ### LaterLezer app view
+    ![Component_Laterlezer_app.png](Component_Laterlezer_app.png)
+
+    ### Extension view
+    ![Component_extension.png](Component_extension.png)
 
 
 (beantwoord de vragen in het software guidebook)
@@ -91,6 +83,3 @@ Door het lezen van dit hoofdstuk krijg je een beter beeld van hoe de structuur v
 (beantwoord de vragen in het software guidebook)
 ## Werking en ondersteuning
 (beantwoord de vragen in het software guidebook)
-
-## Keuze onderbouwing
-onderbouw hier onze keuzes tijdens het maken van de app. 
