@@ -55,13 +55,34 @@ voorbeelden staan in het software guidebook
 ook hier staan voorbeelden in de guidebook
 
 ## Principes
+
+In dit hoofdstuk staat beschreven welke principes we in gebruik hebben genomen tijdens het maken van de LaterLezer applicatie. Dit werpt een licht op welke principes door stakeholders zijn bepaald of die we als software development team gebruikt hebben.  
+
+hieronder een opsomming een aantal principes en wat we bij deze onderdelen gedaan hebben.  
+
 1. Wat zijn de best practices die gebruikt zijn?
+
+2. Architecturele lagen strategie
+
+3. 
 
 
 (beantwoord de vragen in het software guidebook)
 
 ## Software-architectuur
-1. Maak duidelijk hoe de software architectuur er uit ziet.
+Door het lezen van dit hoofdstuk krijg je een beter beeld van hoe de structuur van de software er uit ziet. 
+
+1. The big picture
+    C4 modellen hier invoegen en vertel hoe de interacties hiertussen werkt en waarom dit zo is gedaan. 
+2. Structuur
+
+
+3. Technologieën
+
+4. Componenten en interacties
+
+5. interne interfaces
+
 
 (beantwoord de vragen in het software guidebook)
 ## Infrastructuur-architectuur
