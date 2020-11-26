@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const Article = require("../models/Article");
+const User = require("../models/User")
 
 /**
    * @type ExpressSocket.
@@ -20,13 +21,13 @@ router.get("/", async (req, res) => {
    * @type ExpressSocket.
    * @description Saves a new article from a given link
    * @param empty
-   * @body link, user_id
+   * @body link, user_id, tags
    * @returns nothing
    * @async
    * @memberof app
    */
 router.put("/article", async (req, res) => {
-  
+
   let userid = req.body.user_id;
 
   let doesExist = await Article.exists({ links: url });
@@ -71,17 +72,17 @@ router.put("/article", async (req, res) => {
    * @async
    * @memberof app
    */
-router.get("/article/:id", async (req, res) => {
-  id = req.params.id;
-  let doesExist = await Article.exists({ _id: id });
-
-  if (doesExist) {
-    let article = await Article.find({ _id: id });
-    res.send(article);
-    await Article.updateOne({ _id: id }, { read: true });
-  } else {
-    res.sendStatus(409);
-  }
+router.get("/article/:id", (req, res) => {
+  const id = req.params.id
+  Article.findOne({ _id: id }, (err, article) => {
+    if (!article)
+      res.status(400).json({
+        error: true,
+      });
+    else {
+      res.send(article)
+    }
+  })
 });
 
 /**
@@ -105,8 +106,6 @@ router.delete("/article", async (req, res) => {
   }
 });
 
-
-
 /**
    * @type ExpressSocket.
    * @description Retrieved all articles with given user_id
@@ -123,5 +122,24 @@ router.get("/user/:id", async (req, res) => {
   let allArticles = await Article.find({ _id: userid });
   res.send(allArticles);
 });
+
+
+// TODO add in add article to check for duplicate tag names
+// router.post('/user/:email/tags', async (req,res) => {
+//   let email = req.params.email;
+//   const tagName = req.body.tagName
+//   await User.findOneAndUpdate(
+//     {email: email},
+//     {$push: {tags: {tagName}}}
+//   )
+//   res.json('OK')
+// })
+
+router.get('/user/:email/tags' , async (req,res) => {
+  let email = req.params.email;
+  let allTags = await User.find({email: email}, {tags: 1})
+  let response = JSON.parse(allTags)
+  res.json(response)
+})
 
 module.exports = router;

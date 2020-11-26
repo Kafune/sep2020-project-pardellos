@@ -1,3 +1,4 @@
+const { response } = require("express");
 const express = require("express");
 const router = express.Router();
 const Article = require("../models/Article");
@@ -9,6 +10,7 @@ router.get("/", (req, res) => {
     layout: "login",
   });
 });
+
 
 // @desc    Dashboard
 // @route   Get /dashboard

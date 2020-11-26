@@ -54,7 +54,27 @@ Op dit moment hebben wij hier niet over nagedacht
 Wij hebben op dit moment niet over bepaalde principes nagedacht tijdens het ontwerpen en het bouwen van de Laterlezer app.
 
 ## Software-architectuur
-1. Maak duidelijk hoe de software architectuur er uit ziet.
+Door het lezen van dit hoofdstuk krijg je een beter beeld van hoe de structuur van de software er uit ziet. 
+
+1. The big picture (system context)
+
+    ![system_context_diagram.png](system_context_diagram.png)
+
+2. Container view
+
+    ![Container.png](Container.png)
+
+3. Component views
+
+    ### API component view
+    ![API_component.png](Api_component.png)
+
+    ### LaterLezer app view
+    ![Component_Laterlezer_app.png](Component_Laterlezer_app.png)
+
+    ### Extension view
+    ![Component_extension.png](Component_extension.png)
+
 
 (beantwoord de vragen in het software guidebook)
 ## Infrastructuur-architectuur
