@@ -3,11 +3,9 @@ import { getArticle, getAllArticles, getArticleByUser } from '../serverCommunica
 import { Link } from 'react-router-dom'
 
 export default function Dashboard(props) {
-  const [userID, setUserID] = useState(props.userid)
   const [firstname, setFirstname] = useState(props.firstname)
   const [lastname, setLastname] = useState(props.lastname)
   const [articles, setArticles] = useState(props.articles);
-  const [tags, setTags] = useState('');
 
   useEffect(() => {
     handleGetArticles()
@@ -26,9 +24,6 @@ export default function Dashboard(props) {
       })
   }
 
-  function handleSelectArticle(id) {
-    props.handleIDState(id)
-  }
 
   return <div className="readArticle">
     <h2 class="center">All saved articles of {firstname} {lastname}</h2>
@@ -45,7 +40,7 @@ export default function Dashboard(props) {
             </div>
             <div class="card-action">
               <Link to={`/article/${data._id}`}>
-                <a onClick={() => handleSelectArticle(data._id)}>See article</a>
+                <a>See article</a>
               </Link>
               <p>Tags: {data.tags.map((data) => {
                 return data + " "

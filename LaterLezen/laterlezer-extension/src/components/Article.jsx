@@ -35,6 +35,7 @@ export default function Article(props) {
   }
 
   function saveArticles() {
+    console.log(url = "\n" +selectedTags);
     saveArticle(url, selectedTags)
       .then((res) => res.json())
       .then((response) => {

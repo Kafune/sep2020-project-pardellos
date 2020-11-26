@@ -7,9 +7,6 @@ export default function Login(props) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  
- 
-
   function handleLoginUser(email, password) {
     loginUser(email, password)
       .then((response) => response.json())
