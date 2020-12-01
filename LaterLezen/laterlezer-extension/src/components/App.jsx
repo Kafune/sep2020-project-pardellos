@@ -3,10 +3,6 @@ import React from "react";
 import Login from "./Login";
 import Article from "./Article";
 
-import "./../../src/materialize.css";
-import "./../../src/App.css";
-import M from 'materialize-css'
-import { checkAuthenticated } from '../serverCommunication'
 export default class App extends React.Component {
   constructor(props) {
     super(props);
@@ -17,23 +13,9 @@ export default class App extends React.Component {
     };
   }
 
-  // componentDidMount() {
-  //   chrome.storage.local.get(
-  //     /* String or Array */ ["cookie"],
-  //     function (items) {
-  //       console.log(items);
-  
-  //     }
-  //   );
-  //   checkAuthenticated()
-  //     .then((response) => response.json())
-  //     .then((response) => {
-  //       if (response.isAuthenticated === true) {
-  //         this.handleLoginState(true);
-  //         this.setTags(response.user.tags);
-  //       }
-  //     })
-  // }
+  componentDidMount() {
+    M.AutoInit();
+  }
 
   setTags(value) {
     this.setState({
@@ -54,25 +36,16 @@ export default class App extends React.Component {
   }
 
   render() {
-    const handleLoginState = (c) => this.handleLoginState(c);
-    const handleEmailState = (c) => this.handleEmailState(c);
+    const currentLoginState = (c) => this.handleLoginState(c);
+    const currentEmailState = (c) => this.handleEmailState(c);
     const setTags = (c) => this.setTags(c);
 
     return (
-      <div>
-        {this.state.isLoggedIn === true ? (
-          <Article
-            tags={this.state.tags}
-            username={this.state.username}
-          ></Article>
-        ) : (
-          <Login
-            setTags={setTags}
-            handleLoginState={handleLoginState}
-            handleEmailState={handleEmailState}
-            email={this.state.email}
-          ></Login>
-        )}
+      <div class="container">
+        {this.state.isLoggedIn === true
+          ? <Article tags={this.state.tags} email={this.state.email} handleEmailState={currentEmailState} handleLoginState={currentLoginState} />
+          : <Login setTags={setTags} handleLoginState={currentLoginState} handleEmailState={currentEmailState} />
+        }
       </div>
     );
   }

@@ -280,43 +280,43 @@ router.get(
 router.post(
   "/articleExtension",
   (req, res) => {
-    const { extract } = require("article-parser");
-    let url = String(req.body.url);
-    const article = new Article(req.body);
-    console.log(article);
-    let rawTags = req.body.tags;
-    let processedTags = [];
-    processedTags = rawTags
-      .map(function (value) {
-        return value.toLowerCase();
+    const findUser = User.findOne({ email: req.body.email })
+      .then((response) => {
+        if (response) {
+          console.log(response)
+          const { extract } = require("article-parser");
+          let url = String(req.body.url);
+          const article = new Article(req.body);
+          console.log(article);
+          extract(url)
+            .then((article) => {
+              let newArticle = new Article(article);
+              newArticle.tags = req.body.tags;
+              newArticle.title = req.body.title;
+              newArticle.save((err) => {
+                if (err) {
+                  res.status(500).json({
+                    message: {
+                      msgBody: "Error 2 has occured",
+                      msgError: true,
+                    },
+                  });
+                } else {
+                  response.articles.push(newArticle);
+                  response.save()
+                  res.send(newArticle);
+                }
+              })
+            })
+        } else {
+          res.status(500).json({
+            message: {
+              msgBody: "Error 1 has occured",
+              msgError: true
+            }
+          })
+        }
       })
-      .sort();
-    console.log("lowecase and sorted tags: " + processedTags);
-    const uniqueTags = new Set(processedTags);
-    processedTags = [...uniqueTags];
-    console.log("Lowercase, sorted and unique tags: " + processedTags);
-
-    extract(url)
-      .then((article) => {
-        let newArticle = new Article(article);
-        newArticle.tags = processedTags;
-        newArticle.save((err) => {
-          if (err) {
-            res.status(500).json({
-              message: {
-                msgBody: "Error 3 has occured",
-                msgError: true,
-              },
-            });
-          }
-          else {
-            res.send(newArticle);
-          }
-        })
-      })
-      .catch((err) => {
-        console.log(err);
-      });
   }
 );
 
