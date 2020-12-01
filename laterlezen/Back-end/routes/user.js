@@ -19,6 +19,11 @@ const signToken = (userID) => {
   );
 };
 
+router.get("/test/warning/no/delete", async (req,res) =>{
+  await User.deleteMany({})
+  res.sendStatus(200)
+})
+
 router.post("/register", (req, res) => {
   const { email, password, firstname, lastname } = req.body;
   User.findOne(
