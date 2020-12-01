@@ -15,6 +15,8 @@ import background from '../img/pfp_background.jpg'
 import pfp from '../img/default_pfp.png'
 
 import { checkAuthenticated } from '../serverCommunication'
+import Preferences from './Preferences';
+import ReadArticle from './readArticle';
 
 export default class App extends React.Component {
   constructor(props) {
@@ -25,7 +27,8 @@ export default class App extends React.Component {
       email: '',
       logged_in: false,
       articles: [],
-      tags: []
+      tags: [],
+      theme: 'default'
     }
   }
 
@@ -171,6 +174,9 @@ export default class App extends React.Component {
             </Route>
             <Route path="/article/:id">
               <DisplayArticle articleID={this.state.article_id} />
+            </Route>
+            <Route path="/test">
+              <ReadArticle />
             </Route>
           </Switch>
         </div>

@@ -2,11 +2,19 @@ import React, { useState, useEffect } from 'react';
 import { searchArticleByID } from '../serverCommunication'
 import Parser from 'html-react-parser/dist/html-react-parser'
 import { useHistory } from 'react-router-dom'
+import Preferences from './Preferences'
 
 export default function DisplayArticle(props) {
     const [article, setArticle] = useState([])
 
     const history = useHistory();
+
+    const [background, setBackground] = useState('white');
+
+    const checkBackground = (background) => {
+        setBackground(background)
+        document.body.className = 'theme-' + background;
+      }
 
     useEffect(() => {
         var url = window.location.href;
@@ -21,10 +29,13 @@ export default function DisplayArticle(props) {
                     setArticle(response)
                 }
             })
+            return () => document.body.className = ''
     }, [])
 
     return <div class="row">
-
+        <Preferences handleBackgroundState={checkBackground}
+        backgroundColor={background}
+       ></Preferences>
         <div class="center">
             <h2>{article.title}</h2>
             <h4> Published by: <b>{article.source} {article.author}</b></h4>
