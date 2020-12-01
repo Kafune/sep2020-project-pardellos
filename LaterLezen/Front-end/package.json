@@ -10,7 +10,7 @@
     "axios": "^0.21.0",
     "fs": "0.0.1-security",
     "html-react-parser": "^0.14.2",
-    "materialize-css": "^1.0.0-rc.2",
+    "materialize-css": "^1.0.0",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
     "react-materialize": "^3.9.3",

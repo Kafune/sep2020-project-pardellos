@@ -1,0 +1,40 @@
+.container {
+    width: 100%;
+}
+
+.login-title {
+    text-align: center;
+    color: #ffffff;
+    background: rgba(0,0,0,0.5);
+    margin: 0;
+    padding: 0 5px;
+}
+.input-form {
+    background-color: beige;
+    margin: 0 auto !important;
+}
+.input {
+    border-radius: 25px;
+    padding: 0 5px !important;
+}
+
+.extension-bg {
+    background-image: url(./img/wallpaper.jpg);
+}
+
+
+.tag {
+    margin: 0 10px 0 0;
+    padding: 0 5px;
+    border: 1px solid black;
+    border-radius: 25px;
+    user-select: none;
+}
+.selected-tag {
+    background-color: green;
+    color: #ffffff;
+}
+
+.retrieved-tag {
+    background-color: powderblue;
+}
