@@ -36,7 +36,7 @@ describe('Player Model Tests', () => {
 
     test('extract data from article', async () => {
         const { extract } = require("article-parser");
-        const url = 'https://fakeupdate.net/win8/';
+        const url = 'https://www.youtube.com/watch?v=jXZAbnn1kTU';
 
         return extract(url)
         .then(data => {

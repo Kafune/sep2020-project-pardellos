@@ -19,7 +19,7 @@ const signToken = (userID) => {
   );
 };
 
-router.get("/test/warning/no/delete", async (req,res) =>{
+router.get("/test/warning/no/delete", async (req, res) => {
   await User.deleteMany({})
   res.sendStatus(200)
 })
@@ -149,34 +149,36 @@ router.post(
 
         extract(url)
           .then((article) => {
-            let newArticle = new Article(article);
-            newArticle.tags = processedTags;
-            newArticle.save((err) => {
-              if (err)
-                res.status(500).json({
-                  message: {
-                    msgBody: "Error 3 has occured",
-                    msgError: true,
-                  },
-                });
-              else {
-                let allTags = userTags.concat(processedTags);
-                const allUniqueTags = new Set(allTags);
-                allTags = [...allUniqueTags];
-                req.user.tags = allTags;
-                req.user.articles.push(newArticle);
-                req.user.save((err) => {
-                  if (err)
-                    res.status(500).json({
-                      message: {
-                        msgBody: "Error 4 has occured",
-                        msgError: true,
-                      },
-                    });
-                  else res.send(newArticle);
-                });
-              }
-            });
+              let newArticle = new Article(article);
+              newArticle.tags = processedTags;
+              newArticle.save((err) => {
+                if (err)
+                  res.status(500).json({
+                    message: {
+                      msgBody: "Error 3 has occured",
+                      msgError: true,
+                    },
+                  });
+                else {
+                  let allTags = userTags.concat(processedTags);
+                  const allUniqueTags = new Set(allTags);
+                  allTags = [...allUniqueTags];
+                  req.user.tags = allTags;
+                  req.user.articles.push(newArticle);
+                  req.user.save((err) => {
+                    if (err)
+                      res.status(500).json({
+                        message: {
+                          msgBody: "Error 4 has occured",
+                          msgError: true,
+                        },
+                      });
+                    else res.send(newArticle);
+                  });
+                }
+              });
+            
+
           })
           .catch((err) => {
             console.log(err);

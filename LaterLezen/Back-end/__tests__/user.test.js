@@ -5,7 +5,7 @@ const User = require('../models/User');
 const Article = require("../models/Article");
 
 
-xdescribe('user related tests', () => {
+describe('user related tests', () => {
     const testEmail = 'test@test.com'
     const testFirstName = 'test'
     const testLastName = 'tester'
@@ -95,9 +95,11 @@ xdescribe('user related tests', () => {
             email: testEmail
         }).lean();
 
-        testUser.tags.push('test')
+        let expectedTags = ['test', 'tag', 'voetbal', 'sport']
 
-        expect(testUser.tags).not.toEqual([])
+        testUser.tags.push('test', 'tag', 'voetbal', 'sport')
+
+        expect(testUser.tags).toEqual(expectedTags)
     })
     test('lowercase tags and ascending sorting', async () => {
         let inputTags = ['bt', 'cd', 'ab', 'ba', 'ac']
@@ -120,5 +122,8 @@ xdescribe('user related tests', () => {
         concatTags = [...allUniqueTags]
 
         expect(concatTags).toEqual(['bt', 'cd', 'ab', 'ba', 'ac'])
+    })
+    test('add article without any authentication', async () => {
+        //TODO: Test this
     })
 })
