@@ -7,7 +7,7 @@
 const User = require("../models/User");
 const fetch = require("node-fetch");
 
-xdescribe("User auth testing", () => {
+describe("User auth testing", () => {
   afterAll(async () => {
     await fetch("http://localhost:4000/user/test/warning/no/delete");
   });
@@ -92,8 +92,6 @@ xdescribe("User auth testing", () => {
     };
     await fetch("http://localhost:4000/user/logout", fetchOptions).then(
       (response) => {
-        console.log("1");
-        console.log(response);
         expect(response.status).toBe(401);
       }
     );
@@ -158,7 +156,6 @@ xdescribe("User auth testing", () => {
     await fetch("http://localhost:4000/user/login", fetchOptions)
       .then((response) => response.json())
       .then((response) => {
-        console.log(response);
         expect(response.isAuthenticated).toBe(true);
       });
   });

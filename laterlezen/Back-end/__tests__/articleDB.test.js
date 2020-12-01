@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const Article = require('../models/Article');
 const User = require('../models/User')
 
-describe('Player Model Tests', () => {
+xdescribe('Player Model Tests', () => {
     beforeAll(async () => {
          await mongoose.connect('mongodb+srv://Glenn:LaterLezen@laterlezen.tkmyn.mongodb.net/LaterLezen?retryWrites=true&w=majority', {
             useNewUrlParser: true,
