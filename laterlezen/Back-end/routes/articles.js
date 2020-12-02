@@ -122,4 +122,21 @@ router.get("/user/:id", async (req, res) => {
   res.send(allArticles);
 });
 
+router.put("/testing/tags", (req, res) =>{
+  let tags = ["programmeren", "Python", "multithreading"]
+  let article = {title: "test1233"}
+  let art = new Article(article)
+  art.tags2 = tags
+  art.save()
+  res.json(art)
+})
+
+router.get("/testing/art/:tag", (req, res) =>{
+  let tag = req.params.tag
+  Article.find({tags2: {$in : tag}}, (err, art)=>{
+    res.json(art)
+  })
+})
+
+
 module.exports = router;
