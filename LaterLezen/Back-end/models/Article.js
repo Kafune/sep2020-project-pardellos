@@ -29,8 +29,7 @@ const ArticleSchema = new mongoose.Schema({
   ttr: {
     type: String,
   },
-  tags: [],
-  tags2: [String],
+  tags: [String],
   status: {
     type: String,
     default: "public",

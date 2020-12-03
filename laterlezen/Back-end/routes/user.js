@@ -19,10 +19,10 @@ const signToken = (userID) => {
   );
 };
 
-router.get("/test/warning/no/delete", async (req,res) =>{
-  await User.deleteMany({})
-  res.sendStatus(200)
-})
+router.get("/test/warning/no/delete", async (req, res) => {
+  await User.deleteMany({});
+  res.sendStatus(200);
+});
 
 router.post("/register", (req, res) => {
   const { email, password, firstname, lastname } = req.body;
@@ -123,66 +123,64 @@ router.post(
   (req, res) => {
     const { extract } = require("article-parser");
     let url = String(req.body.url);
-    const article = new Article(req.body);
-    console.log(article);
-    article.save((err) => {
-      if (err)
-        res.status(500).json({
-          message: {
-            msgBody: "Error 3 has occured",
-            msgError: true,
-          },
-        });
-      else {
-        let rawTags = req.body.tags;
-        let userTags = req.user.tags;
-        let processedTags = [];
-        processedTags = rawTags
-          .map(function (value) {
-            return value.toLowerCase();
-          })
-          .sort();
-        console.log("lowecase and sorted tags: " + processedTags);
-        const uniqueTags = new Set(processedTags);
-        processedTags = [...uniqueTags];
-        console.log("Lowercase, sorted and unique tags: " + processedTags);
-
-        extract(url)
-          .then((article) => {
-            let newArticle = new Article(article);
-            newArticle.tags = processedTags;
-            newArticle.save((err) => {
-              if (err)
-                res.status(500).json({
-                  message: {
-                    msgBody: "Error 3 has occured",
-                    msgError: true,
-                  },
-                });
-              else {
-                let allTags = userTags.concat(processedTags);
-                const allUniqueTags = new Set(allTags);
-                allTags = [...allUniqueTags];
-                req.user.tags = allTags;
-                req.user.articles.push(newArticle);
-                req.user.save((err) => {
-                  if (err)
-                    res.status(500).json({
-                      message: {
-                        msgBody: "Error 4 has occured",
-                        msgError: true,
-                      },
-                    });
-                  else res.send(newArticle);
-                });
-              }
-            });
-          })
-          .catch((err) => {
-            console.log(err);
-          });
-      }
+    let rawTags = req.body.tags;
+    let userTags = req.user.tags;
+    console.log(userTags);
+    let processedTags = [];
+    processedTags = rawTags.map(function (value) {
+      return value.toLowerCase();
     });
+    console.log("lowecase and sorted tags: " + processedTags);
+    const uniqueTags = new Set(processedTags);
+    processedTags = [...uniqueTags];
+    console.log("Lowercase, sorted and unique tags: " + processedTags);
+
+    extract(url)
+      .then((article) => {
+        let newArticle = new Article(article);
+        newArticle.tags = processedTags;
+        newArticle.save((err) => {
+          if (err)
+            res.status(500).json({
+              message: {
+                msgBody: "Error 3 has occured",
+                msgError: true,
+              },
+            });
+          else {
+            let lastTag = processedTags[processedTags.length - 1];
+            let usedTags = { tag: processedTags, lastTag: lastTag };
+            User.exists(
+              {
+                _id: req.user._id,
+                "tags.tag": { $all: usedTags.tag },
+                "tags.lastTag": lastTag,
+              },
+              (err, result) => {
+                if (result) {
+                  res.send(newArticle);
+                } else {
+                  req.user.tags.push(usedTags);
+                  req.user.articles.push(newArticle);
+                  req.user.save((err) => {
+                    if (err)
+                      res.status(500).json({
+                        message: {
+                          msgBody: "Error 4 has occured",
+                          msgError: true,
+                        },
+                      });
+                    else res.send(newArticle);
+                  });
+                }
+              }
+            );
+          }
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }
 );
 
