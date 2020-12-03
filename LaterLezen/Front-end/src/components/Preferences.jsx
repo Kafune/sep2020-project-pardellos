@@ -3,19 +3,26 @@ import React, { useEffect, useState } from 'react';
 import M from 'materialize-css'
 
 export default function Preferences(props) {
+    const [activeTheme, setActiveTheme] = useState();
+
+    useEffect(() => {
+        setActiveTheme(props.backgroundColor)
+    })
 
     document.addEventListener('DOMContentLoaded', function () {
         var dropdown1 = document.querySelector('.dropdown-trigger');
         var dropdownOptions = {
             'closeOnClick': false,
-            'constrainWidth': false
+            'constrainWidth': false,
+            'onCloseStart': () => {handleCancelButton()}
         }
         var instanceDropdown = M.Dropdown.init(dropdown1, dropdownOptions);
     });
 
 
     function changeTheme(value) {
-        props.handleBackgroundState(value)
+        props.handleThemeState(value)
+        setActiveTheme(value);
     }
 
     function handleCancelButton() {
@@ -30,20 +37,20 @@ export default function Preferences(props) {
         <div className="right-align">
             <a className='dropdown-trigger btn blue' href='#' data-target='dropdown1'><i className="small material-icons">settings</i></a>
         </div>
-        <div className={"dropdown-content theme-"+(props.backgroundColor)} id="dropdown1">
+        <div className={"dropdown-content blue-border theme-"+(props.backgroundColor)} id="dropdown1">
             <div className="row">
                 <div className="col s12">
-                    <h5>Preferences for articles</h5>
+                    <h5>Select a theme to read articles</h5>
                 </div>
             </div>
             <div className="row">
                 <div className="col s12">
-                    <div className="btn-large waves round-icon default" onClick={() => changeTheme("default")}></div>
-                    <div className="btn-large waves round-icon typewriter" onClick={() => changeTheme("typewriter")}></div>
-                    <div className="btn-large waves round-icon dark" onClick={() => changeTheme("dark")}></div>
-                    <div className="btn-large waves round-icon bluegrey" onClick={() => changeTheme("bluegrey")}></div>
-                    <div className="btn-large waves round-icon darkblue" onClick={() => changeTheme("darkblue")}></div>
-                    <div className={`banner ${active ? "active" : ""}`}></div>
+                <div className={'btn-large waves round-icon default' + ('default'=== activeTheme ? " active_theme" : "")} onClick={() => changeTheme("default")}></div>
+                    <div className={'btn-large waves round-icon typewriter' + ('typewriter'=== activeTheme ? " active_theme" : "")} onClick={() => changeTheme("typewriter")}></div>
+                    <div className={'btn-large waves round-icon dark' + ('dark'=== activeTheme ? " active_theme" : "")}onClick={() => changeTheme("dark")}></div>
+                    <div className={'btn-large waves round-icon bluegrey' + ('bluegrey'=== activeTheme ? " active_theme" : "")}onClick={() => changeTheme("bluegrey")}></div>
+                    <div className={'btn-large waves round-icon darkblue' + ('darkblue'=== activeTheme ? " active_theme" : "")}onClick={() => changeTheme("darkblue")}></div>
+
                 </div>
             </div>
             <div className="row">

@@ -1,28 +1,34 @@
 .theme-dark{
     background-color: #1c1c1c;
     color: #fff;
+
 }
 
-.theme-dark .article p{
-    font-size: small !important;
+.theme-dark .article h1 {
+    font-size: xx-large;
 }
+
 .theme-dark .article h2{
-    font-size: 2.5rem !important;
+    font-size: xx-large;
 }
-
 .theme-dark .article h3{
-    font-size: 2.4rem !important;
+    font-size: x-large;
 }
-
-.theme-dark .article h4{
-    font-size: 1.4rem !important;
+.theme-dark  .article h4{
+    font-size: large;
 }
-
 .theme-dark .article h5{
-    font-size: 2.2rem !important;
+    font-size: medium;
 }
-
 .theme-dark .article h6{
-    font-size: 2.1rem !important;
+    font-size: small;
 }
-
+.theme-dark .article p{
+    font-size: medium !important;
+}
+.theme-dark .article a {
+    color: #03DAC5;
+}
+.theme-dark .btn {
+    color: #000;
+}

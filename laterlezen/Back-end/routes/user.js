@@ -277,60 +277,78 @@ router.get(
   }
 );
 
-router.post(
-  "/articleExtension",
-  (req, res) => {
-    const { extract } = require("article-parser");
-    let url = String(req.body.url);
-    const article = new Article(req.body);
-    console.log(article);
-    let rawTags = req.body.tags;
-    let processedTags = [];
-    processedTags = rawTags
-      .map(function (value) {
-        return value.toLowerCase();
-      })
-      .sort();
-    console.log("lowecase and sorted tags: " + processedTags);
-    const uniqueTags = new Set(processedTags);
-    processedTags = [...uniqueTags];
-    console.log("Lowercase, sorted and unique tags: " + processedTags);
+router.post("/articleExtension", (req, res) => {
+  const { extract } = require("article-parser");
+  let url = String(req.body.url);
+  const article = new Article(req.body);
+  console.log(article);
+  let rawTags = req.body.tags;
+  let processedTags = [];
+  processedTags = rawTags
+    .map(function (value) {
+      return value.toLowerCase();
+    })
+    .sort();
+  console.log("lowecase and sorted tags: " + processedTags);
+  const uniqueTags = new Set(processedTags);
+  processedTags = [...uniqueTags];
+  console.log("Lowercase, sorted and unique tags: " + processedTags);
 
-    extract(url)
-      .then((article) => {
-        let newArticle = new Article(article);
-        newArticle.tags = processedTags;
-        newArticle.save((err) => {
-          if (err) {
-            res.status(500).json({
-              message: {
-                msgBody: "Error 3 has occured",
-                msgError: true,
-              },
-            });
-          }
-          else {
-            res.send(newArticle);
-          }
-        })
-      })
-      .catch((err) => {
-        console.log(err);
+  extract(url)
+    .then((article) => {
+      let newArticle = new Article(article);
+      newArticle.tags = processedTags;
+      newArticle.save((err) => {
+        if (err) {
+          res.status(500).json({
+            message: {
+              msgBody: "Error 3 has occured",
+              msgError: true,
+            },
+          });
+        } else {
+          res.send(newArticle);
+        }
       });
-  }
-);
-
-
-
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+});
 
 router.put(
   "/preference",
   passport.authenticate("jwt", {
     session: false,
   }),
-  async (req, res)  => {
-    await User.findOneAndUpdate({ _id: req.user._id }, { preferences: req.body.theme });
-    res.send(req.body.theme)
+  async (req, res) => {
+    if (
+      req.body.theme === "default" ||
+      req.body.theme === "typewriter" ||
+      req.body.theme === "dark" ||
+      req.body.theme === "bluegrey" ||
+      req.body.theme === "darkblue"
+    ) {
+      await User.findOneAndUpdate(
+        { _id: req.user._id },
+        { preferences: req.body.theme }
+      ).catch(() => {
+        res.status(500).json({
+          message: {
+            msgBody: "Error has occured",
+            msgError: true,
+          },
+        });
+      });
+      res.send(req.body.theme);
+    } else {
+      res.status(500).json({
+        message: {
+          msgBody: "Error has occured",
+          msgError: true,
+        },
+      });
+    }
   }
 );
 
@@ -339,11 +357,10 @@ router.get(
   passport.authenticate("jwt", {
     session: false,
   }),
-  async (req, res)  => {
-    var query = await User.findOne({_id: req.user._id}).select('preferences');
-    res.send(JSON.stringify(query.preferences))
+  async (req, res) => {
+    var query = await User.findOne({ _id: req.user._id }).select("preferences");
+    res.send(JSON.stringify(query.preferences));
   }
 );
-
 
 module.exports = router;

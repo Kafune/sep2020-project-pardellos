@@ -3,6 +3,7 @@ import { getPreference, searchArticleByID, savePreference } from '../serverCommu
 import Parser from 'html-react-parser/dist/html-react-parser'
 import { useHistory } from 'react-router-dom'
 import Preferences from './Preferences'
+import M from 'materialize-css'
 
 export default function DisplayArticle(props) {
     const [article, setArticle] = useState([])
@@ -11,21 +12,20 @@ export default function DisplayArticle(props) {
 
     const [background, setBackground] = useState('white');
 
-    const checkBackground = (background) => {
-        setBackground(background)
-        document.body.className = 'theme-' + background;
+    const checkTheme= (newTheme) => {
+        setBackground(newTheme)
+        document.body.className = 'theme-' + newTheme;
       }
 
     const handleSaveButton = () => {
-        savePreference(background);
+        savePreference(background).then(M.toast({ html: 'Theme is saved!' }));
       }
     const handleCancelButton = () => {
-        getPreferences();
+        getPreferences()
     }
-    
     const getPreferences = () => {
         getPreference().then((response) => response.json())
-        .then(result => checkBackground(result))
+        .then(result => checkTheme(result))
     }
     useEffect(() => {
         getPreferences()
@@ -45,10 +45,11 @@ export default function DisplayArticle(props) {
     }, [])
 
     return <div className="row">
-        <Preferences handleBackgroundState={checkBackground}
-        backgroundColor={background}  handleCancelButton={handleCancelButton} handleSaveButton={handleSaveButton}
+        <Preferences handleThemeState={checkTheme}
+        backgroundColor={background} handleCancelButton={handleCancelButton} handleSaveButton={handleSaveButton}
        ></Preferences>
-        <div className="article center">
+       <div className="article">
+        <div className="center">
             <h2>{article.title}</h2>
             <h4> Published by: <b>{article.source} {article.author}</b></h4>
         </div>
@@ -57,6 +58,7 @@ export default function DisplayArticle(props) {
                 <img className="responsive-img" src={article.image} />
                 {Parser(" " + article.content)}
             </h5>
+        </div>
         </div>
         <a href={article.url}><button className="waves-effect waves-light btn-small blue accent-2">Go to original article</button></a>
     </div>

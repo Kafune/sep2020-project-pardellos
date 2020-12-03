@@ -1,4 +1,37 @@
 .theme-darkblue {
     background-color: #043046;
     color: #fff
+    
+}
+
+.theme-darkblue img {
+    padding: 2rem;
+}
+.theme-darkblue h1{
+    font-size: xx-large;
+}
+.theme-darkblue h2{
+    font-size: xx-large;
+}
+.theme-darkblue h3{
+    font-size: x-large;
+}
+.theme-darkblue h4{
+    font-size: large;
+}
+.theme-darkblue h5{
+    font-size: medium;
+}
+.theme-darkblue h6{
+    font-size: small;
+}
+.theme-darkblue p{
+    font-size: medium;
+}
+.theme-darkblue .article a {
+    color: #fff !important;
+}
+
+.theme-darkblue .btn {
+    color: rgb(117, 0, 0);
 }

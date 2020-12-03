@@ -1,8 +1,3 @@
-/* .inner-content{
-  position: absolute;
-  bottom: 65px;
-  left: 0;
-} */
 
 .round-icon{
   margin: 0.5rem;
@@ -12,6 +7,9 @@
   border: 1px solid #000;
 }
 
+.round-icon.active_theme {
+  border: 2px solid #53b557 !important;
+}
 
 .round-icon.default {
   background-color: #fff;
@@ -57,7 +55,9 @@
   background-color: #043046;
 }
 
-.zoom-icon {
-  user-select: none;
+.blue-border{
+  border: 1px solid #448AFF
 }
+
+
 
