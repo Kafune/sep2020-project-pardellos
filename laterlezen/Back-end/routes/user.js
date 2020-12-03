@@ -291,4 +291,47 @@ router.get(
   }
 );
 
+router.post(
+  "/articleExtension",
+  (req, res) => {
+    const findUser = User.findOne({ email: req.body.email })
+      .then((response) => {
+        if (response) {
+          console.log(response)
+          const { extract } = require("article-parser");
+          let url = String(req.body.url);
+          const article = new Article(req.body);
+          console.log(article);
+          extract(url)  
+            .then((article) => {
+              let newArticle = new Article(article);
+              newArticle.tags = req.body.tags;
+              newArticle.title = req.body.title;
+              newArticle.save((err) => {
+                if (err) {
+                  res.status(500).json({
+                    message: {
+                      msgBody: "Error 2 has occured",
+                      msgError: true,
+                    },
+                  });
+                } else {
+                  response.articles.push(newArticle);
+                  response.save()
+                  res.send(newArticle);
+                }
+              })
+            })
+        } else {
+          res.status(500).json({
+            message: {
+              msgBody: "Error 1 has occured",
+              msgError: true
+            }
+          })
+        }
+      })
+  }
+);
+
 module.exports = router;
