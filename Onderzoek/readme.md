@@ -1,18 +1,25 @@
 # Onderzoek Article parsers
 
+## Inhoud
+- [Inleiding](#Inleiding)
+- [Article-parser](#Article-parser)
+   - [Article-response](#Article-response)
+- [Mercury-parser](#Mercury-parser)
+  - [Mercury-response](#Mercury-response)
+
 ## Inleiding
 Wij hebben de Product Owner tijdens de sprint review laten zien hoe wij de inhoud van een externe artikel eruit halen. Hij vroeg zich af met welk programma wij dit doen. Wij maken hierbij gebruik van article-parser. De Product Owner zegt dat er een alternatief is waarmee dit mogelijk beter zou kunnen. Dit alternatief is de mercury-parser. Hij heeft ons gevraagd om een onderzoek uit te voeren om deze 2 programma’s te vergelijken.
 In dit document beschrijven wij de onderzoeksresultaten van deze 2 programma’s om te kijken welke programma de functies aanbiedt die het beste bij de eisen van de Product Owner past.
 De eisen die de Product Owner minimaal van een parser stelt zijn:
 -	Relevante meta data, zoals: titel, beschrijving, auteur, content etc.
 -	Alle advertentie en andere irrelevante spul weghalen.
--	Idealiter alle afbeeldingen van de artikel eruit halen zodat de gebruiker een afbeelding kan selecteren als thumbnail
+-	Graag alle afbeeldingen van de artikel eruit halen zodat de gebruiker een afbeelding kan selecteren als thumbnail voor zijn overzicht op de front-end homepagina.
 
-Daarnaast vergelijken wij de response die een parser uit een bepaalde artikel haalt. Wij gebruiken de artikel https://www.nu.nl/wetenschap/6093105/wat-drijft-een-mens-om-te-discrimineren.html als voorbeeld omdat dit artikel meerdere afbeeldingen bevat, wat de reden is dat wij dit onderzoek doen.
+Daarnaast vergelijken wij de response die een parser uit een bepaalde artikel haalt. Wij gebruiken de artikel https://www.nu.nl/wetenschap/6093105/wat-drijft-een-mens-om-te-discrimineren.html als voorbeeld omdat dit artikel meerdere afbeeldingen bevat, wat de reden is dat wij dit onderzoek doen. Daarnaast gebruiken wij ook https://nos.nl/artikel/2359116-burgemeester-woensdrecht-over-vuurwerkbom-bij-zijn-huis-schrik-beetje-te-boven.html als voorbeeld om nog een vergelijking te doen tussen deze 2 parsers bij het ophalen van een artikel vanuit een andere website.
 
 ## Article-parser
 https://github.com/ndaidong/article-parser
-### Response: 
+### Article-response: 
 ```json
 // 20201203120346
 // http://localhost:3000/
@@ -37,7 +44,7 @@ https://github.com/ndaidong/article-parser
 ## Mercury-parser
 https://github.com/postlight/mercury-parser
 
-### Response: 
+### Mercury-response: 
 ```json
 // 20201203120114
 // http://localhost:3000/
@@ -60,8 +67,22 @@ https://github.com/postlight/mercury-parser
 }
 ```
 
-## Vergelijking
-### Article-parser
-Articleparser
+## Vergelijkingen
+Hierin kijken we wat elk parser teruggeeft per artikel.
+| Response                       | Article-parser | Mercury-parser | Extra notities                                                                                                                                                                                                                                                                          |
+|--------------------------------|----------------|----------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Thumbnail                      | Ja             | Ja             | Article parser zet de image zowel in de thumbnail als in de content, waardoor deze dubbel erop komt te staan. Mercury-parser zet de thumbnail alleen in de thumbnail.                                                                                                                   |
+| Titel                          | Ja             | Ja             |                                                                                                                                                                                                                                                                                         |
+| URL                            | Ja             | Ja             | Mercury-parser gebruikt de HTML bestand van de artikel. Article-parser gebruikt de AMP bestand van de artikel. Article-parser laat ook de andere soorten bestanden zien waarmee het artikel is gemaakt, dus ook in HTML. Dit doet mercury-parser niet.                                  |
+| Publiceer datum                | Ja             | Ja             | Beide parsers laten de datum op een iets andere manier zien.                                                                                                                                                                                                                            |
+| Auteur                         | Nee            | Ja             | Article parser geeft een lege String terug.                                                                                                                                                                                                                                             |
+| Beschrijving                   | Ja             | Ja             | Mercury-parser neemt een aantal tekens mee bij het ophalen van de beschrijving. Article-parser laat dit redelijk goed zien, maar beide parsers hebben moeite met bepaalde tekens.                                                                                                       |
+| Content                        | Ja             | Ja             | Article parser haalt class namen van de div's weg. Mercury parser zet schuine strepen om de class, zoals \"block-content"\. Article parser haalt niet alle reclame weg van de reader, getest in een NOS artikel. Mercury parser haalt daarin wel alle reclame weg.                      |
+| Andere aanwezige afbeeldingen  | Nee            | Ja             | Beide parsers zetten er een schuine streep om de afbeelding heen, zoals: <img src=\"https://www.nu.nl/static/img/placeholders/wd640-o.png"\ />. Echter haalt mercury-parser de daadwerkelijke afbeelding eruit, terwijl article-parser alleen de placeholder van de afbeelding ophaalt. |
+| Bron                           | Ja             | Nee            |                                                                                                                                                                                                                                                                                         |
+| Domein                         | Nee            | Ja             |                                                                                                                                                                                                                                                                                         |
+| Aantal woorden                 | Nee            | Ja             | Niet heel relevant voor de eisen van de Product Owner                                                                                                                                                                                                                                   |
+| Aantal pagina's                | Nee            | Ja             | Niet heel relevant voor de eisen van de Product Owner                                                                                                                                                                                                                                   |
+| Tijd nodig om artikel te lezen | Ja             | Nee            | Niet heel relevant voor de eisen van de Product Owner                                                                                                                                                                                                                                   |
 
 ## Conclusie

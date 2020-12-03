@@ -1,5 +1,5 @@
 {
-  "name": "mercury-parser-test",
+  "name": "parser-test",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -8,7 +8,6 @@
     "@testing-library/react": "^11.2.2",
     "@testing-library/user-event": "^12.4.0",
     "article-parser": "^4.2.5",
-    "mercury-parser": "^1.0.0",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
     "react-scripts": "4.0.1",
