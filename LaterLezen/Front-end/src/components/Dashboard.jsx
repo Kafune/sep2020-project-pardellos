@@ -6,6 +6,7 @@ export default function Dashboard(props) {
   const [firstname, setFirstname] = useState(props.firstname)
   const [lastname, setLastname] = useState(props.lastname)
   const [articles, setArticles] = useState(props.articles);
+  const [id, setId] = useState()
 
   useEffect(() => {
     handleGetArticles()
@@ -22,6 +23,10 @@ export default function Dashboard(props) {
       .then(result => {
         setArticles(result.articles)
       })
+  }
+
+  function handleEditArticle (){
+
   }
 
 
@@ -45,6 +50,9 @@ export default function Dashboard(props) {
               <p>Tags: {data.tags.map((data) => {
                 return data + " "
               })}</p>
+              <Link to={`/editArticle/${data._id}`}>
+                <a>Edit article</a>
+              </Link>
             </div>
           </div>
         </div>

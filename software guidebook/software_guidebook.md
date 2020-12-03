@@ -98,7 +98,11 @@ Door het lezen van dit hoofdstuk krijg je een beter beeld van hoe de structuur v
     ![Component_Laterlezer_app.png](Component_Laterlezer_app.png)
 
     ### Extension view
-    ![Component_extension.png](Component_extension.png)
+    ![Component_extension.png](Component_extension.png)\
+
+    ### Database view
+
+    ![database.png](database.png)
 
 
 
