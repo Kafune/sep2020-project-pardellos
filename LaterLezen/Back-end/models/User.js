@@ -23,6 +23,10 @@ const UserSchema = new mongoose.Schema({
   articles: [{ type: mongoose.Schema.Types.ObjectId, ref: "Article" }],
   tags: {
     type: [String]
+  },
+  preferences: {
+    default: 'white',
+    type: String,
   }
 });
 

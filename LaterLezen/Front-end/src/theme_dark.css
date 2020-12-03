@@ -1,4 +1,28 @@
 .theme-dark{
-    background-color: #121212;
+    background-color: #1c1c1c;
     color: #fff;
 }
+
+.theme-dark .article p{
+    font-size: small !important;
+}
+.theme-dark .article h2{
+    font-size: 2.5rem !important;
+}
+
+.theme-dark .article h3{
+    font-size: 2.4rem !important;
+}
+
+.theme-dark .article h4{
+    font-size: 1.4rem !important;
+}
+
+.theme-dark .article h5{
+    font-size: 2.2rem !important;
+}
+
+.theme-dark .article h6{
+    font-size: 2.1rem !important;
+}
+

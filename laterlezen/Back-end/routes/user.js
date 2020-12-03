@@ -320,4 +320,30 @@ router.post(
   }
 );
 
+
+
+
+router.put(
+  "/preference",
+  passport.authenticate("jwt", {
+    session: false,
+  }),
+  async (req, res)  => {
+    await User.findOneAndUpdate({ _id: req.user._id }, { preferences: req.body.theme });
+    res.send(req.body.theme)
+  }
+);
+
+router.get(
+  "/preference",
+  passport.authenticate("jwt", {
+    session: false,
+  }),
+  async (req, res)  => {
+    var query = await User.findOne({_id: req.user._id}).select('preferences');
+    res.send(JSON.stringify(query.preferences))
+  }
+);
+
+
 module.exports = router;

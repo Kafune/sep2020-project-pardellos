@@ -2,3 +2,8 @@
     background-color: #E0D3AF;
     color: #000;
 }
+
+.theme-typewriter .article {
+    font-family: 'Courier New', Courier, monospace;
+    line-height: 0,2;
+}

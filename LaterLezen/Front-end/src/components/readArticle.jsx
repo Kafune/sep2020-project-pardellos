@@ -28,7 +28,7 @@ export default function ReadArticle(props) {
        handleFontState={checkFont}
        ></Preferences>
 
-      <div className={'text-' + fontSize}>
+      <div className="article">
 
         <h1>Dit is een test</h1>
 

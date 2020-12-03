@@ -8,46 +8,29 @@ export default function Preferences(props) {
         var dropdown1 = document.querySelector('.dropdown-trigger');
         var dropdownOptions = {
             'closeOnClick': false,
-            'hover': false,
             'constrainWidth': false
         }
         var instanceDropdown = M.Dropdown.init(dropdown1, dropdownOptions);
     });
 
-    const [currentNumber, setCurrentNumber] = useState(2);
-    const [fontSizes] = useState(["x-small", "small", "medium", "large", "x-large"])
 
-    
-    useEffect(() => {
-        // props.handleBackgroundState
-    })
-
-    const addNumber = () => {
-        console.log(currentNumber)
-        if (currentNumber < 4) {
-            setCurrentNumber(currentNumber + 1)
-        } else {
-            M.toast({ html: 'Tekstgrootte kan niet hoger' })
-        }
-    }
-
-    const subtractNumber = () => {
-        if (!currentNumber <= 0) {
-            setCurrentNumber(currentNumber - 1)
-        } else {
-            M.toast({ html: 'Tekstgrootte kan niet lager' })
-        }
-    }
-
-    function changeBackground(value) {
+    function changeTheme(value) {
         props.handleBackgroundState(value)
+    }
+
+    function handleCancelButton() {
+        props.handleCancelButton()
+    }
+
+    function handleSaveButton() {
+        props.handleSaveButton()
     }
 
     return <div className="row">
         <div className="right-align">
             <a className='dropdown-trigger btn blue' href='#' data-target='dropdown1'><i className="small material-icons">settings</i></a>
         </div>
-        <div className={"dropdown-content bg-"+(props.backgroundColor)} id="dropdown1">
+        <div className={"dropdown-content theme-"+(props.backgroundColor)} id="dropdown1">
             <div className="row">
                 <div className="col s12">
                     <h5>Preferences for articles</h5>
@@ -55,11 +38,21 @@ export default function Preferences(props) {
             </div>
             <div className="row">
                 <div className="col s12">
-                    <p>Select a theme</p>
-                    <div className="btn waves round-icon white" onClick={() => changeBackground("white")}></div>
-                    <div className="btn waves round-icon yellow" onClick={() => changeBackground("yellow")}></div>
-                    <div className="btn waves round-icon black" onClick={() => changeBackground("dark")}></div>
+                    <div className="btn-large waves round-icon default" onClick={() => changeTheme("default")}></div>
+                    <div className="btn-large waves round-icon typewriter" onClick={() => changeTheme("typewriter")}></div>
+                    <div className="btn-large waves round-icon dark" onClick={() => changeTheme("dark")}></div>
+                    <div className="btn-large waves round-icon bluegrey" onClick={() => changeTheme("bluegrey")}></div>
+                    <div className="btn-large waves round-icon darkblue" onClick={() => changeTheme("darkblue")}></div>
+                    <div className={`banner ${active ? "active" : ""}`}></div>
                 </div>
+            </div>
+            <div className="row">
+            <div className="col s12">
+            <div className="center-align">
+                    <div className="btn waves blue accent-2" onClick={handleSaveButton}>Save</div>
+                    <div className="btn waves blue accent-2" onClick={handleCancelButton}>Cancel</div>
+                </div>
+            </div>
             </div>
         </div>
     </div>
