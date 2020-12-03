@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom'
-import { registerUser } from '../serverCommunication'
+import { registerUser, loginUser } from '../serverCommunication'
 
 import banner from './../img/wallpaper.jpg';
 
@@ -27,7 +27,17 @@ export default function Register(props) {
                         response.json()
                             .then(() => {
                                 M.toast({ html: 'Account successfully created' })
-                                history.push('/login')
+                                loginUser(email, password)
+                                    .then((response) => response.json())
+                                    .then((response) => {
+                                        if (response.isAuthenticated === true) {
+                                            props.handleEmailState(email);
+                                            props.handleFirstnameState(response.firstname)
+                                            props.handleLastnameState(response.lastname)
+                                            props.handleLoginState(true);
+                                            history.push('/dashboard')
+                                        }
+                                    })
                             })
                     }
                     else {

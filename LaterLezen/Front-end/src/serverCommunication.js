@@ -2,11 +2,11 @@ const port = 4000;
 const serverHostname = `${window.location.hostname}:${port}`
 const serverFetchBase = `${window.location.protocol}//${serverHostname}`
 
-export async function getArticle(url, tags, id) {
+export async function saveArticle(url, tags, title) {
   const body = {
     url: url,
-    user_id: id,
-    tags: tags
+    tags: tags,
+    title: title
   };
 
   const fetchOptions = {

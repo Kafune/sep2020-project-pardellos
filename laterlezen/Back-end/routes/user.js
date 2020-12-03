@@ -150,6 +150,7 @@ router.post(
             const allUniqueTags = new Set(allTags);
             allTags = [...allUniqueTags];
             req.user.tags = allTags;
+            req.user.title = req.body.title
             req.user.articles.push(newArticle);
             req.user.save((err) => {
               if (err)
@@ -288,7 +289,7 @@ router.post(
           let url = String(req.body.url);
           const article = new Article(req.body);
           console.log(article);
-          extract(url)
+          extract(url)  
             .then((article) => {
               let newArticle = new Article(article);
               newArticle.tags = req.body.tags;

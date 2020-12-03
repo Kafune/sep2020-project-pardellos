@@ -164,7 +164,7 @@ export default class App extends React.Component {
               <Login handleLoginState={setLoginStatus} handleEmailState={setEmailState} handleFirstnameState={setFirstnameState} handleLastnameState={setLastnameState} handleTagsState={setTagsState} />
             </Route>
             <Route path="/register">
-              <Register />
+              <Register handleLoginState={setLoginStatus} handleEmailState={setEmailState} handleFirstnameState={setFirstnameState} handleLastnameState={setLastnameState} handleTagsState={setTagsState}/>
             </Route>
             <Route path="/logout">
               <Logout handleLoginState={setLoginStatus} />
