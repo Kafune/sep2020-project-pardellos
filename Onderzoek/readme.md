@@ -86,6 +86,4 @@ Hierin kijken we wat elk parser teruggeeft per artikel. Extra bijzonderheden not
 | Tijd nodig om artikel te lezen | Ja             | Nee            | Niet heel relevant voor de eisen van de Product Owner                                                                                                                                                                                                                                   |
 
 ## Conclusie
-Overleggen met team voor nu.
-
 Het feit dat mercury-parser de correcte afbeelding ophaalt in een artikel, terwijl dit niet lukt bij article-parser, zou al een groot reden zijn om voor mercury-parser te gaan. Daarnaast haalt mercury-parser alle advertenties van een NOS artikel weg, terwijl article-parser dit allemaal erin laat. Mercury parser heeft ook nog een aantal voordelen die article-parser niet heeft. Na het uitvoeren van deze onderzoek, is er minder reden om voor article-parser te kiezen.
