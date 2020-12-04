@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const Article = require('../models/Article');
 const User = require('../models/User')
 
-xdescribe('Player Model Tests', () => {
+describe('Player Model Tests', () => {
     beforeAll(async () => {
          await mongoose.connect('mongodb+srv://Glenn:LaterLezen@laterlezen.tkmyn.mongodb.net/LaterLezen?retryWrites=true&w=majority', {
             useNewUrlParser: true,
@@ -24,14 +24,25 @@ xdescribe('Player Model Tests', () => {
         await mongoose.disconnect();
     });
     
-    test('find all articles', async () => {
+    xtest('find all articles', async () => {
         let article = await Article.find()
         expect(article != undefined)
     });
-    test('find specific article', async () => {
+    xtest('find specific article', async () => {
         let article = await Article.findOne({title: 'Test1'})
         expect(article.title).toBe("Test1")
 
     });
+
+    test('extract data from article', async () => {
+        const { extract } = require("article-parser");
+        const url = 'https://www.youtube.com/watch?v=jXZAbnn1kTU';
+
+        return extract(url)
+        .then(data => {
+            console.log(data)
+            expect(data).not.toBeNull()
+        })
+    })
     
 });
