@@ -7,9 +7,10 @@ import M from "materialize-css";
 
 export default function EditArticle(props) {
   const [article, setArticle] = useState({});
-  const [title, setTitle] = useState("");
-  const [source, setSource] = useState("");
-  const [description, setDescription] = useState("");
+  const [title, setTitle] = useState('');
+  const [source, setSource] = useState('');
+  const [description, setDescription] = useState('');
+  const [tags, setTags] = useState([])
 
   const history = useHistory();
 
@@ -24,29 +25,31 @@ export default function EditArticle(props) {
           M.toast({ html: "Cannot find article" });
         } else {
           setArticle(response);
+          setTitle(response.title)
+          setDescription(response.description)
+          setSource(response.source)
+          setTags(response.tags)
         }
       });
   }, []);
 
-  useEffect(() => {
-    setTitle(article.title);
-    setDescription(article.description);
-    setSource(article.source);
-  })
-
+  
 
   return (
     <div>
-      {console.log(article)}
       <input value={title} onChange={(e) => setTitle(e.target.value)}></input>
       <input value={source} onChange={(e) => setSource(e.target.value)}></input>
       <input
         value={description}
         onChange={(e) => setDescription(e.target.value)}
       ></input>
+      {console.log(article.tags)}
 
-      <button>Confirm changes</button>
-      <button>Cancel changes</button>
+      {tags.map((elem) => {
+        return <span className="tag">{elem}</span>;
+      })}
+      <button className="btn">Confirm changes</button>
+      <button className="btn">Cancel changes</button>
     </div>
   );
 }
