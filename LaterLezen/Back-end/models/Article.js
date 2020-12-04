@@ -1,17 +1,16 @@
 const mongoose = require("mongoose");
 
 const ArticleSchema = new mongoose.Schema({
-  links: {},
   url: {
     type: String,
   },
   title: {
     type: String,
   },
-  description: {
+  excerpt: {
     type: String,
   },
-  image: {
+  lead_image_url: {
     type: String,
   },
   content: {
@@ -20,16 +19,16 @@ const ArticleSchema = new mongoose.Schema({
   author: {
     type: String,
   },
-  source: {
+  domain: {
     type: String,
   },
-  published: {
-    type: String,
+  date_published: {
+    type: Date,
   },
-  ttr: {
-    type: String,
+  word_count: {
+    type: Number,
   },
-  tags: [],
+  tags: [String],
   status: {
     type: String,
     default: "public",
@@ -37,12 +36,12 @@ const ArticleSchema = new mongoose.Schema({
   },
   read: {
     type: Boolean,
-    default: false
+    default: false,
   },
   createdAt: {
     type: Date,
     default: Date.now,
-  }
+  },
 });
 
 module.exports = mongoose.model("Article", ArticleSchema);
