@@ -32,11 +32,11 @@ export default function Dashboard(props) {
         return <div key={data._id}>
           <div class="card blue-grey darken-1">
             <div class="card-image">
-              <img src={data.image} />
+              <img src={data.lead_image_url} />
               <span class="card-title">{data.title}</span>
             </div>
             <div class="card-content white-text">
-              <p>{data.description}</p>
+              <p>{data.excerpt}</p>
             </div>
             <div class="card-action">
               <Link to={`/article/${data._id}`}>

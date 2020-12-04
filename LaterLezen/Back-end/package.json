@@ -4,6 +4,7 @@
   "description": "back end quizzer",
   "main": "app.js",
   "dependencies": {
+    "@postlight/mercury-parser": "^2.2.0",
     "article-parser": "^4.2.5",
     "bcrypt": "^5.0.0",
     "connect-mongo": "^3.2.0",

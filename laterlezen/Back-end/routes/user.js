@@ -3,6 +3,9 @@ const router = express.Router();
 const passport = require("passport");
 const passportConfig = require("../config/passport");
 const JWT = require("jsonwebtoken");
+const Mercury = require("@postlight/mercury-parser");
+const { PerformanceObserver, performance } = require("perf_hooks");
+const { extract } = require("article-parser");
 const User = require("../models/User");
 const Article = require("../models/Article");
 
@@ -121,23 +124,32 @@ router.post(
     session: false,
   }),
   (req, res) => {
-    const { extract } = require("article-parser");
     let url = String(req.body.url);
     let rawTags = req.body.tags;
-    let userTags = req.user.tags;
-    console.log(userTags);
+    let description;
+
     let processedTags = [];
     processedTags = rawTags.map(function (value) {
       return value.toLowerCase();
     });
-    console.log("lowecase and sorted tags: " + processedTags);
     const uniqueTags = new Set(processedTags);
     processedTags = [...uniqueTags];
-    console.log("Lowercase, sorted and unique tags: " + processedTags);
-
+    var t0 = performance.now();
     extract(url)
       .then((article) => {
-        let newArticle = new Article(article);
+        description = article.description;
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    var t1 = performance.now();
+    console.log("Call to articleparser took " + (t1 - t0) + " milliseconds.");
+    var t2 = performance.now();
+    Mercury.parse(url)
+      .then((response) => {
+        let newArticle = new Article(response);
+        if (!req.body.title == "") newArticle.title = req.body.title;
+        if (description != null) newArticle.excerpt = description;
         newArticle.tags = processedTags;
         newArticle.save((err) => {
           if (err)
@@ -157,30 +169,28 @@ router.post(
                 "tags.lastTag": lastTag,
               },
               (err, result) => {
-                if (result) {
-                  res.send(newArticle);
-                } else {
+                if (!result) {
                   req.user.tags.push(usedTags);
-                  req.user.articles.push(newArticle);
-                  req.user.save((err) => {
-                    if (err)
-                      res.status(500).json({
-                        message: {
-                          msgBody: "Error 4 has occured",
-                          msgError: true,
-                        },
-                      });
-                    else res.send(newArticle);
-                  });
                 }
+                req.user.articles.push(newArticle);
+                req.user.save((err) => {
+                  if (err)
+                    res.status(500).json({
+                      message: {
+                        msgBody: "Error 4 has occured",
+                        msgError: true,
+                      },
+                    });
+                  else res.send(newArticle);
+                });
               }
             );
           }
         });
       })
-      .catch((err) => {
-        console.log(err);
-      });
+      .catch((err) => console.log("Error: ", err));
+    var t3 = performance.now();
+    console.log("Call to mercury took " + (t3 - t2) + " milliseconds.");
   }
 );
 
@@ -291,47 +301,42 @@ router.get(
   }
 );
 
-router.post(
-  "/articleExtension",
-  (req, res) => {
-    const findUser = User.findOne({ email: req.body.email })
-      .then((response) => {
-        if (response) {
-          console.log(response)
-          const { extract } = require("article-parser");
-          let url = String(req.body.url);
-          const article = new Article(req.body);
-          console.log(article);
-          extract(url)  
-            .then((article) => {
-              let newArticle = new Article(article);
-              newArticle.tags = req.body.tags;
-              newArticle.title = req.body.title;
-              newArticle.save((err) => {
-                if (err) {
-                  res.status(500).json({
-                    message: {
-                      msgBody: "Error 2 has occured",
-                      msgError: true,
-                    },
-                  });
-                } else {
-                  response.articles.push(newArticle);
-                  response.save()
-                  res.send(newArticle);
-                }
-              })
-            })
-        } else {
-          res.status(500).json({
-            message: {
-              msgBody: "Error 1 has occured",
-              msgError: true
-            }
-          })
-        }
-      })
-  }
-);
+router.post("/articleExtension", (req, res) => {
+  const findUser = User.findOne({ email: req.body.email }).then((response) => {
+    if (response) {
+      console.log(response);
+      const { extract } = require("article-parser");
+      let url = String(req.body.url);
+      const article = new Article(req.body);
+      console.log(article);
+      extract(url).then((article) => {
+        let newArticle = new Article(article);
+        newArticle.tags = req.body.tags;
+        newArticle.title = req.body.title;
+        newArticle.save((err) => {
+          if (err) {
+            res.status(500).json({
+              message: {
+                msgBody: "Error 2 has occured",
+                msgError: true,
+              },
+            });
+          } else {
+            response.articles.push(newArticle);
+            response.save();
+            res.send(newArticle);
+          }
+        });
+      });
+    } else {
+      res.status(500).json({
+        message: {
+          msgBody: "Error 1 has occured",
+          msgError: true,
+        },
+      });
+    }
+  });
+});
 
 module.exports = router;
