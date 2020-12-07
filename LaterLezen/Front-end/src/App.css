@@ -63,5 +63,16 @@
   overflow-y: hidden !important;
 }
 
+.preference-button {
+  position: fixed;
+  bottom: 0;
+  right: 16%;
+}
 
+.preference-button .btn {
+  margin: 5px 0;
+}
 
+.preference-button h5 {
+  font-size: 1.5rem !important;
+}

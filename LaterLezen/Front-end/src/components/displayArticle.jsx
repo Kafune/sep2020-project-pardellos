@@ -51,10 +51,9 @@ export default function DisplayArticle(props) {
             return () => document.body.className = ''
     }, [])
 
-    return <div className="row">
+    return <>
         <Preferences handleThemeState={checkTheme}
-        backgroundColor={background} handleCancelButton={handleCancelButton} handleSaveButton={handleSaveButton}
-       ></Preferences>
+        backgroundColor={background} handleCancelButton={handleCancelButton} handleSaveButton={handleSaveButton}/>
        <div className="article">
         <div className="center">
             <h2>{article.title}</h2>
@@ -68,5 +67,5 @@ export default function DisplayArticle(props) {
         </div>
         </div>
         <a href={article.url}><button className="waves-effect waves-light btn-small blue accent-2">Go to original article</button></a>
-    </div>
+    </>
 }

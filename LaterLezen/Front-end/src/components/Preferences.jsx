@@ -23,7 +23,7 @@ export default function Preferences(props) {
     }
 
     return <div className="row">
-        <div className="right-align">
+        <div className="center-align preference-button">
             <button className={'dropdown-trigger btn blue'} data-target={'dropdown1'}><i className="small material-icons">settings</i></button>
         </div>
         <div className={"dropdown-content blue-border no-scroll theme-"+(props.backgroundColor)} id="dropdown1">

@@ -84,7 +84,6 @@ export default class App extends React.Component {
     )
   }
   
-  
 
   render() {
     const setLoginStatus = (c) => this.handleLoginState(c)
