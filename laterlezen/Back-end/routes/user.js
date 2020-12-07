@@ -321,4 +321,51 @@ router.post(
   }
 );
 
+router.put(
+  "/preference",
+  passport.authenticate("jwt", {
+    session: false,
+  }),
+  async (req, res) => {
+    if (
+      req.body.theme === "default" ||
+      req.body.theme === "typewriter" ||
+      req.body.theme === "dark" ||
+      req.body.theme === "bluegrey" ||
+      req.body.theme === "darkblue"
+    ) {
+      await User.findOneAndUpdate(
+        { _id: req.user._id },
+        { preferences: req.body.theme }
+      ).catch(() => {
+        res.status(500).json({
+          message: {
+            msgBody: "Error has occured",
+            msgError: true,
+          },
+        });
+      });
+      res.send(req.body.theme);
+    } else {
+      res.status(500).json({
+        message: {
+          msgBody: "Error has occured",
+          msgError: true,
+        },
+      });
+    }
+  }
+);
+
+router.get(
+  "/preference",
+  passport.authenticate("jwt", {
+    session: false,
+  }),
+  async (req, res) => {
+    var query = await User.findOne({ _id: req.user._id }).select("preferences");
+    res.send(JSON.stringify(query.preferences));
+  }
+);
+
 module.exports = router;

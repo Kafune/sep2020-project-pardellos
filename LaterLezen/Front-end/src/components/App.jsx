@@ -26,7 +26,8 @@ export default class App extends React.Component {
       email: '',
       logged_in: false,
       articles: [],
-      tags: []
+      tags: [],
+      theme: 'default'
     }
   }
 
@@ -75,6 +76,7 @@ export default class App extends React.Component {
     })
     )
   }
+  
 
   handleTagsState(value) {
     this.setState(() => ({
@@ -82,6 +84,7 @@ export default class App extends React.Component {
     })
     )
   }
+  
 
   render() {
     const setLoginStatus = (c) => this.handleLoginState(c)
@@ -89,7 +92,9 @@ export default class App extends React.Component {
     const setFirstnameState = (c) => this.handleFirstnameState(c)
     const setLastnameState = (c) => this.handleLastnameState(c)
     const setTagsState = (c) => this.handleTagsState(c)
+    
     return (
+      
       <div className="App">
         <nav>
           <div class="nav-wrapper blue accent-2">

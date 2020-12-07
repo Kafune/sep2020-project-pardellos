@@ -126,4 +126,42 @@ describe('user related tests', () => {
     test('add article without any authentication', async () => {
         //TODO: Test this
     })
+
+    test('add new theme to user', async () => {
+        let testUser = await User.findOne({
+            email: testEmail
+        }).lean();
+        let preference = 'dark';
+        if (
+            preference === "default" ||
+            preference === "typewriter" ||
+            preference === "dark" ||
+            preference === "bluegrey" ||
+            preference === "darkblue"
+          ) {
+            testUser.preferences = preference;
+          }
+
+        expect(testUser.preferences).toEqual(preference)
+    })
+
+    test('theme stays on the current theme when changing it to a invalid theme', async () => {
+        let testUser = await User.findOne({
+            email: testEmail
+        }).lean();
+        let preference = 'orange';
+
+        if (
+            preference === "default" ||
+            preference === "typewriter" ||
+            preference === "dark" ||
+            preference === "bluegrey" ||
+            preference === "darkblue"
+          ) {
+            testUser.preferences = preference;
+          }
+
+        expect(testUser.preferences).toEqual('default')
+    })
+
 })
