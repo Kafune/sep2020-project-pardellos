@@ -1,20 +1,20 @@
 import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom'
-import { registerUser } from '../serverCommunication'
+import { registerUser, loginUser } from '../serverCommunication'
 
 import banner from './../img/wallpaper.jpg';
 
 export default function Register(props) {
-    const [email, setEmail] = useInput({ type: "email" });
-    const [firstName, setfirstName] = useInput({ type: "text" });
-    const [lastName, setLastName] = useInput({ type: "text" });
-    const [password, setPassword] = useInput({ type: "password" });
-    const [confirmPassword, setConfirmPassword] = useInput({ type: "password" });
+    const [email, setEmail] = useInput({ type: "email", name:"email" });
+    const [firstName, setfirstName] = useInput({ type: "text", name:"firstname" });
+    const [lastName, setLastName] = useInput({ type: "text", name: "lastname" });
+    const [password, setPassword] = useInput({ type: "password", name:"password" });
+    const [confirmPassword, setConfirmPassword] = useInput({ type: "password", name:"confirmpassword" });
     const history = useHistory();
 
-    function useInput({ type }) {
+    function useInput({ type, name }) {
         const [value, setValue] = useState("");
-        const input = <input type={type} onChange={e => setValue(e.target.value)} required />
+        const input = <input type={type} name={name} onChange={e => setValue(e.target.value)} required />
         return [value, input];
     }
 
@@ -27,7 +27,17 @@ export default function Register(props) {
                         response.json()
                             .then(() => {
                                 M.toast({ html: 'Account successfully created' })
-                                history.push('/login')
+                                loginUser(email, password)
+                                    .then((response) => response.json())
+                                    .then((response) => {
+                                        if (response.isAuthenticated === true) {
+                                            props.handleEmailState(email);
+                                            props.handleFirstnameState(response.firstname)
+                                            props.handleLastnameState(response.lastname)
+                                            props.handleLoginState(true);
+                                            history.push('/dashboard')
+                                        }
+                                    })
                             })
                     }
                     else {

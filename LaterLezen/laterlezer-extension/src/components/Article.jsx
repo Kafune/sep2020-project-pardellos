@@ -2,10 +2,13 @@ import React, { useState, useEffect } from "react";
 import TagList from "./TagsList";
 import { saveArticle } from "../serverCommunication";
 export default function Article(props) {
+  const [email, setEmail] = useState(props.email)
   const [url, setUrl] = useState("");
+  const [title, setTitle] = useState("")
   const [filter, setFilter] = useState("");
   const [selectedTags, setSelectedTags] = useState([]);
   const [filteredTags, setFilteredTags] = useState([props.tags]);
+
 
   useEffect(() => {
     setFilteredTags([...props.tags])
@@ -26,6 +29,12 @@ export default function Article(props) {
     setFilter(e.target.value);
   }
 
+  function handleTitleChange(e) {
+    e.preventDefault();
+    setTitle(e.target.value);
+  }
+
+
   function handleTagSelect(value) {
     if (selectedTags.includes(value)) {
       setSelectedTags((oldArray) =>
@@ -36,8 +45,8 @@ export default function Article(props) {
     }
   }
 
-  function handleSaveArticle(url, tags) {
-    saveArticle(url, tags)
+  function handleSaveArticle(url, tags, title, email) {
+    saveArticle(url, tags, title, email)
       .then((response) => response.json())
       .then((response) => {
         console.log(response);
@@ -45,38 +54,25 @@ export default function Article(props) {
       });
   }
 
+  function handleLogout() {
+    props.handleEmailState("")
+    props.handleLoginState(false)
+  }
+
   return (
-    <div className="container extension-bg">
-      <h3 className="login-title">LaterLezer</h3>
-      <h4 className="login-title">Add articles here!!</h4>
+    <div className="container">
+      <h3 className="h1">LaterLezer</h3>
+      <h4 className="h2">Add article:</h4>
       <div className="row input-form">
-        <input
-          type="text"
-          placeholder="url"
-          className="input"
-          onChange={(e) => handleUrlChange(e)}
-          value={url}
-        ></input>
-        <br></br>
+      <input type="text" placeholder="URL.." className="input" onChange={(e) => handleUrlChange(e)} value={url} />
+        <input type="text" placeholder="Title.." className="input" onChange={(e) => handleTitleChange(e)} value={title} />
+        <input type="text" placeholder="Search Tag(s).." className="input" onChange={(e) => handleFilterChange(e)} value={filter} />
         <div>
-          <input
-            type="text"
-            placeholder="find tag.."
-            className="input"
-            onChange={(e) => handleFilterChange(e)}
-            value={filter}
-          ></input>
         </div>
-        <br />
         <h5>Available tags: </h5>
-        <TagList
-          handleTagSelect={handleTagSelect}
-          tags={filteredTags}
-          selectedTags={selectedTags}
-        ></TagList>
-        <button className="waves-effect waves-light btn" onClick={() => { handleSaveArticle(url, selectedTags) }}>
-          Save
-        </button>
+        <TagList handleTagSelect={handleTagSelect} tags={filteredTags} selectedTags={selectedTags} />
+        <button className="waves-effect waves-light btn" onClick={() => { handleSaveArticle(url, selectedTags, title, email) }}>Save</button>
+        <button className="waves-effect waves-light btn" onClick={() => { handleLogout() }}>Logout</button>
       </div>
     </div>
   );

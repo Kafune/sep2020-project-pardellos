@@ -11,6 +11,7 @@ import DisplayArticle from './displayArticle'
 import ManageTags from './ManageTags'
 import EditArticle from './EditArticle'
 
+
 import '../../src/App.css'
 import M from 'materialize-css'
 import background from '../img/pfp_background.jpg'
@@ -173,7 +174,7 @@ export default class App extends React.Component {
               <Login handleLoginState={setLoginStatus} handleEmailState={setEmailState} handleFirstnameState={setFirstnameState} handleLastnameState={setLastnameState} handleTagsState={setTagsState} />
             </Route>
             <Route path="/register">
-              <Register />
+              <Register handleLoginState={setLoginStatus} handleEmailState={setEmailState} handleFirstnameState={setFirstnameState} handleLastnameState={setLastnameState} handleTagsState={setTagsState}/>
             </Route>
             <Route path="/logout">
               <Logout handleLoginState={setLoginStatus} />
