@@ -18,6 +18,7 @@ import pfp from '../img/default_pfp.png'
 
 import { checkAuthenticated } from '../serverCommunication'
 
+
 export default class App extends React.Component {
   constructor(props) {
     super(props);
@@ -27,7 +28,8 @@ export default class App extends React.Component {
       email: '',
       logged_in: false,
       articles: [],
-      tags: []
+      tags: [],
+      theme: 'default'
     }
   }
 
