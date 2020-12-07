@@ -2,6 +2,9 @@ import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom'
 import { registerUser, loginUser } from '../serverCommunication'
 
+import M from 'materialize-css'
+
+
 import banner from './../img/wallpaper.jpg';
 
 export default function Register(props) {
@@ -47,6 +50,7 @@ export default function Register(props) {
         } else {
             M.toast({ html: 'Passwords are not matching' })
         }
+        console.log(email,firstName,lastName,password,confirmPassword)
     }
 
     return (

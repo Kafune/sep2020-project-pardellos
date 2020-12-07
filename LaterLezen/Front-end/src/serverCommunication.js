@@ -141,8 +141,8 @@ export async function searchArticleByID(id) {
 export async function confirmArticleChanges(title,source,description,author, tags) {
   const body = {
     title: title,
-    domain: source,
-    excerp: description,
+    source: source,
+    description: description,
     author: author,
     tags: tags
   }
