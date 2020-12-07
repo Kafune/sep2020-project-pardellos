@@ -28,6 +28,13 @@ export default function DisplayArticle(props) {
         .then(result => checkTheme(result))
     }
     useEffect(() => {
+        var dropdown1 = document.querySelector('.dropdown-trigger');
+        var dropdownOptions = {
+            'closeOnClick': false,
+            'constrainWidth': false,
+            'onCloseStart': () => {handleCancelButton()}
+        }
+       M.Dropdown.init(dropdown1, dropdownOptions);
         getPreferences()
         var url = window.location.href;
         var id = url.substring(url.lastIndexOf('/') + 1);

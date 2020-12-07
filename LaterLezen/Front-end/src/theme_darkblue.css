@@ -4,28 +4,28 @@
     
 }
 
-.theme-darkblue img {
+.theme-darkblue .article img {
     padding: 2rem;
 }
-.theme-darkblue h1{
+.theme-darkblue .article h1{
     font-size: xx-large;
 }
-.theme-darkblue h2{
+.theme-darkblue .article h2{
     font-size: xx-large;
 }
-.theme-darkblue h3{
+.theme-darkblue .article h3{
     font-size: x-large;
 }
-.theme-darkblue h4{
+.theme-darkblue .article h4{
     font-size: large;
 }
-.theme-darkblue h5{
+.theme-darkblue .article h5{
     font-size: medium;
 }
-.theme-darkblue h6{
+.theme-darkblue .article h6{
     font-size: small;
 }
-.theme-darkblue p{
+.theme-darkblue .article p{
     font-size: medium;
 }
 .theme-darkblue .article a {

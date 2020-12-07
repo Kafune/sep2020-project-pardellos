@@ -9,17 +9,6 @@ export default function Preferences(props) {
         setActiveTheme(props.backgroundColor)
     })
 
-    document.addEventListener('DOMContentLoaded', function () {
-        var dropdown1 = document.querySelector('.dropdown-trigger');
-        var dropdownOptions = {
-            'closeOnClick': false,
-            'constrainWidth': false,
-            'onCloseStart': () => {handleCancelButton()}
-        }
-        var instanceDropdown = M.Dropdown.init(dropdown1, dropdownOptions);
-    });
-
-
     function changeTheme(value) {
         props.handleThemeState(value)
         setActiveTheme(value);
@@ -35,9 +24,9 @@ export default function Preferences(props) {
 
     return <div className="row">
         <div className="right-align">
-            <a className='dropdown-trigger btn blue' href='#' data-target='dropdown1'><i className="small material-icons">settings</i></a>
+            <button className={'dropdown-trigger btn blue'} data-target={'dropdown1'}><i className="small material-icons">settings</i></button>
         </div>
-        <div className={"dropdown-content blue-border theme-"+(props.backgroundColor)} id="dropdown1">
+        <div className={"dropdown-content blue-border no-scroll theme-"+(props.backgroundColor)} id="dropdown1">
             <div className="row">
                 <div className="col s12">
                     <h5>Select a theme to read articles</h5>
