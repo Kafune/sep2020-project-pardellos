@@ -5,11 +5,11 @@ import { registerUser, loginUser } from '../serverCommunication'
 import banner from './../img/wallpaper.jpg';
 
 export default function Register(props) {
-    const [email, setEmail] = useInput({ type: "email", name:"email" });
-    const [firstName, setfirstName] = useInput({ type: "text", name:"firstname" });
+    const [email, setEmail] = useInput({ type: "email", name: "email" });
+    const [firstName, setfirstName] = useInput({ type: "text", name: "firstname" });
     const [lastName, setLastName] = useInput({ type: "text", name: "lastname" });
-    const [password, setPassword] = useInput({ type: "password", name:"password" });
-    const [confirmPassword, setConfirmPassword] = useInput({ type: "password", name:"confirmpassword" });
+    const [password, setPassword] = useInput({ type: "password", name: "password" });
+    const [confirmPassword, setConfirmPassword] = useInput({ type: "password", name: "confirmpassword" });
     const history = useHistory();
 
     function useInput({ type, name }) {
@@ -19,31 +19,39 @@ export default function Register(props) {
     }
 
     const onSubmitForm = (e) => {
+        const minPasswordLength = 7;
+
         e.preventDefault();
+
         if (password === confirmPassword) {
-            registerUser(email, password, firstName, lastName)
-                .then((response) => {
-                    if (response.status == 200) {
-                        response.json()
-                            .then(() => {
-                                M.toast({ html: 'Account successfully created' })
-                                loginUser(email, password)
-                                    .then((response) => response.json())
-                                    .then((response) => {
-                                        if (response.isAuthenticated === true) {
-                                            props.handleEmailState(email);
-                                            props.handleFirstnameState(response.firstname)
-                                            props.handleLastnameState(response.lastname)
-                                            props.handleLoginState(true);
-                                            history.push('/dashboard')
-                                        }
-                                    })
-                            })
-                    }
-                    else {
-                        M.toast({ html: 'Email already taken' })
-                    }
-                })
+            if (password.length > minPasswordLength) {
+                registerUser(email, password, firstName, lastName)
+                    .then((response) => {
+                        if (response.status == 200) {
+                            response.json()
+                                .then(() => {
+                                    M.toast({ html: 'Account successfully created' })
+                                    loginUser(email, password)
+                                        .then((response) => response.json())
+                                        .then((response) => {
+                                            if (response.isAuthenticated === true) {
+                                                props.handleEmailState(email);
+                                                props.handleFirstnameState(response.firstname)
+                                                props.handleLastnameState(response.lastname)
+                                                props.handleLoginState(true);
+                                                history.push('/dashboard')
+                                            }
+                                        })
+                                })
+                        }
+                        else {
+                            M.toast({ html: 'Email already taken' })
+                        }
+                    })
+            } else {
+                M.toast({ html: 'Password must be atleast 7 characters long' })
+
+            }
         } else {
             M.toast({ html: 'Passwords are not matching' })
         }
