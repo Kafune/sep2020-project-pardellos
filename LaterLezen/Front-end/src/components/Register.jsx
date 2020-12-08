@@ -50,7 +50,6 @@ export default function Register(props) {
         } else {
             M.toast({ html: 'Passwords are not matching' })
         }
-        console.log(email,firstName,lastName,password,confirmPassword)
     }
 
     return (

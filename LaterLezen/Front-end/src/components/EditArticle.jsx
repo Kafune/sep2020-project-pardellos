@@ -54,20 +54,24 @@ export default function EditArticle(props) {
       <input
         type="text"
         value={title}
+        id="title"
         onChange={(e) => setTitle(e.target.value)}
       ></input>
       <input
         type="text"
+        id="source"
         value={source}
         onChange={(e) => setSource(e.target.value)}
       ></input>
       <input
         type="text"
+        id="description"
         value={description}
         onChange={(e) => setDescription(e.target.value)}
       ></input>
       <input
         type="text"
+        id="author"
         value={author}
         onChange={(e) => setAuthor(e.target.value)}
       ></input>

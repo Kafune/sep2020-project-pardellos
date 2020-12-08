@@ -3,6 +3,8 @@ import { searchArticleByID } from '../serverCommunication'
 import Parser from 'html-react-parser/dist/html-react-parser'
 import { useHistory } from 'react-router-dom'
 
+import M from 'materialize-css'
+
 export default function DisplayArticle(props) {
     const [article, setArticle] = useState([])
 
@@ -35,6 +37,6 @@ export default function DisplayArticle(props) {
                 {Parser(" " + article.content)}
             </h5>
         </div>
-        <a href={article.url}><button className="waves-effect waves-light btn-small blue accent-2">Go to original article</button></a>
+        <a href={article.url} id="originalArticle"><button className="waves-effect waves-light btn-small blue accent-2">Go to original article</button></a>
     </div>
 }

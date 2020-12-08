@@ -45,13 +45,13 @@ export default function Dashboard(props) {
             </div>
             <div class="card-action">
               <Link to={`/article/${data._id}`}>
-                <a>See article</a>
+                <a id="seeArticle">See article</a>
               </Link>
               <p>Tags: {data.tags.map((data) => {
                 return data + " "
               })}</p>
               <Link to={`/editArticle/${data._id}`}>
-                <a>Edit article</a>
+                <a id="editArticle">Edit article</a>
               </Link>
             </div>
           </div>
