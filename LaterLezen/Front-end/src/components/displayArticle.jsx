@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { searchArticleByID } from '../serverCommunication'
+import { getPreference, searchArticleByID, savePreference } from '../serverCommunication'
 import Parser from 'html-react-parser/dist/html-react-parser'
 import { useHistory } from 'react-router-dom'
+import Preferences from './Preferences'
+import M from 'materialize-css'
 
 import M from 'materialize-css'
 
@@ -10,9 +12,34 @@ export default function DisplayArticle(props) {
 
     const history = useHistory();
 
+    const [background, setBackground] = useState('white');
+
+    const checkTheme= (newTheme) => {
+        setBackground(newTheme)
+        document.body.className = 'theme-' + newTheme;
+      }
+
+    const handleSaveButton = () => {
+        savePreference(background).then(M.toast({ html: 'Theme is saved!' }));
+      }
+    const handleCancelButton = () => {
+        getPreferences()
+    }
+    const getPreferences = () => {
+        getPreference().then((response) => response.json())
+        .then(result => checkTheme(result))
+    }
     useEffect(() => {
-        var url = window.location.href;
-        var id = url.substring(url.lastIndexOf('/') + 1);
+        let dropdown1 = document.querySelector('.dropdown-trigger');
+        let dropdownOptions = {
+            'closeOnClick': false,
+            'constrainWidth': false,
+            'onCloseStart': () => {handleCancelButton()}
+        }
+       M.Dropdown.init(dropdown1, dropdownOptions);
+        getPreferences()
+        let url = window.location.href;
+        let id = url.substring(url.lastIndexOf('/') + 1);
         searchArticleByID(id)
             .then((response) => response.json())
             .then((response) => {
@@ -23,20 +50,24 @@ export default function DisplayArticle(props) {
                     setArticle(response)
                 }
             })
+            return () => document.body.className = ''
     }, [])
 
-    return <div class="row">
-
-        <div class="center">
+    return <>
+        <Preferences handleThemeState={checkTheme}
+        backgroundColor={background} handleCancelButton={handleCancelButton} handleSaveButton={handleSaveButton}/>
+       <div className="article">
+        <div className="center">
             <h2>{article.title}</h2>
-            <h4> Published by: <b>{article.source} {article.author}</b></h4>
+            <h4> Published by: <b>{article.source} - {article.author}</b></h4>
         </div>
-        <div class="text-flow">
+        <div className="text-flow">
             <h5>
-                <img src={article.image} />
+                <img className="responsive-img" src={article.image} />
                 {Parser(" " + article.content)}
             </h5>
         </div>
         <a href={article.url} id="originalArticle"><button className="waves-effect waves-light btn-small blue accent-2">Go to original article</button></a>
     </div>
+    </>
 }

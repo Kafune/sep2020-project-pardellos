@@ -137,9 +137,37 @@ export async function searchArticleByID(id) {
   return fetch(serverFetchBase + `/articles/article/${id}`, fetchOptions)
 }
 
-
-export async function confirmArticleChanges(title,source,description,author, tags) {
+export async function savePreference(theme) {
   const body = {
+    theme: theme
+  }
+  const fetchOptions = {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    credentials: 'include',
+    mode: 'cors',
+    body: JSON.stringify(body)
+  }
+  return fetch(serverFetchBase + `/user/preference/`, fetchOptions)
+}
+
+export async function getPreference() {
+  const fetchOptions = {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    credentials: 'include',
+    mode: 'cors'
+  }
+  return fetch(serverFetchBase + `/user/preference/`, fetchOptions)
+}
+
+export async function confirmArticleChanges(article, title,source,description,author, tags) {
+  const body = {
+    article_id: article,
     title: title,
     source: source,
     description: description,
@@ -152,7 +180,8 @@ export async function confirmArticleChanges(title,source,description,author, tag
       'Content-Type': 'application/json'
     },
     credentials: 'include',
-    mode: 'cors'
+    mode: 'cors',
+    body: JSON.stringify(body)
   }
-  return fetch(serverFetchBase + `/articles/article`, fetchOptions)
+  return fetch(serverFetchBase + `/user/article`, fetchOptions)
 }

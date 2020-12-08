@@ -21,51 +21,76 @@ const signToken = (userID) => {
 
 router.post("/register", (req, res) => {
   const { email, password, firstname, lastname } = req.body;
-  User.findOne(
-    {
-      email,
-    },
-    (err, user) => {
-      if (err)
-        res.status(500).json({
-          message: {
-            msgBody: "Error 1 has occured",
-            msgError: true,
-          },
-        });
-      if (user)
-        res.status(400).json({
-          message: {
-            msgBody: "Username already taken",
-            msgError: true,
-          },
-        });
-      else {
-        const newUser = new User({
+
+  //Back-end account checks. Can be adjusted at any time
+  // For now, only checks if email format is valid with regex, and the password length.
+  let emailFormat = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+  let minPasswordLength = 7;
+
+  if (emailFormat.test(email)) {
+    if (password.length > minPasswordLength) {
+      User.findOne(
+        {
           email,
-          password,
-          firstname,
-          lastname,
-        });
-        newUser.save((err) => {
+        },
+        (err, user) => {
           if (err)
             res.status(500).json({
               message: {
-                msgBody: "Error 2 has occured",
+                msgBody: "Error 1 has occured",
                 msgError: true,
               },
             });
-          else
-            res.status(200).json({
+          if (user)
+            res.status(400).json({
               message: {
-                msgBody: "Account sucessfully created",
-                msgError: false,
+                msgBody: "Username already taken",
+                msgError: true,
               },
             });
-        });
-      }
+          else {
+            const newUser = new User({
+              email,
+              password,
+              firstname,
+              lastname,
+            });
+            newUser.save((err) => {
+              if (err)
+                res.status(500).json({
+                  message: {
+                    msgBody: "Error 2 has occured",
+                    msgError: true,
+                  },
+                });
+              else
+                res.status(200).json({
+                  message: {
+                    msgBody: "Account sucessfully created",
+                    msgError: false,
+                  },
+                });
+            });
+          }
+        }
+
+      );
+    } else {
+      res.status(500).json({
+        message: {
+          msgBody: "Password must be 7 characters or longer.",
+          msgError: true,
+        },
+      });
     }
-  );
+  } else {
+    res.status(500).json({
+      message: {
+        msgBody: "Wrong email format.",
+        msgError: true,
+      },
+    });
+  }
 });
 
 router.post(
@@ -170,6 +195,30 @@ router.post(
       });
   }
 );
+
+router.put("/article", (req, res) => {
+  Article.findOne({
+    _id: req.body.article_id,
+  }, (err, article) => {
+    console.log(article)
+
+    if (err) {
+      res.status(500).json({
+        message: {
+          msgBody: "Error has occured",
+          msgError: true
+        }
+      });
+    } else {
+      if (!req.body.title == "") article.title = req.body.title
+      if (!req.body.author == "") article.author = req.body.author
+      if (!req.body.description == "") article.description = req.body.description
+      if (!req.body.source == "") article.source = req.body.source
+      article.save();
+      res.json(article);
+    }
+  })
+})
 
 router.get(
   "/articles",
@@ -313,19 +362,6 @@ router.put("/testing/art/:title", (req, res) => {
   );
 });
 
-router.put(
-  "/preference",
-  passport.authenticate("jwt", {
-    session: false,
-  }),
-  (req, res) => {
-    console.log(req.body.theme);
-    User.findOneAndUpdate(
-      { email: req.body.email}, {$push: {preferences: req.body.theme}}
-    );
-  }
-);
-
 router.post(
   "/articleExtension",
   (req, res) => {
@@ -337,7 +373,7 @@ router.post(
           let url = String(req.body.url);
           const article = new Article(req.body);
           console.log(article);
-          extract(url)  
+          extract(url)
             .then((article) => {
               let newArticle = new Article(article);
               newArticle.tags = req.body.tags;
@@ -366,6 +402,53 @@ router.post(
           })
         }
       })
+  }
+);
+
+router.put(
+  "/preference",
+  passport.authenticate("jwt", {
+    session: false,
+  }),
+  async (req, res) => {
+    if (
+      req.body.theme === "default" ||
+      req.body.theme === "typewriter" ||
+      req.body.theme === "dark" ||
+      req.body.theme === "bluegrey" ||
+      req.body.theme === "darkblue"
+    ) {
+      await User.findOneAndUpdate(
+        { _id: req.user._id },
+        { preferences: req.body.theme }
+      ).catch(() => {
+        res.status(500).json({
+          message: {
+            msgBody: "Error has occured",
+            msgError: true,
+          },
+        });
+      });
+      res.send(req.body.theme);
+    } else {
+      res.status(500).json({
+        message: {
+          msgBody: "Error has occured",
+          msgError: true,
+        },
+      });
+    }
+  }
+);
+
+router.get(
+  "/preference",
+  passport.authenticate("jwt", {
+    session: false,
+  }),
+  async (req, res) => {
+    var query = await User.findOne({ _id: req.user._id }).select("preferences");
+    res.send(JSON.stringify(query.preferences));
   }
 );
 
