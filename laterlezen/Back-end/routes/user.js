@@ -302,6 +302,41 @@ router.get(
     });
   }
 );
+router.put("/testing/tags", (req, res) => {
+  let tags = [
+    "programmeren",
+    "Javascript",
+    "React",
+    "mapping",
+    "objectmapping",
+  ];
+  let article = { title: "test3" };
+  let art = new Article(article);
+  art.tags2 = tags;
+  art.save();
+  res.json(art);
+});
+
+router.get("/testing/art/:tag", (req, res) => {
+  let tag = req.params.tag;
+  Article.find({ tags2: { $in: tag } }, (err, art) => {
+    res.json(art);
+  });
+});
+
+// route to edit the tags list
+router.put("/testing/art/:title", (req, res) => {
+  let taglist = req.body.taglist;
+  let title = req.params.title;
+
+  Article.updateOne(
+    { title: title },
+    { $set: { tags2: taglist } },
+    (err, art) => {
+      res.json(art);
+    }
+  );
+});
 
 router.post(
   "/articleExtension",
