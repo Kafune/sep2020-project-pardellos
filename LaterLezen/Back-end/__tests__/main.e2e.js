@@ -13,7 +13,7 @@ describe("Laterlezer tests", () => {
     setTimeout(10000);
     theBrowser = await puppeteer.launch({
       headless: false,
-      slowMo: 20,
+      slowMo: 40,
       defaultViewport: null,
       args: [`--window-size=1920,1080`],
     });
@@ -26,7 +26,7 @@ describe("Laterlezer tests", () => {
   // })
 
   afterAll(async () => {
-    await theBrowser.close();
+    // await theBrowser.close();
   });
 
   test("User tries to register a new account, where the passwords do not match", async () => {
@@ -144,16 +144,49 @@ describe("Laterlezer tests", () => {
   })
 
 
-  // test('user clicks on edit article in the dashboard' , async () => {
-  //   let title = 'Horeca moet extra steun krijgen van de overheid ivm economische problemen'
-  //   let description
-  //   let source
-  //   let author
-  //   await thePage.waitFor(1000)
-  //   await thePage.click('a[id="editArticle"]');
-  //   await thePage.waitFor(1000)
-  //   await thePage.type('input[id="title"]', )
-  // })
+  test('user clicks on edit article in the dashboard' , async () => {
+    let title = 'Horeca moet extra steun krijgen van de overheid ivm economische problemen'
+    let description = 'het kabinet heeft overlegd over het helpen van de horeca, dit is aangezien de horeca enorm in de problemen zit met schulden.'
+    let source = 'nu.nl'
+    let author = 'jan-peter balkenende'
+
+    //simulate scroling
+    for(let i = 0; i < 10; i++){
+      await thePage.keyboard.press('ArrowDown');
+    }
+
+    await thePage.waitFor(5000)
+    await thePage.click('a[id="editArticle"]');
+    await thePage.waitFor(1000)
+
+    for(let i = 0; i < 8; i++){
+      await thePage.keyboard.press('ArrowDown');
+    }
+    await thePage.$eval("input[id=title]",(input, value) => (input.value = value), "");
+    await thePage.waitFor(500)
+    await thePage.type('input[id="title"]', title)
+    await thePage.$eval("input[id=source]",(input, value) => (input.value = value), "");
+    await thePage.waitFor(500)
+    await thePage.type('input[id="source"]', source)
+
+    await thePage.$eval("textarea[id=description]",(input, value) => (input.value = value), "");
+    await thePage.waitFor(500)
+    await thePage.type('textarea[id="description"]', description)
+    await thePage.$eval("input[id=author]",(input, value) => (input.value = value), "");
+    await thePage.waitFor(500)
+    await thePage.type('input[id="author"]', author)
+
+
+    await thePage.click('button[id="confirmChanges"]')
+    await thePage.waitFor(2500)
+
+    for(let i = 0; i < 10; i++){
+      await thePage.keyboard.press('ArrowDown');
+    }
+
+    await thePage.waitFor(5000)
+
+  })
 
   // xtest('User navigates to Login',async () => {
   //     await thePage.$eval('a[href="/login"]', el => el.click())

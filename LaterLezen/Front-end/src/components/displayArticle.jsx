@@ -5,8 +5,6 @@ import { useHistory } from 'react-router-dom'
 import Preferences from './Preferences'
 import M from 'materialize-css'
 
-import M from 'materialize-css'
-
 export default function DisplayArticle(props) {
     const [article, setArticle] = useState([])
 

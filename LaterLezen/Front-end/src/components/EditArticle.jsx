@@ -97,10 +97,10 @@ export default function EditArticle(props) {
         key={elem}
         className="tag">{elem}</span>;
       })} */}
-      <button className="btn" onClick={(e) => saveChanges(e)}>
+      <button className="btn" id="confirmChanges" onClick={(e) => saveChanges(e)}>
         Confirm changes
       </button>
-      <button className="btn" onClick={(e) => cancelChanges(e)}>Cancel changes</button>
+      <button className="btn" id="cancelChanges" onClick={(e) => cancelChanges(e)}>Cancel changes</button>
     </div>
   );
 }
