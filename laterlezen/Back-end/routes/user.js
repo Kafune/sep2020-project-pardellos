@@ -368,4 +368,54 @@ router.get(
   }
 );
 
+router.get("/:email/articles/authors/", async (req, res) => {
+  let email = req.params.email;
+
+  let user = '5fcdfee7ec0c790e46374227'
+
+   User.findById({
+    _id: user
+  })
+  .populate('articles', 'author')
+    .exec((err, document) => {
+      if (err)
+        res.status(500).json({
+          message: {
+            msgBody: "Error has occured",
+            msgError: true,
+          },
+        });
+      else {
+        res.send(document.articles)
+      }
+    });
+});
+
+router.get("/:email/articles/find/:author", async (req, res) => {
+  let email = req.params.email;
+  let author = req.params.author;
+
+  let user = await User.findOne({email: email})
+
+   User.findById({
+    _id: user._id
+  })
+      .populate({
+        path: 'articles',
+  
+    })
+    .exec((err, document) => {
+      if (err)
+        res.status(500).json({
+          message: {
+            msgBody: "Error has occured",
+            msgError: true,
+          },
+        });
+      else {
+        res.send(document.author)
+      }
+    });
+});
+
 module.exports = router;

@@ -164,3 +164,27 @@ export async function getPreference() {
   }
   return fetch(serverFetchBase + `/user/preference/`, fetchOptions)
 }
+
+export async function findAuthor() {
+  const fetchOptions = {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    credentials: 'include',
+    mode: 'cors'
+  }
+  return fetch(serverFetchBase + `/articles/user/steven@test.nl/articles/find`, fetchOptions)
+}
+
+export async function getAuthors() {
+  const fetchOptions = {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    credentials: 'include',
+    mode: 'cors'
+  }
+  return fetch(serverFetchBase + `/user/steven@test.nl/articles/authors`, fetchOptions)
+}
