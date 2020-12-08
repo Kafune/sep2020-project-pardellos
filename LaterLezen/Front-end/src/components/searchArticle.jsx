@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { searchArticleByTags,getAuthors } from "../serverCommunication";
+import { searchArticleByTags, getAuthors } from "../serverCommunication";
 import { Link } from "react-router-dom";
 import M from 'materialize-css'
 
@@ -8,7 +8,6 @@ export default function SearchArticle(props) {
   const [isChecked, setIsChecked] = useState("");
   const [articles, setArticles] = useState(props.articles);
   const [author, setAuthor] = useState()
-  const [suggestion, setSuggestion] = useState()
   // var instance = M.Autocomplete.getInstance(elem);
 
   useEffect(() => {
@@ -42,35 +41,37 @@ export default function SearchArticle(props) {
     }
   };
 
-  const handleSearchArticleByAuthor = (e) => {
-    setAuthor(e.target.value)
-  };
-
-  const handleSearch = () => {
+  const handleSearchByAuthor = () => {
 
   }
 
+  //Authors
   const getAllAuthors = () => {
     getAuthors().then((response) => response.json())
-    .then(result => result.filter((values) => values.author != ''))
-    .then(result => populateAutocomplete(result))
-    .then(result => console.log(result))
-    .then((result)=> {
-      console.log(suggestion)
-      var elems = document.querySelector('.autocomplete');
-      let options ={
-        data: {"result": null}
-      }
-      M.Autocomplete.init(elems,options);
-    })
-}
+      .then(result => result.filter((values) => values.author != ''))
+      .then(result => populateAutocomplete(result))
+      .then((result) => {
+        var elems = document.querySelector('.autocomplete');
+        let options = {
+          data: result,
+          onAutocomplete: (value) => { setAuthor(value) }
+        }
+        M.Autocomplete.init(elems, options);
+      })
+  }
 
 
 
-const populateAutocomplete = (result) => {
-  const itemList = result.map((data) => ({[data.author]: null }));
-  return itemList
-}
+  const populateAutocomplete = (result) => {
+    let authors = {}
+
+    result.forEach(element => {
+      authors[element.author] = null
+    });
+
+    return authors;
+
+  }
 
   return (
     <div>
@@ -105,15 +106,16 @@ const populateAutocomplete = (result) => {
       </button>
       <div className="row">
         <h3>Search by author</h3>
-      <div class="col s8 search input-field"> 
-    <input class="autocomplete" type="text" id="autocomplete-input" placeholder="Search" />
-    <button
-        className="waves-effect waves-light btn-small blue accent-2"
-        onClick={() => handleSearch()}
-      >
-        Search
+        <div class="col s8 search input-field">
+          <input class="autocomplete" type="text" id="autocomplete-input" placeholder="Search"
+            onChange={e => setAuthor(e.target.value)} />
+          <button
+            className="waves-effect waves-light btn-small blue accent-2"
+            onClick={() => handleSearchByAuthor()}
+          >
+            Search
       </button>
-</div>
+        </div>
       </div>
       <div class="row">
         {articles.map((data) => {
