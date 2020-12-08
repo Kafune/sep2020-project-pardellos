@@ -8,6 +8,8 @@ import Login from './Login'
 import Register from './Register'
 import Logout from './Logout'
 import DisplayArticle from './displayArticle'
+import ManageTags from './ManageTags'
+import EditArticle from './EditArticle'
 
 
 import '../../src/App.css'
@@ -16,6 +18,7 @@ import background from '../img/pfp_background.jpg'
 import pfp from '../img/default_pfp.png'
 
 import { checkAuthenticated } from '../serverCommunication'
+
 
 export default class App extends React.Component {
   constructor(props) {
@@ -123,12 +126,12 @@ export default class App extends React.Component {
           </li>
           <Link to="/dashboard">
             <li>
-              <a><i class="material-icons">home</i>Dashboard</a>
+              <a><i class="material-icons">dashboard</i>Dashboard</a>
             </li>
           </Link>
           <Link to="/save/web">
             <li>
-              <a><i class="material-icons">web</i>Save Web Article</a>
+              <a><i class="material-icons">article</i>Save Web Article</a>
             </li>
           </Link>
           <Link to="/save/pdf">
@@ -139,6 +142,11 @@ export default class App extends React.Component {
           <Link to="/search">
             <li>
               <a><i class="material-icons">search</i>Search Article</a>
+            </li>
+          </Link>
+          <Link to="/tags">
+            <li>
+              <a><i class="material-icons">label</i>Manage tags</a>
             </li>
           </Link>
           <div class="inner-content">
@@ -177,6 +185,12 @@ export default class App extends React.Component {
             </Route>
             <Route path="/article/:id">
               <DisplayArticle articleID={this.state.article_id} />
+            </Route>
+            <Route path="/tags">
+              <ManageTags tags={this.state.tags}></ManageTags>
+            </Route>
+            <Route path="/editArticle/:id">
+              <EditArticle></EditArticle>
             </Route>
           </Switch>
         </div>

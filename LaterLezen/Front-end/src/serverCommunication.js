@@ -164,3 +164,22 @@ export async function getPreference() {
   }
   return fetch(serverFetchBase + `/user/preference/`, fetchOptions)
 }
+
+export async function confirmArticleChanges(title,source,description,author, tags) {
+  const body = {
+    title: title,
+    source: source,
+    description: description,
+    author: author,
+    tags: tags
+  }
+  const fetchOptions = {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    credentials: 'include',
+    mode: 'cors'
+  }
+  return fetch(serverFetchBase + `/articles/article`, fetchOptions)
+}
