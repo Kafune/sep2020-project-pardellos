@@ -28,16 +28,16 @@ export default function DisplayArticle(props) {
         .then(result => checkTheme(result))
     }
     useEffect(() => {
-        var dropdown1 = document.querySelector('.dropdown-trigger');
-        var dropdownOptions = {
+        let dropdown1 = document.querySelector('.dropdown-trigger');
+        let dropdownOptions = {
             'closeOnClick': false,
             'constrainWidth': false,
             'onCloseStart': () => {handleCancelButton()}
         }
        M.Dropdown.init(dropdown1, dropdownOptions);
         getPreferences()
-        var url = window.location.href;
-        var id = url.substring(url.lastIndexOf('/') + 1);
+        let url = window.location.href;
+        let id = url.substring(url.lastIndexOf('/') + 1);
         searchArticleByID(id)
             .then((response) => response.json())
             .then((response) => {
@@ -57,7 +57,7 @@ export default function DisplayArticle(props) {
        <div className="article">
         <div className="center">
             <h2>{article.title}</h2>
-            <h4> Published by: <b>{article.source} {article.author}</b></h4>
+            <h4> Published by: <b>{article.source} - {article.author}</b></h4>
         </div>
         <div className="text-flow">
             <h5>

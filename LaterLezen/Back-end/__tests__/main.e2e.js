@@ -1,7 +1,7 @@
 const puppeteer = require('puppeteer')
 jest.setTimeout(120000)
 
-describe('Laterlezer tests', () => {
+xdescribe('Laterlezer tests', () => {
   it('should register a user', () => {
 
   })
