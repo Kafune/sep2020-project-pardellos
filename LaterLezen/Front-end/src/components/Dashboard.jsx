@@ -25,33 +25,35 @@ export default function Dashboard(props) {
       })
   }
 
-  function handleEditArticle (){
-
-  }
-
 
   return <div className="readArticle">
     <h2 class="center">All saved articles of {firstname} {lastname}</h2>
     <div class="row">
       {articles.map((data) => {
         return <div key={data._id}>
-          <div class="card blue-grey darken-1">
-            <div class="card-image">
-              <img src={data.image} />
-              <span class="card-title">{data.title}</span>
-            </div>
+          <div class="card blue-grey darken-1 dashboard-article">
+            <Link to={`/article/${data._id}`}>
+              <div class="card-image">
+                <img src={data.image} />
+              </div>
+            </Link>
             <div class="card-content white-text">
+              <Link to={`/article/${data._id}`}>
+                <span class="card-title">{data.title}</span>
+              </Link>
               <p>{data.description}</p>
+              <span class="author">Author: {data.author}</span>
+              <span class="source">Source: {data.source}</span><br/>
+             Tags: {data.tags.map((data) => {
+                return  <span class="tag">{data}</span>
+              })}
             </div>
             <div class="card-action">
               <Link to={`/article/${data._id}`}>
-                <a>See article</a>
+                <a class="btn green">Read article</a>
               </Link>
-              <p>Tags: {data.tags.map((data) => {
-                return data + " "
-              })}</p>
               <Link to={`/editArticle/${data._id}`}>
-                <a>Edit article</a>
+                <a class="btn blue">Edit article</a>
               </Link>
             </div>
           </div>

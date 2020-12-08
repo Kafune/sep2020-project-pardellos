@@ -196,6 +196,30 @@ router.post(
   }
 );
 
+router.put("/article", (req, res) => {
+  Article.findOne({
+    _id: req.body.article_id,
+  }, (err, article) => {
+    console.log(article)
+
+    if (err) {
+      res.status(500).json({
+        message: {
+          msgBody: "Error has occured",
+          msgError: true
+        }
+      });
+    } else {
+      if (!req.body.title == "") article.title = req.body.title
+      if (!req.body.author == "") article.author = req.body.author
+      if (!req.body.description == "") article.description = req.body.description
+      if (!req.body.source == "") article.source = req.body.source
+      article.save();
+      res.json(article);
+    }
+  })
+})
+
 router.get(
   "/articles",
   passport.authenticate("jwt", {

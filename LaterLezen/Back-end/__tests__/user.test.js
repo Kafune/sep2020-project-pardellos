@@ -5,7 +5,7 @@ const User = require('../models/User');
 const Article = require("../models/Article");
 
 
-describe('user related tests', () => {
+xdescribe('user related tests', () => {
     const testEmail = 'test@test.com'
     const testFirstName = 'test'
     const testLastName = 'tester'
@@ -163,5 +163,4 @@ describe('user related tests', () => {
 
         expect(testUser.preferences).toEqual('default')
     })
-
 })
