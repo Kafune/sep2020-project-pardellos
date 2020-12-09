@@ -50,10 +50,11 @@ export default function Dashboard(props) {
             </div>
             <div class="card-action">
               <Link to={`/article/${data._id}`}>
-                <a class="btn green">Read article</a>
+               
+                <a id="seeArticle" class="btn green">Read article</a>
               </Link>
               <Link to={`/editArticle/${data._id}`}>
-                <a class="btn blue">Edit article</a>
+                <a id="editArticle" class="btn blue">Edit article</a>
               </Link>
             </div>
           </div>

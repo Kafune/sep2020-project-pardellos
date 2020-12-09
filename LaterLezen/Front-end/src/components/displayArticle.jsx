@@ -65,7 +65,7 @@ export default function DisplayArticle(props) {
                 {Parser(" " + article.content)}
             </h5>
         </div>
-        </div>
-        <a href={article.url}><button className="waves-effect waves-light btn-small blue accent-2">Go to original article</button></a>
+        <a href={article.url} id="originalArticle"><button className="waves-effect waves-light btn-small blue accent-2">Go to original article</button></a>
+    </div>
     </>
 }

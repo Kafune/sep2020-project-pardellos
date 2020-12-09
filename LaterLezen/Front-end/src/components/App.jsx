@@ -105,7 +105,7 @@ export default class App extends React.Component {
               <a class="brand-logo center">LaterLezen</a>
             </div>
             {this.state.logged_in
-              ? <a data-target="slide-out" class="sidenav-trigger show-on-large "><i class="material-icons">menu</i></a>
+              ? <a data-target="slide-out" class="sidenav-trigger show-on-large " id="hamburger"><i class="material-icons">menu</i></a>
               : <ul class="right hide-on-med-and-down">
                 <li><Link to="/login">Login</Link></li>
                 <li><Link to="register">Register</Link></li>
@@ -126,36 +126,36 @@ export default class App extends React.Component {
           </li>
           <Link to="/dashboard">
             <li>
-              <a><i class="material-icons">dashboard</i>Dashboard</a>
+              <a><i class="material-icons" id='dashboard'>dashboard</i>Dashboard</a>
             </li>
           </Link>
           <Link to="/save/web">
             <li>
-              <a><i class="material-icons">article</i>Save Web Article</a>
+              <a><i class="material-icons" id='saveArticle'>article</i>Save Web Article</a>
             </li>
           </Link>
           <Link to="/save/pdf">
             <li>
-              <a><i class="material-icons">picture_as_pdf</i>Save PDF Article</a>
+              <a><i class="material-icons" id='savePDF'>picture_as_pdf</i>Save PDF Article</a>
             </li>
           </Link>
           <Link to="/search">
             <li>
-              <a><i class="material-icons">search</i>Search Article</a>
+              <a><i class="material-icons" id="search">search</i>Search Article</a>
             </li>
           </Link>
           <Link to="/tags">
             <li>
-              <a><i class="material-icons">label</i>Manage tags</a>
+              <a><i class="material-icons" id="tags">label</i>Manage tags</a>
             </li>
           </Link>
           <div class="inner-content">
             <li>
-              <a><i class="material-icons">settings</i>Settings</a>
+              <a><i class="material-icons" id='settings'>settings</i>Settings</a>
             </li>
             <Link to="/logout">
               <li>
-                <a><i class="material-icons">exit_to_app</i>Logout</a>
+                <a><i class="material-icons" id='logout'>exit_to_app</i>Logout</a>
               </li>
             </Link>
           </div>

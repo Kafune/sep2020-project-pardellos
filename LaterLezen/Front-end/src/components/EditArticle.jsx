@@ -66,17 +66,20 @@ export default function EditArticle(props) {
       <input
         type="text"
         value={title}
+        id="title"
         onChange={(e) => setTitle(e.target.value)}
       ></input>
       <label>Source</label>
       <input
         type="text"
+        id="source"
         value={source}
         onChange={(e) => setSource(e.target.value)}
       ></input>
       <label>Description</label>
       <textarea
         type="text"
+        id="description"
         class="materialize-textarea"
         value={description}
         onChange={(e) => setDescription(e.target.value)}
@@ -84,6 +87,7 @@ export default function EditArticle(props) {
       <label>Author</label>
       <input
         type="text"
+        id="author"
         value={author}
         onChange={(e) => setAuthor(e.target.value)}
       ></input>
@@ -93,10 +97,10 @@ export default function EditArticle(props) {
         key={elem}
         className="tag">{elem}</span>;
       })} */}
-      <button className="btn" onClick={(e) => saveChanges(e)}>
+      <button className="btn" id="confirmChanges" onClick={(e) => saveChanges(e)}>
         Confirm changes
       </button>
-      <button className="btn" onClick={(e) => cancelChanges(e)}>Cancel changes</button>
+      <button className="btn" id="cancelChanges" onClick={(e) => cancelChanges(e)}>Cancel changes</button>
     </div>
   );
 }
