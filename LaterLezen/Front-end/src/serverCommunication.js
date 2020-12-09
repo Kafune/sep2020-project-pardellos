@@ -185,3 +185,27 @@ export async function confirmArticleChanges(article, title,source,description,au
   }
   return fetch(serverFetchBase + `/user/article`, fetchOptions)
 }
+
+export async function findAuthor(query) {
+  const fetchOptions = {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    credentials: 'include',
+    mode: 'cors'
+  }
+  return fetch(serverFetchBase + `/user/steven@test.nl/articles/find/`+ query, fetchOptions)
+}
+
+export async function getAuthors() {
+  const fetchOptions = {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    credentials: 'include',
+    mode: 'cors'
+  }
+  return fetch(serverFetchBase + `/user/steven@test.nl/articles/authors`, fetchOptions)
+}
