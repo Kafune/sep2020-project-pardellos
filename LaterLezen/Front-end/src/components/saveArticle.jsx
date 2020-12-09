@@ -21,7 +21,7 @@ export default function SaveArticle(props) {
                 setTags(elems[0].M_Chips.chipsData)
             },
             placeholder: 'Enter Tag...',
-            secondaryPlaceholder: '+Tag',
+            secondaryPlaceholder: '+ Sub Tag...',
         });
     }
 
@@ -40,6 +40,7 @@ export default function SaveArticle(props) {
                     }
                 })
                 if (noErrors === true) {
+                    console.log(tagArray)
                     saveArticle(url, tagArray, title)
                         .then(() => M.toast({ html: 'Article succesfully saved' }))
                 }
