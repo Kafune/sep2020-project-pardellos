@@ -4,19 +4,22 @@ const passport = require("passport");
 const passportConfig = require("../config/passport");
 const JWT = require("jsonwebtoken");
 const Mercury = require("@postlight/mercury-parser");
-const { PerformanceObserver, performance } = require("perf_hooks");
-const { extract } = require("article-parser");
+const {
+  PerformanceObserver,
+  performance
+} = require("perf_hooks");
+const {
+  extract
+} = require("article-parser");
 const User = require("../models/User");
 const Article = require("../models/Article");
 
 const signToken = (userID) => {
-  return JWT.sign(
-    {
+  return JWT.sign({
       iss: "Laterlezen",
       sub: userID,
     },
-    "LaterLezen",
-    {
+    "LaterLezen", {
       expiresIn: "1h",
     }
   );
@@ -28,9 +31,13 @@ router.get("/test/warning/no/delete", async (req, res) => {
 });
 
 router.post("/register", (req, res) => {
-  const { email, password, firstname, lastname } = req.body;
-  User.findOne(
-    {
+  const {
+    email,
+    password,
+    firstname,
+    lastname
+  } = req.body;
+  User.findOne({
       email,
     },
     (err, user) => {
@@ -83,7 +90,12 @@ router.post(
   }),
   (req, res) => {
     if (req.isAuthenticated()) {
-      const { _id, email, firstname, lastname } = req.user;
+      const {
+        _id,
+        email,
+        firstname,
+        lastname
+      } = req.user;
       const token = signToken(_id);
       console.log(req.user);
       res.cookie("access_token", token, {
@@ -160,16 +172,22 @@ router.post(
               },
             });
           else {
-            let lastTag = processedTags[processedTags.length - 1];
-            let usedTags = { tag: processedTags, lastTag: lastTag };
-            User.exists(
-              {
+            let amountOfTags = processedTags.length;
+            let usedTags = {};
+            for (let i = 0; i < amountOfTags; i++) {
+              let mainTag = processedTags.shift();
+              let tagObject = {
+                mainTag: mainTag,
+                subTags: processedTags[0],
+              };
+              console.log(tagObject);
+            }
+            console.log(usedTags);
+            User.exists({
                 _id: req.user._id,
-                "tags.tag": { $all: usedTags.tag },
-                "tags.lastTag": lastTag,
               },
               (err, result) => {
-                if (!result) {
+                if (result) {
                   req.user.tags.push(usedTags);
                 }
                 req.user.articles.push(newArticle);
@@ -201,8 +219,8 @@ router.get(
   }),
   (req, res) => {
     User.findById({
-      _id: req.user._id,
-    })
+        _id: req.user._id,
+      })
       .populate("articles")
       .exec((err, document) => {
         if (err)
@@ -222,18 +240,64 @@ router.get(
   }
 );
 
+router.put("/article", (req, res) => {
+  Article.findOne({
+      _id: req.body.article_id,
+    },
+    (err, article) => {
+      if (err)
+        res.status(500).json({
+          message: {
+            msgBody: "Error has occured",
+            msgError: true,
+          },
+        });
+      else {
+        if (!req.body.title == "") article.title = req.body.title;
+        if (!req.body.author == "") article.author = req.body.author;
+        if (!req.body.description == "") article.excerpt = req.body.description;
+        if (!req.body.source == "") article.source = req.body.source;
+        article.save();
+        res.json(article);
+      }
+    }
+  );
+});
+
+router.delete("/article", (req, res) => {
+  Article.deleteOne({
+      _id: req.body.article_id,
+    },
+    (err, article) => {
+      console.log(err);
+      if (err)
+        res.status(500).json({
+          message: {
+            msgBody: "Error has occured",
+            msgError: true,
+          },
+        });
+      else {
+        res.status(200).json({
+          message: {
+            msgBody: "succes",
+            msgError: false,
+          },
+        });
+      }
+    }
+  );
+});
+
 router.put(
   "/tag",
   passport.authenticate("jwt", {
     session: false,
   }),
   (req, res) => {
-    User.updateOne(
-      {
-        _id: req.user._id,
-      },
-      {}
-    );
+    User.updateOne({
+      _id: req.user._id,
+    }, {});
   }
 );
 
@@ -254,8 +318,8 @@ router.put(
   (req, res) => {
     let tags = req.body.tags;
     User.findById({
-      _id: req.user._id,
-    })
+        _id: req.user._id,
+      })
       .populate({
         path: "articles",
         match: {
@@ -288,7 +352,12 @@ router.get(
     session: false,
   }),
   (req, res) => {
-    const { firstname, lastname, email, tags } = req.user;
+    const {
+      firstname,
+      lastname,
+      email,
+      tags
+    } = req.user;
     res.status(200).json({
       isAuthenticated: true,
       user: {
@@ -302,10 +371,14 @@ router.get(
 );
 
 router.post("/articleExtension", (req, res) => {
-  const findUser = User.findOne({ email: req.body.email }).then((response) => {
+  const findUser = User.findOne({
+    email: req.body.email,
+  }).then((response) => {
     if (response) {
       console.log(response);
-      const { extract } = require("article-parser");
+      const {
+        extract
+      } = require("article-parser");
       let url = String(req.body.url);
       const article = new Article(req.body);
       console.log(article);
@@ -337,6 +410,100 @@ router.post("/articleExtension", (req, res) => {
       });
     }
   });
+});
+
+router.put("/testing/tags", (req, res) => {
+  var t0 = performance.now();
+  pathx = ["financieel", "bitcoin"];
+  pathy = ["nieuws", "corona", "vaccin"];
+  pathz = ["nieuws", "financieel", "bitcoin"];
+
+  let tagList = [{
+    tagName: "nieuws",
+    subTags: [{
+      tagName: "corona",
+      subTags: [{
+          tagName: "dodenaantal",
+          subTags: [],
+        },
+        {
+          tagName: "vaccin",
+          subTags: [],
+        },
+      ],
+    }, ],
+  }, ];
+
+  class Tag {
+    constructor(value) {
+      (this.tagName = value), (this.subTags = []);
+    }
+  }
+
+  switch (pathx.length) {
+    case 1:
+      if (tagList.some((element) => element.tagName === pathx[0])) {} else {
+        let tag = new Tag(pathx[0]);
+        tagList.push(tag);
+      }
+      break;
+
+    case 2:
+      if (tagList.some((element) => element.tagName === pathx[0])) {
+        index = tagList.findIndex((x) => x.tagName === pathx[0]);
+        if (
+          tagList[index].subTags.some((element) => element.tagName === pathx[1])
+        ) {} else {
+          let tag = new Tag(pathx[1]);
+          tagList[index].subTags.push(tag);
+        }
+      } else {
+        let tag = new Tag(pathx[0]);
+        tagList.push(tag);
+        tag = new Tag(pathx[1]);
+        tagList[1].subTags.push(tag);
+      }
+      break;
+
+    case 3:
+      if (tagList.some((element) => element.tagName === pathx[0])) {
+        index = tagList.findIndex((x) => x.tagName === pathx[0]);
+        if (
+          tagList[index].subTags.some((element) => element.tagName === pathx[1])
+        ) {
+          index2 = tagList[index].subTags.findIndex(
+            (x) => x.tagName === pathx[1]
+          );
+          if (
+            tagList[index].subTags[index2].subTags.some(
+              (element) => element.tagName === pathx[2]
+            )
+          ) {} else {
+            let tag = new Tag(pathx[2]);
+            tagList[index].subTags[index2].subTags.push(tag);
+          }
+        } else {
+          let tag = new Tag(pathx[1]);
+          tagList[index].subTags.push(tag);
+          tag = new Tag(pathx[2]);
+          tagList[index].subTags[
+            tagList[index].subTags.length - 1
+          ].subTags.push(tag);
+        }
+      } else {
+        let tag = new Tag(pathx[0]);
+        tagList.push(tag);
+        tag = new Tag(pathx[1]);
+        tagList[tagList.length - 1].subTags.push(tag);
+        tag = new Tag(pathx[2]);
+        tagList[tagList.length - 1].subTags[0].subTags.push(tag);
+      }
+      break;
+
+  }
+  res.json(tagList);
+  var t1 = performance.now();
+  console.log("Tag loop took " + (t1 - t0) + " milliseconds.");
 });
 
 module.exports = router;
