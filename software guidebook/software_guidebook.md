@@ -97,6 +97,28 @@ Door het lezen van dit hoofdstuk krijg je een beter beeld van hoe de structuur v
     ### LaterLezer app view
     ![Component_Laterlezer_app.png](Component_Laterlezer_app.png)
 
+    De gebruiker komt voor het eerst op de homepagina van de website. De gebruiker kan ervoor kiezen om te registreren, waarin hij in de registratiepagina komt, of om in te loggen. De gebruiker komt dan op de pagina waarin hij kan inloggen. 
+
+    De gebruiker zal als eerst registreren op de website, omdat de gebruiker geen account heeft. Nadat de gebruiker de registratieformulier heeft ingevuld, stuurt het registersysteem een functie aan van servercommunication. Servercommunication voert dan de functie aan die het registersysteem aanroept, en doet een fetch request naar de API toe. Voor het registersysteem is het een POST request naar de user route in de API. De API handelt het verzoek in de relevante route af. Eerst controleert de API of de email formaat correct is en of de wachtwoord lang genoeg is. Daarna voegt de API na het hashen van de wachtwoord de gebruiker in de database toe. De API stuurt een bericht terug naar de web applicatie. Het registersysteem vangt dit keer het bericht op, en verstuurt de gebruiker naar de dashboard.
+
+    De gebruiker bevindt zich nu in de dashboard. De gebruiker kan nu alleen een artikel opslaan, omdat de gebruiker voor het eerst op de dashboard komt. De gebruiker navigeert naar de save article pagina. Daarin geeft de gebruiker de URL van de artikel mee om een artikel op te slaan. Optioneel kan de gebruiker ook een titel meegeven, die dan de originele titel van de artikel overschrijft. De gebruiker kan ook tags meegeven, zodat de gebruiker de artikel makkelijker terug kan vinden op de search article component. Zodra de gebruiker de artikel opslaat, stuurt de save article component een functie aan van Servercommunication, die vervolgens een fetch request doet naar de API. De API gaat naar de route toe die de fetch request heeft aangegeven, en handelt het verzoek om een article op te slaan daarin af. Na het afhandelen van het verzoek stuurt de API een bericht terug naar de Save article component om te laten weten dat het opslaan van de artikel is gelukt, of gefaald is. De save article component redirect de gebruiker niet naar een ander pagina.
+
+    Nu kan de gebruiker kiezen om terug te gaan naar de dashboard, om een artikel te zoeken, of om nog een artikel op te slaan door het hierboven beschreven proces opnieuw te herhalen. Als de gebruiker de opgeslagen artikel wilt lezen, navigeert de gebruiker terug naar de dashboard. De dashboard laat nu de opgeslagen artikel zien. De gebruiker kan de artikel lezen door op de titel, afbeelding of de "Read article" knop aan te klikken. 
+    
+    De gebruiker komt nu bij de Display article component. Daarin kan de gebruiker de gekozen artikel doorlezen. Als eerst roept display article de functie via servercommunication aan om de huidige geselecteerde thema op te halen. Bij een nieuw gebruiker is de thema altijd 'White'. De display article component zet na het ophalen van de kleur de thema in. De gebruiker kan in de component een nieuw thema selecteren. Als een gebruiker een thema selecteert, dan kan de gebruiker de geselecteerde thema bekijken. De gebruiker kan ervoor kiezen om de thema op te slaan, een ander thema te selecteren, of het kiezen van een thema te annuleren. Bij het selecteren van een thema doet de display article component nog geen verzoek naar de API. Op het moment dat de gebruiker niet zijn thema wilt wijzigen door op annuleren te klikken, of buiten de themaopties menu te klikken, doet de display article component nog een request naar de API om de huidige opgeslagen kleur op te halen, en deze opnieuw in te stellen aan de component. Als de gebruiker een nieuw thema selecteert en opslaat door op opslaan te klikken, dan roept de display article component een functie in servercommunication aan, die vervolgens de fetch request naar de API doet om de nieuwe kleur te zetten. Zodra de API een bericht terug stuurt naar de display article component, stelt dit component het nieuwe thema in, zodat de gebruiker een nieuwe thema krijgt om de artikel te lezen.
+
+    Naast het instellen van de thema kan de gebruiker ook naar de pagina van de originele artikel navigeren waar de gebruiker de artikel vandaan heeft gehaald. Er is op dat moment naast de vorige knop in de browser of het handmatig invoeren van de website URL geen manier om terug te gaan naar de display artikel component.
+
+    De gebruiker kan na het lezen van de artikel ervoor kiezen om terug naar de dashboard te gaan, een nieuwe artikel op te slaan, of het zoeken van opgeslagen artikelen. Als de gebruiker zijn artikelen wilt zoeken, navigeert de gebruiker naar de search article component. Hierin heeft de gebruiker de optie om opgeslagen artikelen op tags, of op auteursnaam te zoeken. 
+    
+    //TODO: zoeken op tags beschrijven.
+
+    Als de gebruiker ervoor kiest om een artikel op de naam van de auteur te zoeken, dan haalt de search article component alle namen van bestaande auteurs op. Alle artikelen die geen auteur hebben, worden weggefiltert voor de zoeklijst. Dan typt de gebruiker de naam van de auteur in. Op dit moment ondersteunt de API nog niet dat de gebruiker op een deel van de auteursnaam kan zoeken. In plaats daarvan is er een autocomplete module van Materialize, die ervoor zorgt dat de naam van een auteur automatisch aanvult als er een deel van de auteursnaam is ingevuld. Na het invullen van de auteursnaam, zoekt de gebruiker op de artikelen die door dat specifieke auteur is uitgebracht. De search article component roept weer de functie in Servercommunication aan, die vervolgens een fetch request naar de API doet om de artikelen die uitgebracht zijn door de ingevulde auteur op te halen.
+
+    Na de verzoek van de search article component, krijgt dit component de relevante artikelen terug van de API.
+
+    
+
     ### Extension view
     ![Component_extension.png](Component_extension.png)\
 
@@ -111,4 +133,4 @@ Door het lezen van dit hoofdstuk krijg je een beter beeld van hoe de structuur v
 ## Deployment
 (beantwoord de vragen in het software guidebook)
 ## Werking en ondersteuning
-(beantwoord de vragen in het software guidebook)
+//TODO: Installatie van de applicatie. back-end, front-end en de extensie beschrijven.
