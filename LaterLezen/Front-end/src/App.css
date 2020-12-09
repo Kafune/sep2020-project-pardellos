@@ -76,3 +76,40 @@
 .preference-button h5 {
   font-size: 1.5rem !important;
 }
+
+.inner-content{
+  position: absolute;
+  bottom: 65px;
+  left: 0;
+}
+
+.tag {
+  margin: 0 10px 0 0;
+  padding: 0 5px;
+  border: 1px solid black;
+  border-radius: 25px;
+  user-select: none;
+  background-color: orange;
+}
+
+#edit-article {
+  margin: 25px 0;
+}
+
+#edit-article label {
+  font-size: 1.2rem;
+}
+
+.dashboard-article .card-title {
+  color: #ffffff;
+}
+
+.readArticle .author {
+  border-top: 1px solid rgba(160,160,160,0.2);
+  display: block;
+  margin-top: 20px;
+}
+
+.readArticle .tag {
+  color: #000000;
+}

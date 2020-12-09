@@ -368,13 +368,15 @@ router.get(
   }
 );
 
-router.get("/:email/articles/authors/", async (req, res) => {
-  let email = req.params.email;
 
-  let user = '5fcdfee7ec0c790e46374227'
+router.get(
+  "/:email/articles/authors/",
+  passport.authenticate("jwt", {
+    session: false,
+  }),async (req, res) => {
 
    User.findById({
-    _id: user
+    _id: req.user._id
   })
   .populate('articles', 'author')
     .exec((err, document) => {
@@ -391,17 +393,21 @@ router.get("/:email/articles/authors/", async (req, res) => {
     });
 });
 
-router.get("/:email/articles/find/:author", async (req, res) => {
-  let email = req.params.email;
+router.get(
+  "/:email/articles/find/:author",
+  passport.authenticate("jwt", {
+    session: false,
+  }),async (req, res) => {
   let author = req.params.author;
 
-  let user = await User.findOne({email: email})
-
    User.findById({
-    _id: user._id
+    _id: req.user._id
   })
       .populate({
         path: 'articles',
+        match: {
+          author: author
+       }
   
     })
     .exec((err, document) => {
@@ -413,7 +419,7 @@ router.get("/:email/articles/find/:author", async (req, res) => {
           },
         });
       else {
-        res.send(document.author)
+        res.send(document.articles)
       }
     });
 });

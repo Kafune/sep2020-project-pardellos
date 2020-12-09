@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { searchArticleByTags, getAuthors } from "../serverCommunication";
+import { searchArticleByTags, getAuthors,findAuthor } from "../serverCommunication";
 import { Link } from "react-router-dom";
 import M from 'materialize-css'
 
@@ -42,7 +42,8 @@ export default function SearchArticle(props) {
   };
 
   const handleSearchByAuthor = () => {
-
+    findAuthor(author).then(result => result.json())
+    .then(response => setArticles(response))
   }
 
   //Authors
@@ -59,8 +60,6 @@ export default function SearchArticle(props) {
         M.Autocomplete.init(elems, options);
       })
   }
-
-
 
   const populateAutocomplete = (result) => {
     let authors = {}

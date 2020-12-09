@@ -165,7 +165,7 @@ export async function getPreference() {
   return fetch(serverFetchBase + `/user/preference/`, fetchOptions)
 }
 
-export async function findAuthor() {
+export async function findAuthor(query) {
   const fetchOptions = {
     method: 'GET',
     headers: {
@@ -174,7 +174,7 @@ export async function findAuthor() {
     credentials: 'include',
     mode: 'cors'
   }
-  return fetch(serverFetchBase + `/articles/user/steven@test.nl/articles/find`, fetchOptions)
+  return fetch(serverFetchBase + `/user/steven@test.nl/articles/find/`+ query, fetchOptions)
 }
 
 export async function getAuthors() {
