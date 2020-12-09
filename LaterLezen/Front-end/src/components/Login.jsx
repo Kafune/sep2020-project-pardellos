@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useHistory, Link } from 'react-router-dom'
 import { loginUser } from '../serverCommunication'
 
+import M from "materialize-css";
 
 export default function Login(props) {
     const [email, setEmail] = useState('')
@@ -42,36 +43,38 @@ export default function Login(props) {
 
         <div className="container">
             <div className="row">
-                <div className="col s6">
-                    <h5>Email</h5>
-                    <input
-                        type="text"
-                        id="Email"
-                        placeholder="Please enter your email here.."
-                        onChange={(e) => setEmail(e.target.value)} value={email}
-                    ></input>
-                </div>
-                <div className="col s6">
-                    <h5>Password</h5>
-                    <input
-                        type="password"
-                        id="password"
-                        placeholder="Please enter your password here.."
-                        onChange={(e) => setPassword(e.target.value)} value={password}
-                    ></input>
-                </div>
-                <div class="row">
-                    <div className="col">
-                        <a className="waves-effect waves-light btn-small blue" onClick={() => { handleLoginUser(email, password) }}>
-                            Log in
+                <form>
+                    <div className="col s6">
+                        <h5>Email</h5>
+                        <input
+                            type="email"
+                            id="Email"
+                            placeholder="Please enter your email here.."
+                            onChange={(e) => setEmail(e.target.value)} value={email}
+                        ></input>
+                    </div>
+                    <div className="col s6">
+                        <h5>Password</h5>
+                        <input
+                            type="password"
+                            id="password"
+                            placeholder="Please enter your password here.."
+                            onChange={(e) => setPassword(e.target.value)} value={password}
+                        ></input>
+                    </div>
+                    <div class="row">
+                        <div className="col">
+                            <a className="waves-effect waves-light btn-small blue" onClick={() => { handleLoginUser(email, password) }}>
+                                Log in
                         </a>
-                    </div>
-                    <div className="col">
-                        <a className="waves-effect waves-light btn-small blue">
-                            <i class="fab fa-google left"></i>Log in with Google
+                        </div>
+                        <div className="col">
+                            <a className="waves-effect waves-light btn-small blue">
+                                <i class="fab fa-google left"></i>Log in with Google
                     </a>
+                        </div>
                     </div>
-                </div>
+                </form>
                 <div className="col">
                     <h5>No account?</h5>
                     <Link to="/register"><a className="waves-effect waves-light btn-small blue">
