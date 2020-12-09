@@ -22,11 +22,11 @@ const UserSchema = new mongoose.Schema({
   },
   articles: [{ type: mongoose.Schema.Types.ObjectId, ref: "Article" }],
   tags: [
-    {tag: [],
-    lastTag: String}
-  ]
-    
-  
+    {
+      mainTag: String,
+      subTags: [],
+    },
+  ],
 });
 
 UserSchema.pre("save", function (next) {

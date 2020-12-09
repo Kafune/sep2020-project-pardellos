@@ -28,7 +28,7 @@ const ArticleSchema = new mongoose.Schema({
   word_count: {
     type: Number,
   },
-  tags: [String],
+  tags: [],
   status: {
     type: String,
     default: "public",

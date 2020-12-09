@@ -42,9 +42,9 @@ export default function Dashboard(props) {
               <Link to={`/article/${data._id}`}>
                 <a>See article</a>
               </Link>
-              <p>Tags: {data.tags.map((data) => {
+              {/* <p>Tags: {data.tags.map((data) => {
                 return data + " "
-              })}</p>
+              })}</p> */}
             </div>
           </div>
         </div>

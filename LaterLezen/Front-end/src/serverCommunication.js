@@ -136,3 +136,20 @@ export async function searchArticleByID(id) {
   }
   return fetch(serverFetchBase + `/articles/article/${id}`, fetchOptions)
 }
+
+export async function deleteArticleByID(id) {
+  const body = {
+    article_id: id
+  }
+
+  const fetchOptions = {
+    method: 'DELETE',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    credentials: 'include',
+    mode: 'cors',
+    body: JSON.stringify(body)
+  }
+  return fetch(serverFetchBase + `/user/article/`, fetchOptions)
+}
