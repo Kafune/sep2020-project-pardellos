@@ -92,7 +92,7 @@ Door het lezen van dit hoofdstuk krijg je een beter beeld van hoe de structuur v
     Hierna kunnen we vergroten tot de component view per container. Deze worden opgedeeld in de API component, app component en extension component.
 
     ### API component view
-    ![API_component.png](Api_component.png)
+    ![API_component.png](API_component.png)
 
     ### Extension view
     ![Component_extension.png](Component_extension.png)
@@ -105,8 +105,8 @@ Door het lezen van dit hoofdstuk krijg je een beter beeld van hoe de structuur v
 
     De App bevat bijna alle componenten in de webapplicatie. De app laadt componenten in op basis van waar de gebruiker zich plaatsvindt in de website. Alle componenten die requests naar de API uitvoert, maakt gebruik van Servercommunication, een aparte bestand in de webapplicatie die niet afhankelijk is van App. Servercommunication bevat alle fetch requests die de componenten nodig hebben om met de API te communiceren. Een component haalt de data via de API als volgt op: Eerst roept de component een functie binnen Servercommunication aan om een fetch request te sturen. De request hangt uiteraard af vanuit welk component, en kan bestaan uit een GET, POST, PUT of een DELETE request. Na het aanroepen van deze functie, communiceert de webapplicatie met de API om de request af te handelen. Zodra de API de request heeft afgehandeld, stuurt de API een bericht terug naar de functie binnen Servercommunication waar de request vandaan komt. De component die de fetch functie aanroept, handelt het bericht van de API af. Wat er na het ontvangen van dat bericht gebeurt, hangt af van hoe dat in een component geimplementeerd is.
 
-    ### LaterLezer app view
-    ![Component_Laterlezer_app.png](Component_Laterlezer_app.png)
+    ### LaterLezer app - user flow
+    ![c4-modellen-Web_App-user_flow.png](c4-modellen-Web_App-user_flow.png)
 
     #### **Homepagina**
     De gebruiker komt voor het eerst op de homepagina van de website. De gebruiker kan ervoor kiezen om te registreren, waarin hij in de registratiepagina komt, of om in te loggen. De gebruiker komt dan op de pagina waarin hij kan inloggen. 
@@ -129,8 +129,7 @@ Door het lezen van dit hoofdstuk krijg je een beter beeld van hoe de structuur v
     De gebruiker kan na het lezen van de artikel ervoor kiezen om terug naar de dashboard te gaan, een nieuwe artikel op te slaan, of het zoeken van opgeslagen artikelen. Als de gebruiker zijn artikelen wilt zoeken, navigeert de gebruiker naar de search article component. Hierin heeft de gebruiker de optie om opgeslagen artikelen op tags, of op auteursnaam te zoeken. 
     
     #### **Zoeken op tags**
-    //TODO: zoeken op tags uitbreiden.
-    Als een gebruiker ervoor kiest om een artikel te zoeken op basis van tags, dan haalt de search article component alle bestaande tags op. De gebruiker kan een tag aanvinken door middel van een checkbox. Door op de "Search" button te klikken wordt er een functie aangeroepen in Servercommunication. De functie in Servercommunication doet vervolgens een fetch request naar artikelen die matchen met de aangevinkte tag(s). Na het verzoek van de search article component krijgt dit component de relevante artikelen terug van de API. De resultaten worden overzichtelijk getoond in een lijstweergave met kaarten.
+    Wanneer de gebruiker artikelen wilt filteren op basis van tags, kan hij naar de Search Article component gaan.  Hierbij worden alle gebruikte tags van de user op een hiërarchische structuur teruggegeven. De gebruiker kan nu een tag selecteren doormiddel van een checkbox aan te klikken. Daarna kan de gebruiker nog meer sub-tags aanvinken die nu worden weergeven op basis van de main-tag die aangeklikt was. Als de gebruiker zijn/haar gewenste tags heeft geselecteerd kan hij op de 'Search' knop klikken en wordt er een functie aangeroepen naar de Servercommunication met de geselecteerde tags in een String Array. Deze servercommunication zal dan een fetch request maken en geeft de artikelen terug die aan de geselecteerde tags voldoen. De artikelen worden daarna in een overzichtelijke lijst weergegeven op de pagina. Naast de 'Search' knop bestaat er ook een 'Clear tags' knop die de geselecteerde tags snel verwijderd.
 
     #### **Zoeken op auteur**
     Als de gebruiker ervoor kiest om een artikel op basis van auteursnaam te zoeken, dan haalt de search article component alle namen van bestaande auteurs op. Alle artikelen die geen auteur hebben, worden weggefiltert voor de autocomplete zoeklijst. Er wordt gebruik gemaakt van een autocomplete module van Materialize, die ervoor zorgt dat de naam van een auteur automatisch aanvult als er een deel van de auteursnaam is ingevuld. De API ondersteunt ook de mogelijkheid om op een deel van de auteursnaam kan zoeken. Op deze manier wordt er ook gezocht op een gedeelte van de naam bij een auteur. Dan typt de gebruiker de naam van de auteur in. Na het invullen van de auteursnaam, zoekt de gebruiker op de artikelen die door die specifieke auteur is uitgebracht. De search article component roept weer de functie in Servercommunication aan, die vervolgens een fetch request naar de API doet om de artikelen die uitgebracht zijn door de ingevulde auteur op te halen. Na het verzoek van de search article component, krijgt dit component de relevante artikelen terug van de API. De resultaten worden overzichtelijk getoond in een lijstweergave met kaarten.
