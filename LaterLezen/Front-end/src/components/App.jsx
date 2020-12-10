@@ -41,6 +41,7 @@ export default class App extends React.Component {
           this.handleFirstnameState(response.user.firstname);
           this.handleLastnameState(response.user.lastname);
           this.handleTagsState(response.user.tags);
+          console.log(response.user.tags);
         }
       })
       .catch((e) => {

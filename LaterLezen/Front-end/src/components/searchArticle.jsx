@@ -18,6 +18,8 @@ export default function SearchArticle(props) {
   const [author, setAuthor] = useState('')
   const [showSearch, setShowSearch] = useState(0)
 
+  
+
   useEffect(() => {
     setTags(props.tags)
     if (tags.length >= 1) {
@@ -37,7 +39,6 @@ export default function SearchArticle(props) {
     } else {
       setSubTagState(false)
     }
-
     if (tagCounter > 2) {
       setLastTagState(true)
     } else {
@@ -54,7 +55,6 @@ export default function SearchArticle(props) {
         selectedTagsList.push(key);
       }
     });
-    console.log(selectedTagsList)
     searchArticleByTags(selectedTagsList)
       .then((response) => response.json())
       .then((response) => {
