@@ -65,7 +65,7 @@ export default function Login(props) {
                     </div>
                     <div class="row">
                         <div className="col">
-                            <a className="waves-effect waves-light btn-small blue" onClick={() => { handleLoginUser(email, password) }}>
+                            <a className="waves-effect waves-light btn-small blue" onClick={() => { handleLoginUser(email, password) }} id="login">
                                 Log in
                         </a>
                         </div>

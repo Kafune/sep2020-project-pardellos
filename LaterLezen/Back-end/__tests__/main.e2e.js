@@ -223,9 +223,10 @@ describe("Laterlezer tests", () => {
     let email = 'joebiden@usa.com'
     let password = 'ditiseenwachtwoord'
 
-    await thePage.waitFor('a[textContent="Log in"]')
     await thePage.type('input[id="email"]', email);
-    await thePage.type('input[id="password"]', password);
+    await thePage.type('input[id="password"]', password)
+    await thePage.waitFor(1500)
+    await thePage.click('a[id="login"]')
 
     await thePage.waitFor(4000)
   }) 
