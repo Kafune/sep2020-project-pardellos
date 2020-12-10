@@ -281,9 +281,23 @@ Door het lezen van dit hoofdstuk krijg je een beter beeld van hoe de structuur v
 
 
 ## Infrastructuur-architectuur
-(beantwoord de vragen in het software guidebook)
+Op dit moment draait het Laterlezer project alleen in de lokale pc van de teamleden. Laterlezer gebruikt op dit moment de [online Mongo database](https://www.mongodb.com/) om alle gegevens op te slaan. Zo werken alle teamleden met hetzelfde gegevens. Dit helpt voornamelijk met debuggen. Na het overdragen van Laterlezer kan de opdrachtgever ervoor kiezen om de Mongo database te draaien op een lokale server.
+
+
+
+
+
+
 ## Deployment
-(beantwoord de vragen in het software guidebook)
+De server waar Laterlezer op gaat draaien, heeft minimaal de volgende eisen om alle requests van de webapplicatie en de extensie af te handelen:
+- bCrypt v5.0.0
+- Express v4.17.1
+- Mongoose v5.10.13
+- Passport v0.4.1
+- Jest v26.6.3
+
+
+
 ## Werking en ondersteuning
 Om alle onderdelen van Laterlezer te installeren, heeft Laterlezer de volgende vereisten:
 - Git, om het project binnen te halen
