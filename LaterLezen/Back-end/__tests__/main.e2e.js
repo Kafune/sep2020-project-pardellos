@@ -5,7 +5,7 @@ const User = require("../models/User");
 const Article = require("../models/Article");
 const e = require("express");
 
-describe("Laterlezer tests", () => {
+xdescribe("Laterlezer tests", () => {
   it("should register a user", () => {});
   let theBrowser, thePage;
 
@@ -29,7 +29,7 @@ describe("Laterlezer tests", () => {
     // await theBrowser.close();
   });
 
-  test("User tries to register a new account, where the passwords do not match", async () => {
+  xtest("User tries to register a new account, where the passwords do not match", async () => {
     let email = "donaldtrump@americagreatagain.com";
     let firstname = "donald";
     let lastname = "trump";
@@ -49,7 +49,7 @@ describe("Laterlezer tests", () => {
     await thePage.click('input[name="register"]');
   });
 
-  test("User registers a new account that already exists", async () => {
+  xtest("User registers a new account that already exists", async () => {
     const password = "ditiseenwachtwoord";
 
     await thePage.waitFor(1500);
@@ -71,7 +71,7 @@ describe("Laterlezer tests", () => {
     await thePage.click('input[name="register"]');
   });
 
-  test("User registers a new account that does not exist yet", async () => {
+  xtest("User registers a new account that does not exist yet", async () => {
     let email = "joebiden@usa.com";
 
     await thePage.waitFor(1500);
@@ -90,7 +90,7 @@ describe("Laterlezer tests", () => {
     await thePage.click('input[name="register"]');
   });
 
-  test("User clicks the hamburger menu and selects the option to safe an article", async () => {
+  xtest("User clicks the hamburger menu and selects the option to safe an article", async () => {
     let url =
       "https://www.nu.nl/politiek/6095197/horeca-krijgt-wellicht-extra-steun-maar-is-geen-bouwsteen-van-economie.html";
     let title = "horeca krijgt wellicht extra steun";
@@ -115,7 +115,7 @@ describe("Laterlezer tests", () => {
   });
 
 
-  test('user clicks an article to read' , async () => {
+  xtest('user clicks an article to read' , async () => {
     await thePage.waitFor(1500);
     for(let i = 0; i < 10; i++){
       await thePage.keyboard.press('ArrowDown');
@@ -144,7 +144,7 @@ describe("Laterlezer tests", () => {
   })
 
 
-  test('user clicks on edit article in the dashboard' , async () => {
+  xtest('user clicks on edit article in the dashboard' , async () => {
     let title = 'Horeca moet extra steun krijgen van de overheid ivm economische problemen'
     let description = 'het kabinet heeft overlegd over het helpen van de horeca, dit is aangezien de horeca enorm in de problemen zit met schulden.'
     let source = 'nu.nl'
