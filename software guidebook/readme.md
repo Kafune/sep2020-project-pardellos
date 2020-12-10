@@ -357,7 +357,7 @@ Vereisten:
 
 Navigeer naar
 ```
-sep2020-project-pardellos \ LaterLezen \ Front-end
+sep2020-project-pardellos \ LaterLezen \ laterlezer-extension
 ```
 
 Open de terminal en voer de installatie uit door het volgende in te voeren:
@@ -370,6 +370,20 @@ Voer na de installatie het volgende uit:
 npm run build
 ```
 
-Na het uitvoeren van dit commando komt er een map build in het project.
-
+Na het uitvoeren van dit commando komt de map build in het project.
 Open nu de chrome browser
+[]()
+Open ontwikkelaarsmodus
+[]()
+Klik op uitgepakte extensie laden
+[]()
+
+Navigeer naar
+```
+sep2020-project-pardellos \ LaterLezen \ laterlezer-extension
+```
+
+Selecteer de build map en klik op open
+[]()
+De extensie is nu toegevoegd aan de browser.
+[]()
