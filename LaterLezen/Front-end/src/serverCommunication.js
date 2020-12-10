@@ -195,7 +195,7 @@ export async function findAuthor(query) {
     credentials: 'include',
     mode: 'cors'
   }
-  return fetch(serverFetchBase + `/user/steven@test.nl/articles/find/`+ query, fetchOptions)
+  return fetch(serverFetchBase + `/articles/find/`+ query, fetchOptions)
 }
 
 export async function getAuthors() {
@@ -207,5 +207,5 @@ export async function getAuthors() {
     credentials: 'include',
     mode: 'cors'
   }
-  return fetch(serverFetchBase + `/user/steven@test.nl/articles/authors`, fetchOptions)
+  return fetch(serverFetchBase + `/articles/authors`, fetchOptions)
 }
