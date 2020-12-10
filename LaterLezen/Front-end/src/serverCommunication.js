@@ -209,3 +209,27 @@ export async function confirmArticleChanges(
   };
   return fetch(serverFetchBase + `/user/article`, fetchOptions);
 }
+
+export async function findAuthor(query) {
+  const fetchOptions = {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    credentials: 'include',
+    mode: 'cors'
+  }
+  return fetch(serverFetchBase + `/articles/find/`+ query, fetchOptions)
+}
+
+export async function getAuthors() {
+  const fetchOptions = {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    credentials: 'include',
+    mode: 'cors'
+  }
+  return fetch(serverFetchBase + `/articles/authors`, fetchOptions)
+}

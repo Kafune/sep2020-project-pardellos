@@ -8,7 +8,7 @@ import Login from "./Login";
 import Register from "./Register";
 import Logout from "./Logout";
 import DisplayArticle from "./displayArticle";
-import EditArticle from "./EditArticle";
+import EditArticle from "./editArticle";
 import "../../src/App.css";
 import M from "materialize-css";
 import background from "../img/pfp_background.jpg";
