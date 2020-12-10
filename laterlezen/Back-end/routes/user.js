@@ -4,25 +4,22 @@ const passport = require("passport");
 const passportConfig = require("../config/passport");
 const JWT = require("jsonwebtoken");
 const Mercury = require("@postlight/mercury-parser");
-var ObjectID = require('mongodb').ObjectID;
-const {
-  PerformanceObserver,
-  performance
-} = require("perf_hooks");
-const {
-  extract
-} = require("article-parser");
+var ObjectID = require("mongodb").ObjectID;
+const { PerformanceObserver, performance } = require("perf_hooks");
+const { extract } = require("article-parser");
 const User = require("../models/User");
 const Article = require("../models/Article");
 
 const signToken = (userID) => {
-  return JWT.sign({
-    iss: "Laterlezen",
-    sub: userID,
-  },
-    "LaterLezen", {
-    expiresIn: "1h",
-  }
+  return JWT.sign(
+    {
+      iss: "Laterlezen",
+      sub: userID,
+    },
+    "LaterLezen",
+    {
+      expiresIn: "1h",
+    }
   );
 };
 
@@ -32,56 +29,76 @@ router.get("/test/warning/no/delete", async (req, res) => {
 });
 
 router.post("/register", (req, res) => {
-  const {
-    email,
-    password,
-    firstname,
-    lastname
-  } = req.body;
-  User.findOne({
-    email,
-  },
-    (err, user) => {
-      if (err)
-        res.status(500).json({
-          message: {
-            msgBody: "Error 1 has occured",
-            msgError: true,
-          },
-        });
-      if (user)
-        res.status(400).json({
-          message: {
-            msgBody: "Username already taken",
-            msgError: true,
-          },
-        });
-      else {
-        const newUser = new User({
+  const { email, password, firstname, lastname } = req.body;
+
+  // Back-end account checks. Can be adjusted at any time
+  // For now, only checks if email format is valid with regex, and the password length.
+  let emailFormat = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+  let minPasswordLength = 7;
+
+  if (emailFormat.test(email)) {
+    if (password.length > minPasswordLength) {
+      User.findOne(
+        {
           email,
-          password,
-          firstname,
-          lastname,
-        });
-        newUser.save((err) => {
+        },
+        (err, user) => {
           if (err)
             res.status(500).json({
               message: {
-                msgBody: "Error 2 has occured",
+                msgBody: "Error 1 has occured",
                 msgError: true,
               },
             });
-          else
-            res.status(200).json({
+          if (user)
+            res.status(400).json({
               message: {
-                msgBody: "Account sucessfully created",
-                msgError: false,
+                msgBody: "Username already taken",
+                msgError: true,
               },
             });
-        });
-      }
+          else {
+            const newUser = new User({
+              email,
+              password,
+              firstname,
+              lastname,
+            });
+            newUser.save((err) => {
+              if (err)
+                res.status(500).json({
+                  message: {
+                    msgBody: "Error 2 has occured",
+                    msgError: true,
+                  },
+                });
+              else
+                res.status(200).json({
+                  message: {
+                    msgBody: "Account sucessfully created",
+                    msgError: false,
+                  },
+                });
+            });
+          }
+        }
+      );
+    } else {
+      res.status(500).json({
+        message: {
+          msgBody: "Password must be 7 characters or longer.",
+          msgError: true,
+        },
+      });
     }
-  );
+  } else {
+    res.status(500).json({
+      message: {
+        msgBody: "Wrong email format.",
+        msgError: true,
+      },
+    });
+  }
 });
 
 router.post(
@@ -91,12 +108,7 @@ router.post(
   }),
   (req, res) => {
     if (req.isAuthenticated()) {
-      const {
-        _id,
-        email,
-        firstname,
-        lastname
-      } = req.user;
+      const { _id, email, firstname, lastname } = req.user;
       const token = signToken(_id);
       console.log(req.user);
       res.cookie("access_token", token, {
@@ -140,7 +152,7 @@ router.post(
     let url = String(req.body.url);
     let rawTags = req.body.tags;
     let description;
-    let processedTags = processTags(rawTags)
+    let processedTags = processTags(rawTags);
     var t0 = performance.now();
     extract(url)
       .then((article) => {
@@ -167,12 +179,13 @@ router.post(
               },
             });
           else {
-            User.exists({
-              _id: req.user._id,
-            },
+            User.exists(
+              {
+                _id: req.user._id,
+              },
               (err, result) => {
-                let tagList = req.user.tags
-                handleUserNestedTags(processedTags, tagList)
+                let tagList = req.user.tags;
+                handleUserNestedTags(processedTags, tagList);
                 var t1 = performance.now();
                 console.log("Tag loop took " + (t1 - t0) + " milliseconds.");
                 req.user.articles.push(newArticle);
@@ -196,6 +209,34 @@ router.post(
     console.log("Call to mercury took " + (t3 - t2) + " milliseconds.");
   }
 );
+
+router.put("/article", (req, res) => {
+  Article.findOne(
+    {
+      _id: req.body.article_id,
+    },
+    (err, article) => {
+      console.log(article);
+
+      if (err) {
+        res.status(500).json({
+          message: {
+            msgBody: "Error has occured",
+            msgError: true,
+          },
+        });
+      } else {
+        if (!req.body.title == "") article.title = req.body.title;
+        if (!req.body.author == "") article.author = req.body.author;
+        if (!req.body.description == "")
+          article.description = req.body.description;
+        if (!req.body.source == "") article.source = req.body.source;
+        article.save();
+        res.json(article);
+      }
+    }
+  );
+});
 
 router.get(
   "/articles",
@@ -225,41 +266,48 @@ router.get(
   }
 );
 
-router.put("/article", passport.authenticate("jwt", {
-  session: false,
-}), (req, res) => {
-  Article.findOne({
-    _id: req.body.article_id,
-  },
-    (err, article) => {
-      if (err)
-        res.status(500).json({
-          message: {
-            msgBody: "Error has occured",
-            msgError: true,
-          },
-        });
-      else {
-        if (!req.body.title == "") article.title = req.body.title;
-        if (!req.body.author == "") article.author = req.body.author;
-        if (!req.body.description == "") article.excerpt = req.body.description;
-        if (!req.body.source == "") article.source = req.body.source;
-        if (!req.body.tags == "") {
-          let processedTags = processTags(req.body.tags)
-          req.user.tags = handleUserNestedTags(processedTags, req.user.tags)
-          req.user.save()
+router.put(
+  "/article",
+  passport.authenticate("jwt", {
+    session: false,
+  }),
+  (req, res) => {
+    Article.findOne(
+      {
+        _id: req.body.article_id,
+      },
+      (err, article) => {
+        if (err)
+          res.status(500).json({
+            message: {
+              msgBody: "Error has occured",
+              msgError: true,
+            },
+          });
+        else {
+          if (!req.body.title == "") article.title = req.body.title;
+          if (!req.body.author == "") article.author = req.body.author;
+          if (!req.body.description == "")
+            article.excerpt = req.body.description;
+          if (!req.body.source == "") article.source = req.body.source;
+          if (!req.body.tags == "") {
+            let processedTags = processTags(req.body.tags);
+            req.user.tags = handleUserNestedTags(processedTags, req.user.tags);
+            req.user.save();
+          }
+          article.save();
+          res.json(article);
         }
-        article.save();
-        res.json(article);
       }
-    }
-  );
-});
+    );
+  }
+);
 
 router.delete("/article", (req, res) => {
-  Article.deleteOne({
-    _id: req.body.article_id,
-  },
+  Article.deleteOne(
+    {
+      _id: req.body.article_id,
+    },
     (err, article) => {
       console.log(err);
       if (err)
@@ -287,9 +335,12 @@ router.put(
     session: false,
   }),
   (req, res) => {
-    User.updateOne({
-      _id: req.user._id,
-    }, {});
+    User.updateOne(
+      {
+        _id: req.user._id,
+      },
+      {}
+    );
   }
 );
 
@@ -344,12 +395,7 @@ router.get(
     session: false,
   }),
   (req, res) => {
-    const {
-      firstname,
-      lastname,
-      email,
-      tags
-    } = req.user;
+    const { firstname, lastname, email, tags } = req.user;
     res.status(200).json({
       isAuthenticated: true,
       user: {
@@ -361,6 +407,41 @@ router.get(
     });
   }
 );
+router.put("/testing/tags", (req, res) => {
+  let tags = [
+    "programmeren",
+    "Javascript",
+    "React",
+    "mapping",
+    "objectmapping",
+  ];
+  let article = { title: "test3" };
+  let art = new Article(article);
+  art.tags2 = tags;
+  art.save();
+  res.json(art);
+});
+
+router.get("/testing/art/:tag", (req, res) => {
+  let tag = req.params.tag;
+  Article.find({ tags2: { $in: tag } }, (err, art) => {
+    res.json(art);
+  });
+});
+
+// route to edit the tags list
+router.put("/testing/art/:title", (req, res) => {
+  let taglist = req.body.taglist;
+  let title = req.params.title;
+
+  Article.updateOne(
+    { title: title },
+    { $set: { tags2: taglist } },
+    (err, art) => {
+      res.json(art);
+    }
+  );
+});
 
 router.post("/articleExtension", (req, res) => {
   const findUser = User.findOne({
@@ -368,9 +449,7 @@ router.post("/articleExtension", (req, res) => {
   }).then((response) => {
     if (response) {
       console.log(response);
-      const {
-        extract
-      } = require("article-parser");
+      const { extract } = require("article-parser");
       let url = String(req.body.url);
       const article = new Article(req.body);
       console.log(article);
@@ -404,26 +483,74 @@ router.post("/articleExtension", (req, res) => {
   });
 });
 
-function processTags(rawTags){
+router.put(
+  "/preference",
+  passport.authenticate("jwt", {
+    session: false,
+  }),
+  async (req, res) => {
+    if (
+      req.body.theme === "default" ||
+      req.body.theme === "typewriter" ||
+      req.body.theme === "dark" ||
+      req.body.theme === "bluegrey" ||
+      req.body.theme === "darkblue"
+    ) {
+      await User.findOneAndUpdate(
+        { _id: req.user._id },
+        { preferences: req.body.theme }
+      ).catch(() => {
+        res.status(500).json({
+          message: {
+            msgBody: "Error has occured",
+            msgError: true,
+          },
+        });
+      });
+      res.send(req.body.theme);
+    } else {
+      res.status(500).json({
+        message: {
+          msgBody: "Error has occured",
+          msgError: true,
+        },
+      });
+    }
+  }
+);
+
+router.get(
+  "/preference",
+  passport.authenticate("jwt", {
+    session: false,
+  }),
+  async (req, res) => {
+    var query = await User.findOne({ _id: req.user._id }).select("preferences");
+    res.send(JSON.stringify(query.preferences));
+  }
+);
+
+function processTags(rawTags) {
   let processedTags = [];
-    processedTags = rawTags.map(function (value) {
-      return value.toLowerCase();
-    });
-    const uniqueTags = new Set(processedTags);
-    processedTags = [...uniqueTags];
-    return processedTags
+  processedTags = rawTags.map(function (value) {
+    return value.toLowerCase();
+  });
+  const uniqueTags = new Set(processedTags);
+  processedTags = [...uniqueTags];
+  return processedTags;
 }
 
-function handleUserNestedTags(processedTags, tagList){
+function handleUserNestedTags(processedTags, tagList) {
   class Tag {
     constructor(value) {
-      (this.tagName = value), (this.subTags = []), (this._id = new ObjectID);
+      (this.tagName = value), (this.subTags = []), (this._id = new ObjectID());
     }
   }
 
   switch (processedTags.length) {
     case 1:
-      if (tagList.some((element) => element.tagName === processedTags[0])) {} else {
+      if (tagList.some((element) => element.tagName === processedTags[0])) {
+      } else {
         let tag = new Tag(processedTags[0]);
         tagList.push(tag);
       }
@@ -433,8 +560,11 @@ function handleUserNestedTags(processedTags, tagList){
       if (tagList.some((element) => element.tagName === processedTags[0])) {
         index = tagList.findIndex((x) => x.tagName === processedTags[0]);
         if (
-          tagList[index].subTags.some((element) => element.tagName === processedTags[1])
-        ) {} else {
+          tagList[index].subTags.some(
+            (element) => element.tagName === processedTags[1]
+          )
+        ) {
+        } else {
           let tag = new Tag(processedTags[1]);
           tagList[index].subTags.push(tag);
         }
@@ -450,7 +580,9 @@ function handleUserNestedTags(processedTags, tagList){
       if (tagList.some((element) => element.tagName === processedTags[0])) {
         index = tagList.findIndex((x) => x.tagName === processedTags[0]);
         if (
-          tagList[index].subTags.some((element) => element.tagName === processedTags[1])
+          tagList[index].subTags.some(
+            (element) => element.tagName === processedTags[1]
+          )
         ) {
           index2 = tagList[index].subTags.findIndex(
             (x) => x.tagName === processedTags[1]
@@ -459,7 +591,8 @@ function handleUserNestedTags(processedTags, tagList){
             tagList[index].subTags[index2].subTags.some(
               (element) => element.tagName === processedTags[2]
             )
-          ) {} else {
+          ) {
+          } else {
             let tag = new Tag(processedTags[2]);
             tagList[index].subTags[index2].subTags.push(tag);
           }
@@ -480,10 +613,9 @@ function handleUserNestedTags(processedTags, tagList){
         tagList[tagList.length - 1].subTags[0].subTags.push(tag);
       }
       break;
-
   }
-  
-  return tagList
+
+  return tagList;
 }
 
 module.exports = router;

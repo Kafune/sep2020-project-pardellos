@@ -1,80 +1,80 @@
 const port = 4000;
-const serverHostname = `${window.location.hostname}:${port}`
-const serverFetchBase = `${window.location.protocol}//${serverHostname}`
+const serverHostname = `${window.location.hostname}:${port}`;
+const serverFetchBase = `${window.location.protocol}//${serverHostname}`;
 
 export async function saveArticle(url, tags, title) {
   const body = {
     url: url,
     tags: tags,
-    title: title
+    title: title,
   };
 
   const fetchOptions = {
-    method: 'POST',
+    method: "POST",
     headers: {
-      'Content-Type': 'application/json'
+      "Content-Type": "application/json",
     },
-    credentials: 'include',
-    mode: 'cors',
-    body: JSON.stringify(body)
-  }
+    credentials: "include",
+    mode: "cors",
+    body: JSON.stringify(body),
+  };
 
-  return fetch(serverFetchBase + `/user/article`, fetchOptions)
+  return fetch(serverFetchBase + `/user/article`, fetchOptions);
 }
 
 export async function getAllArticles() {
   const fetchOptions = {
-    method: 'GET',
+    method: "GET",
     headers: {
-      'Content-Type': 'application/json'
+      "Content-Type": "application/json",
     },
-    credentials: 'include',
-    mode: 'cors',
-  }
+    credentials: "include",
+    mode: "cors",
+  };
 
-  return fetch(serverFetchBase + `/user/articles`, fetchOptions)
+  return fetch(serverFetchBase + `/user/articles`, fetchOptions);
 }
 
 export async function getArticleByUser() {
   const fetchOptions = {
-    method: 'GET',
+    method: "GET",
     headers: {
-      'Content-Type': 'application/json'
+      "Content-Type": "application/json",
     },
-    credentials: 'include',
-    mode: 'cors',
-  }
-  return fetch(serverFetchBase + `/user/articles`, fetchOptions)
+    credentials: "include",
+    mode: "cors",
+  };
+  return fetch(serverFetchBase + `/user/articles`, fetchOptions);
 }
 
 export async function loginUser(email, password) {
   const body = {
     email: email,
-    password: password
-  }
+    password: password,
+  };
 
   const fetchOptions = {
-    method: 'POST',
+    method: "POST",
     headers: {
-      'Content-Type': 'application/json'
+      "Content-Type": "application/json",
     },
-    credentials: 'include',
-    mode: 'cors',
-    body: JSON.stringify(body)
-  }
-  return fetch(serverFetchBase + `/user/login`, fetchOptions)
+    credentials: "include",
+    mode: "cors",
+    body: JSON.stringify(body),
+  };
+  return fetch(serverFetchBase + `/user/login`, fetchOptions);
 }
 
 export async function logoutUser() {
   const fetchOptions = {
-    method: 'GET',
+    method: "GET",
     headers: {
-      'Content-Type': 'application/json'
+      "Content-Type": "application/json",
     },
-    credentials: 'include',
-    mode: 'cors'
-  }
-  return fetch(serverFetchBase + `/user/logout`, fetchOptions)
+    credentials: "include",
+    mode: "cors",
+  };
+  return fetch(serverFetchBase + `/user/logout`, fetchOptions);
 }
 
 export async function registerUser(email, password, firstname, lastname) {
@@ -82,123 +82,130 @@ export async function registerUser(email, password, firstname, lastname) {
     email: email,
     password: password,
     firstname: firstname,
-    lastname: lastname
-  }
+    lastname: lastname,
+  };
   const fetchOptions = {
-    method: 'POST',
+    method: "POST",
     headers: {
-      'Content-Type': 'application/json'
+      "Content-Type": "application/json",
     },
-    credentials: 'include',
-    mode: 'cors',
-    body: JSON.stringify(body)
-  }
-  return fetch(serverFetchBase + `/user/register`, fetchOptions)
+    credentials: "include",
+    mode: "cors",
+    body: JSON.stringify(body),
+  };
+  return fetch(serverFetchBase + `/user/register`, fetchOptions);
 }
 
 export async function checkAuthenticated() {
   const fetchOptions = {
-    method: 'GET',
+    method: "GET",
     headers: {
-      'Content-Type': 'application/json'
+      "Content-Type": "application/json",
     },
-    credentials: 'include',
-    mode: 'cors'
-  }
-  return fetch(serverFetchBase + `/user/authenticated`, fetchOptions)
+    credentials: "include",
+    mode: "cors",
+  };
+  return fetch(serverFetchBase + `/user/authenticated`, fetchOptions);
 }
 
 export async function searchArticleByTags(tags) {
   const body = {
-    tags: tags
-  }
+    tags: tags,
+  };
 
   const fetchOptions = {
-    method: 'PUT',
+    method: "PUT",
     headers: {
-      'Content-Type': 'application/json'
+      "Content-Type": "application/json",
     },
-    credentials: 'include',
-    mode: 'cors',
-    body: JSON.stringify(body)
-  }
-  return fetch(serverFetchBase + `/user/tags`, fetchOptions)
+    credentials: "include",
+    mode: "cors",
+    body: JSON.stringify(body),
+  };
+  return fetch(serverFetchBase + `/user/tags`, fetchOptions);
 }
 
 export async function searchArticleByID(id) {
   const fetchOptions = {
-    method: 'GET',
+    method: "GET",
     headers: {
-      'Content-Type': 'application/json'
+      "Content-Type": "application/json",
     },
-    credentials: 'include',
-    mode: 'cors'
-  }
-  return fetch(serverFetchBase + `/articles/article/${id}`, fetchOptions)
+    credentials: "include",
+    mode: "cors",
+  };
+  return fetch(serverFetchBase + `/articles/article/${id}`, fetchOptions);
 }
 
 export async function deleteArticleByID(id) {
   const body = {
-    article_id: id
-  }
+    article_id: id,
+  };
 
   const fetchOptions = {
-    method: 'DELETE',
+    method: "DELETE",
     headers: {
-      'Content-Type': 'application/json'
+      "Content-Type": "application/json",
     },
-    credentials: 'include',
-    mode: 'cors',
-    body: JSON.stringify(body)
-  }
-  return fetch(serverFetchBase + `/user/article/`, fetchOptions)
+    credentials: "include",
+    mode: "cors",
+    body: JSON.stringify(body),
+  };
+  return fetch(serverFetchBase + `/user/article/`, fetchOptions);
 }
 
 export async function savePreference(theme) {
   const body = {
-    theme: theme
-  }
+    theme: theme,
+  };
   const fetchOptions = {
-    method: 'PUT',
+    method: "PUT",
     headers: {
-      'Content-Type': 'application/json'
+      "Content-Type": "application/json",
     },
-    credentials: 'include',
-    mode: 'cors',
-    body: JSON.stringify(body)
-  }
-  return fetch(serverFetchBase + `/user/preference/`, fetchOptions)
+    credentials: "include",
+    mode: "cors",
+    body: JSON.stringify(body),
+  };
+  return fetch(serverFetchBase + `/user/preference/`, fetchOptions);
 }
 
 export async function getPreference() {
   const fetchOptions = {
-    method: 'GET',
+    method: "GET",
     headers: {
-      'Content-Type': 'application/json'
+      "Content-Type": "application/json",
     },
-    credentials: 'include',
-    mode: 'cors'
-  }
-  return fetch(serverFetchBase + `/user/preference/`, fetchOptions)
+    credentials: "include",
+    mode: "cors",
+  };
+  return fetch(serverFetchBase + `/user/preference/`, fetchOptions);
 }
 
-export async function confirmArticleChanges(article, title,source,description,author, tags) {
+export async function confirmArticleChanges(
+  article,
+  title,
+  source,
+  description,
+  author,
+  tags
+) {
   const body = {
     article_id: article,
     title: title,
     source: source,
     description: description,
     author: author,
-    tags: tags
-  }
+    tags: tags,
+  };
   const fetchOptions = {
-    method: 'PUT',
+    method: "PUT",
     headers: {
-      'Content-Type': 'application/json'
+      "Content-Type": "application/json",
     },
-    credentials: 'include',
-    mode: 'cors',
-    body: JSON.stringify(body)
-  }
-  return fetch(serverFetchBase + `/user/article`, fetchOptions)
+    credentials: "include",
+    mode: "cors",
+    body: JSON.stringify(body),
+  };
+  return fetch(serverFetchBase + `/user/article`, fetchOptions);
 }

@@ -24,6 +24,8 @@
     "passport-google-oauth20": "^2.0.0",
     "passport-jwt": "^4.0.0",
     "passport-local": "^1.0.0",
+    "puppeteer": "^5.5.0",
+    "puppeteer-autoscroll-down": "^0.1.6",
     "supertest": "^6.0.1",
     "websockets": "^0.2.0",
     "ws": "^7.4.0"
@@ -37,7 +39,8 @@
   "scripts": {
     "start": "cross-env NODE_ENV=production node app",
     "dev": "cross-env NODE_ENV=development nodemon app",
-    "test": "jest --verbose"
+    "test": "jest --verbose",
+    "e2e": "jest --testMatch=\"**/*.e2e.js\""
   },
   "author": "Glenn Hulscher",
   "license": "ISC"
