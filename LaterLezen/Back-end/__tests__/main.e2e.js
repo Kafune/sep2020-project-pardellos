@@ -1,19 +1,14 @@
 const puppeteer = require("puppeteer");
-jest.setTimeout(120000);
-
-const User = require("../models/User");
-const Article = require("../models/Article");
-const e = require("express");
+jest.setTimeout(250000);
 
 describe("Laterlezer tests", () => {
   it("should register a user", () => {});
   let theBrowser, thePage;
 
   beforeAll(async () => {
-    setTimeout(10000);
     theBrowser = await puppeteer.launch({
       headless: false,
-      slowMo: 40,
+      slowMo: 25,
       defaultViewport: null,
       args: [`--window-size=1920,1080`],
     });
@@ -26,7 +21,7 @@ describe("Laterlezer tests", () => {
   // })
 
   afterAll(async () => {
-    // await theBrowser.close();
+    await theBrowser.close();
   });
 
   test("User tries to register a new account, where the passwords do not match", async () => {
@@ -94,8 +89,6 @@ describe("Laterlezer tests", () => {
     let url =
       "https://www.nu.nl/politiek/6095197/horeca-krijgt-wellicht-extra-steun-maar-is-geen-bouwsteen-van-economie.html";
     let title = "horeca krijgt wellicht extra steun";
-    let tag1 = "horeca";
-    let tag2 = "steun";
 
     await thePage.waitFor(1500);
     await thePage.click('a[id="hamburger"]');
@@ -117,7 +110,7 @@ describe("Laterlezer tests", () => {
 
   test('user clicks an article to read' , async () => {
     await thePage.waitFor(1500);
-    for(let i = 0; i < 10; i++){
+    for(let i = 0; i < 12; i++){
       await thePage.keyboard.press('ArrowDown');
     }
     await thePage.click('a[id="seeArticle"]')
@@ -127,13 +120,37 @@ describe("Laterlezer tests", () => {
       await thePage.keyboard.press('ArrowDown');
     }
     await thePage.waitFor(3000)
+
+    await thePage.click('button[id="preferenceButton"]');
+    await thePage.waitFor(1500);
+    await thePage.click('div[id="typewriter"]')
+    await thePage.waitFor(1500)
+    await thePage.click('div[id="dark"]')
+    await thePage.waitFor(1500)
+    await thePage.click('div[id="cancelPreferences"]')
+    await thePage.waitFor(1500)
+    await thePage.focus('div[id="root"]')
+    await thePage.click('div[id="root"]')
+    await thePage.click('div[id="root"]')
+    await thePage.waitFor(1500)
+    await thePage.click('button[id="preferenceButton"]');
+    await thePage.waitFor(1500)
+    await thePage.click('div[id="darkblue"]')
+    await thePage.waitFor(1000)
+    await thePage.click('div[id="savePreferences"]');
+    await thePage.waitFor(1000);
+    await thePage.click('div[id="root"]')
+    await thePage.focus('div[id="root"]')
+    await thePage.click('div[id="root"]')
+    await thePage.click('div[id="root"]')
+
+    await thePage.waitFor(1000)
     for(let i = 0; i < 60; i++){
       await thePage.keyboard.press('ArrowDown');
     }
     await thePage.waitFor(5000)
     await thePage.focus('a[id="originalArticle"]')
     await thePage.waitFor(2500)
-    //todo iets met de h2 query selector om door het artikel te scrollen
     await thePage.click('a[id="originalArticle"]');
     await thePage.waitFor(2500);
     await thePage.goBack();
@@ -150,8 +167,9 @@ describe("Laterlezer tests", () => {
     let source = 'nu.nl'
     let author = 'jan-peter balkenende'
 
+    await thePage.waitFor(1500)
     //simulate scroling
-    for(let i = 0; i < 10; i++){
+    for(let i = 0; i < 12; i++){
       await thePage.keyboard.press('ArrowDown');
     }
 
@@ -180,13 +198,22 @@ describe("Laterlezer tests", () => {
     await thePage.click('button[id="confirmChanges"]')
     await thePage.waitFor(2500)
 
-    for(let i = 0; i < 10; i++){
+    for(let i = 0; i < 12; i++){
       await thePage.keyboard.press('ArrowDown');
     }
-
     await thePage.waitFor(5000)
+    
 
   })
+
+  test('User logs out of the LaterLezer app', async () => {
+    await thePage.waitFor(1500)
+    await thePage.click('a[id="hamburger"]');
+    await thePage.waitFor(1000);
+    await thePage.click('i[id="logout"]');
+    await thePage.waitFor(2500);
+  })
+
 
   // xtest('User navigates to Login',async () => {
   //     await thePage.$eval('a[href="/login"]', el => el.click())
