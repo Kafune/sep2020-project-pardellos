@@ -43,12 +43,10 @@ export default function Dashboard(props) {
                   <img src={data.lead_image_url} />
                   <span class="card-title">{data.title}</span>
                 </div>
-                <div class="card-content white-text">
+                <div class="card-content">
                   <p>{data.excerpt}</p>
-                </div>
-                <div class="card-action">
                   <span class="author">Author: {data.author}</span>
-                  <span class="source">Source: {data.source}</span>
+                  <span class="source">Source: {data.domain}</span>
                   <br/>
                   <span>
                     Tags:{" "}

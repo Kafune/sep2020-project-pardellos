@@ -285,7 +285,7 @@ router.put(
           if (!req.body.author == "") article.author = req.body.author;
           if (!req.body.description == "")
             article.excerpt = req.body.description;
-          if (!req.body.source == "") article.source = req.body.source;
+          if (!req.body.source == "") article.domain = req.body.source;
           if (!req.body.tags == "") {
             let processedTags = processTags(req.body.tags);
             req.user.tags = handleUserNestedTags(processedTags, req.user.tags);
