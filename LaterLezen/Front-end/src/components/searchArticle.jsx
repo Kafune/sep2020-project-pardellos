@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { searchArticleByTags, getAuthors, findAuthors } from "../serverCommunication";
+import { searchArticleByTags, getAuthors, findAuthor } from "../serverCommunication";
 import { Link } from "react-router-dom";
+import M from "materialize-css";
 
 export default function SearchArticle(props) {
   const [tags, setTags] = useState(props.tags);
@@ -100,6 +101,7 @@ export default function SearchArticle(props) {
             setAuthor(value);
           },
         };
+        M.Autocomplete.init(elems, options);
       })
   };
 
