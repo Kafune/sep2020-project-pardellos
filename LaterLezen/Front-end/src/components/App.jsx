@@ -8,6 +8,7 @@ import Login from './Login'
 import Register from './Register'
 import Logout from './Logout'
 import DisplayArticle from './displayArticle'
+import EditArticle from './editArticle'
 
 
 import '../../src/App.css'
@@ -32,20 +33,20 @@ export default class App extends React.Component {
 
   componentDidMount() {
     M.AutoInit();
-      checkAuthenticated()
-        .then((response) => response.json())
-        .then((response) => {
-          if (response.isAuthenticated === true) {
-            this.handleLoginState(true)
-            this.handleEmailState(response.user.email)
-            this.handleFirstnameState(response.user.firstname)
-            this.handleLastnameState(response.user.lastname)
-            this.handleTagsState(response.user.tags)
-          }
-        })
-        .catch((e) => {
-          M.toast({ html: 'Unauthorized user, please login first' })
-        });
+    checkAuthenticated()
+      .then((response) => response.json())
+      .then((response) => {
+        if (response.isAuthenticated === true) {
+          this.handleLoginState(true)
+          this.handleEmailState(response.user.email)
+          this.handleFirstnameState(response.user.firstname)
+          this.handleLastnameState(response.user.lastname)
+          this.handleTagsState(response.user.tags)
+        }
+      })
+      .catch((e) => {
+        M.toast({ html: 'Unauthorized user, please login first' })
+      });
   }
 
   handleLoginState(value) {
@@ -165,13 +166,16 @@ export default class App extends React.Component {
               <Login handleLoginState={setLoginStatus} handleEmailState={setEmailState} handleFirstnameState={setFirstnameState} handleLastnameState={setLastnameState} handleTagsState={setTagsState} />
             </Route>
             <Route path="/register">
-              <Register handleLoginState={setLoginStatus} handleEmailState={setEmailState} handleFirstnameState={setFirstnameState} handleLastnameState={setLastnameState} handleTagsState={setTagsState}/>
+              <Register handleLoginState={setLoginStatus} handleEmailState={setEmailState} handleFirstnameState={setFirstnameState} handleLastnameState={setLastnameState} handleTagsState={setTagsState} />
             </Route>
             <Route path="/logout">
               <Logout handleLoginState={setLoginStatus} />
             </Route>
             <Route path="/article/:id">
               <DisplayArticle articleID={this.state.article_id} />
+            </Route>
+            <Route path="/edit/:id">
+              <EditArticle/>
             </Route>
           </Switch>
         </div>

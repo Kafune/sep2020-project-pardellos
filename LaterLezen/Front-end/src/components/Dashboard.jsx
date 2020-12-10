@@ -39,12 +39,17 @@ export default function Dashboard(props) {
               <p>{data.excerpt}</p>
             </div>
             <div class="card-action">
-              <Link to={`/article/${data._id}`}>
-                <a>See article</a>
-              </Link>
+              <span class="author">Author: {data.author}</span>
+              <span class="source">Source: {data.source}</span><br />
               <p>Tags: {data.tags.map((data) => {
                 return data + " "
               })}</p>
+              <Link to={`/article/${data._id}`}>
+                <a id="seeArticle" class="btn green">Read article</a>
+              </Link>
+              <Link to={`/edit/${data._id}`}>
+                <a id="editArticle" class="btn blue">Edit article</a>
+              </Link>
             </div>
           </div>
         </div>
