@@ -489,9 +489,7 @@ router.get(
   })
       .populate({
         path: 'articles',
-        match: {
-          author: author
-       }
+        match: {author: author}
   
     })
     .exec((err, document) => {
