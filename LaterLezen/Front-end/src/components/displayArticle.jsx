@@ -40,14 +40,14 @@ export default function DisplayArticle(props) {
         <div class="center">
             <h2>{article.title}</h2>
             <h4> Published by: <b>{article.source} {article.author}</b></h4>
+            <img src={article.lead_image_url} alt="lead"/>
         </div>
         <div class="text-flow">
             <h5>
-                <img src={article.lead_image_url} alt="lead"/>
                 {Parser(" " + article.content)}
             </h5>
         </div>
         <a href={article.url}><button className="waves-effect waves-light btn-small blue accent-2">Go to original article</button></a>
-        <button className="waves-effect waves-light btn-small blue accent-2" onClick={() => { handleDeleteArticle(article._id) }}>Unsave this article</button>
+        {/* <button className="waves-effect waves-light btn-small blue accent-2" onClick={() => { handleDeleteArticle(article._id) }}>Unsave this article</button> */}
     </div>
 }

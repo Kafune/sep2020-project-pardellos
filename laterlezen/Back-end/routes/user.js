@@ -140,13 +140,7 @@ router.post(
     let url = String(req.body.url);
     let rawTags = req.body.tags;
     let description;
-
-    let processedTags = [];
-    processedTags = rawTags.map(function (value) {
-      return value.toLowerCase();
-    });
-    const uniqueTags = new Set(processedTags);
-    processedTags = [...uniqueTags];
+    let processedTags = processTags(rawTags)
     var t0 = performance.now();
     extract(url)
       .then((article) => {
@@ -179,10 +173,6 @@ router.post(
               (err, result) => {
                 let tagList = req.user.tags
                 handleUserNestedTags(processedTags, tagList)
-
-                
-              
-                
                 var t1 = performance.now();
                 console.log("Tag loop took " + (t1 - t0) + " milliseconds.");
                 req.user.articles.push(newArticle);
@@ -235,7 +225,9 @@ router.get(
   }
 );
 
-router.put("/article", (req, res) => {
+router.put("/article", passport.authenticate("jwt", {
+  session: false,
+}), (req, res) => {
   Article.findOne({
     _id: req.body.article_id,
   },
@@ -252,6 +244,11 @@ router.put("/article", (req, res) => {
         if (!req.body.author == "") article.author = req.body.author;
         if (!req.body.description == "") article.excerpt = req.body.description;
         if (!req.body.source == "") article.source = req.body.source;
+        if (!req.body.tags == "") {
+          let processedTags = processTags(req.body.tags)
+          req.user.tags = handleUserNestedTags(processedTags, req.user.tags)
+          req.user.save()
+        }
         article.save();
         res.json(article);
       }
@@ -407,6 +404,16 @@ router.post("/articleExtension", (req, res) => {
   });
 });
 
+function processTags(rawTags){
+  let processedTags = [];
+    processedTags = rawTags.map(function (value) {
+      return value.toLowerCase();
+    });
+    const uniqueTags = new Set(processedTags);
+    processedTags = [...uniqueTags];
+    return processedTags
+}
+
 function handleUserNestedTags(processedTags, tagList){
   class Tag {
     constructor(value) {
@@ -475,6 +482,8 @@ function handleUserNestedTags(processedTags, tagList){
       break;
 
   }
+  
+  return tagList
 }
 
 module.exports = router;

@@ -189,7 +189,7 @@ export default function SearchArticle(props) {
       <div class="row">
         {articles.map((data) => {
           return (
-            <div class="col" key={data._id}>
+            <div class="row" key={data._id}>
               <div class="card blue-grey darken-1">
                 <div class="card-image">
                   <img src={data.lead_image_url} />
