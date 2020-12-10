@@ -489,7 +489,9 @@ router.get(
   })
       .populate({
         path: 'articles',
-        match: {author: author}
+        match: {author: {
+          '$regex': new RegExp(author, "i")
+      }}
   
     })
     .exec((err, document) => {
@@ -501,6 +503,7 @@ router.get(
           },
         });
       else {
+        console.log(document.articles)
         res.send(document.articles)
       }
     });

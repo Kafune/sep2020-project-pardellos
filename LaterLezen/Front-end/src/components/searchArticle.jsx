@@ -48,11 +48,10 @@ export default function SearchArticle(props) {
   const handleSearchByAuthor = () => {
     findAuthor(author)
       .then((result) => result.json())
-      .then((response) => setArticles(response));
+      .then((response) => setArticles(response))
   };
 
   const getAllAuthors = () => {
-    console.log("hallo!")
     getAuthors()
       .then((response) => response.json())
       .then((result) => result.filter((values) => values.author != ""))
@@ -150,7 +149,6 @@ export default function SearchArticle(props) {
                       onChange={(e) => setAuthor(e.target.value)}
                       value={author}
                     />
-
                   </div>
                 </div>
                 <button
@@ -167,7 +165,8 @@ export default function SearchArticle(props) {
       })()}
        <div class="row">
         {articles.map((data) => {
-          return (<div key={data._id}>
+          return  (
+          <div key={data._id}>
             <div class="card blue-grey darken-1 dashboard-article">
               <Link to={`/article/${data._id}`}>
                 <div class="card-image">
