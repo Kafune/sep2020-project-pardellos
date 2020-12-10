@@ -214,16 +214,14 @@ describe("Laterlezer tests", () => {
     await thePage.waitFor(2500);
   })
 
+  test('User logs in the webpage', async () => {
+    let email = 'joebiden@usa.com'
+    let password = 'ditiseenwachtwoord'
 
-  // xtest('User navigates to Login',async () => {
-  //     await thePage.$eval('a[href="/login"]', el => el.click())
+    await thePage.waitFor('a[textContent="Log in"]')
+    await thePage.type('input[id="email"]', email);
+    await thePage.type('input[id="password"]', password);
 
-  // })
-  // xtest('User logs in the webpage', async () => {
-  //   let email = 'test@test.net'
-  //   let password = 'test123'
-
-  //   await thePage.waitFor('a[textContent="Log in"]')
-  //   await thePage.type('input#email', email)
-  // })
+    await thePage.waitFor(4000)
+  })
 });

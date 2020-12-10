@@ -48,7 +48,7 @@ export default function Login(props) {
                         <h5>Email</h5>
                         <input
                             type="email"
-                            id="Email"
+                            id="email"
                             placeholder="Please enter your email here.."
                             onChange={(e) => setEmail(e.target.value)} value={email}
                         ></input>
