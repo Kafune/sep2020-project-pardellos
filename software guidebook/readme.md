@@ -285,8 +285,6 @@ Door het lezen van dit hoofdstuk krijg je een beter beeld van hoe de structuur v
 ## Deployment
 (beantwoord de vragen in het software guidebook)
 ## Werking en ondersteuning
-//TODO: Installatie van de applicatie. back-end, front-end en de extensie beschrijven.
-
 Om alle onderdelen van Laterlezer te installeren, heeft Laterlezer de volgende vereisten:
 - Git, om het project binnen te halen
 - Node, om alle onderdelen van de applicatie te installeren
@@ -371,19 +369,14 @@ npm run build
 ```
 
 Na het uitvoeren van dit commando komt de map build in het project.
-Open nu de chrome browser
-[]()
-Open ontwikkelaarsmodus
-[]()
+Open nu de chrome browser en navigeer naar de extensies menu
+![chrome-extension-install-1.png](chrome-extension-install-1.png)
+Zet ontwikkelaarsmodus aan
+![chrome-extension-install-2.png](chrome-extension-install-2.png)
 Klik op uitgepakte extensie laden
-[]()
+![chrome-extension-install-3.png](chrome-extension-install-3.png)
 
-Navigeer naar
-```
-sep2020-project-pardellos \ LaterLezen \ laterlezer-extension
-```
+Navigeer naar de map waarin de extensie is geinstalleerd, Selecteer de build map en klik op open
+![chrome-extension-install-4.png](chrome-extension-install-4.png)
 
-Selecteer de build map en klik op open
-[]()
-De extensie is nu toegevoegd aan de browser.
-[]()
+De extensie is nu toegevoegd aan de browser. De extensie kan nu artikelen van externe websites toevoegen.
