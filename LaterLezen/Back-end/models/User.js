@@ -21,13 +21,20 @@ const UserSchema = new mongoose.Schema({
     default: Date.now,
   },
   articles: [{ type: mongoose.Schema.Types.ObjectId, ref: "Article" }],
-  tags: {
-    type: [String]
-  },
+  tags: [
+    {
+      tagName: {
+        type: String,
+      },
+      subTags: {
+        type: [],
+      },
+    },
+  ],
   preferences: {
-    default: 'default',
+    default: "default",
     type: String,
-  }
+  },
 });
 
 UserSchema.pre("save", function (next) {
@@ -38,7 +45,6 @@ UserSchema.pre("save", function (next) {
     this.password = passwordHash;
     next();
   });
-
 });
 
 UserSchema.methods.comparePassword = function (password, cb) {
