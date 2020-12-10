@@ -172,7 +172,7 @@ export default class App extends React.Component {
               </a>
             </li>
           </Link>
-          {/* <Link to="/tags">
+          <Link to="/tags">
             <li>
               <a>
                 <i class="material-icons" id="tags">
@@ -181,7 +181,7 @@ export default class App extends React.Component {
                 Manage tags
               </a>
             </li>
-          </Link> */}
+          </Link>
           <div class="inner-content">
             <li>
               <a>
