@@ -94,6 +94,15 @@ Door het lezen van dit hoofdstuk krijg je een beter beeld van hoe de structuur v
     ### API component view
     ![API_component.png](Api_component.png)
 
+    ### Extension view
+    ![Component_extension.png](Component_extension.png)
+
+    ### Database view
+    ![database.png](database.png)
+
+    ### LaterLezer web app component
+    ![c4-modellen-Web_App-component-v2.png](c4-modellen-Web_App-component-v2.png)
+
     ### LaterLezer app view
     ![Component_Laterlezer_app.png](Component_Laterlezer_app.png)
 
@@ -115,15 +124,6 @@ Door het lezen van dit hoofdstuk krijg je een beter beeld van hoe de structuur v
     Als een gebruiker ervoor kiest om een artikel te zoeken op basis van tags, dan haalt de search article component alle bestaande tags op. De gebruiker kan een tag aanvinken door middel van een checkbox. Door op de "Search" button te klikken wordt er een functie aangeroepen in Servercommunication. De functie in Servercommunication doet vervolgens een fetch request naar artikelen die matchen met de aangevinkte tag(s). Na het verzoek van de search article component krijgt dit component de relevante artikelen terug van de API. De resultaten worden overzichtelijk getoond in een lijstweergave met kaarten.
 
     Als de gebruiker ervoor kiest om een artikel op basis van auteursnaam te zoeken, dan haalt de search article component alle namen van bestaande auteurs op. Alle artikelen die geen auteur hebben, worden weggefiltert voor de autocomplete zoeklijst. Er wordt gebruik gemaakt van een autocomplete module van Materialize, die ervoor zorgt dat de naam van een auteur automatisch aanvult als er een deel van de auteursnaam is ingevuld. De API ondersteunt ook de mogelijkheid om op een deel van de auteursnaam kan zoeken. Op deze manier wordt er ook gezocht op een gedeelte van de naam bij een auteur. Dan typt de gebruiker de naam van de auteur in. Na het invullen van de auteursnaam, zoekt de gebruiker op de artikelen die door die specifieke auteur is uitgebracht. De search article component roept weer de functie in Servercommunication aan, die vervolgens een fetch request naar de API doet om de artikelen die uitgebracht zijn door de ingevulde auteur op te halen. Na het verzoek van de search article component, krijgt dit component de relevante artikelen terug van de API. De resultaten worden overzichtelijk getoond in een lijstweergave met kaarten.
-
-    
-
-    ### Extension view
-    ![Component_extension.png](Component_extension.png)\
-
-    ### Database view
-
-    ![database.png](database.png)
 
 
 
