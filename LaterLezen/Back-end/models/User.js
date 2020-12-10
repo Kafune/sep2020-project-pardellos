@@ -23,8 +23,12 @@ const UserSchema = new mongoose.Schema({
   articles: [{ type: mongoose.Schema.Types.ObjectId, ref: "Article" }],
   tags: [
     {
-      mainTag: String,
-      subTags: [],
+      tagName: {
+        type: String,
+      },
+      subTags: {
+        type: []
+      },
     },
   ],
 });

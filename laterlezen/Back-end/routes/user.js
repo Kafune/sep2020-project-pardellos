@@ -4,6 +4,7 @@ const passport = require("passport");
 const passportConfig = require("../config/passport");
 const JWT = require("jsonwebtoken");
 const Mercury = require("@postlight/mercury-parser");
+var ObjectID = require('mongodb').ObjectID;
 const {
   PerformanceObserver,
   performance
@@ -16,12 +17,12 @@ const Article = require("../models/Article");
 
 const signToken = (userID) => {
   return JWT.sign({
-      iss: "Laterlezen",
-      sub: userID,
-    },
+    iss: "Laterlezen",
+    sub: userID,
+  },
     "LaterLezen", {
-      expiresIn: "1h",
-    }
+    expiresIn: "1h",
+  }
   );
 };
 
@@ -38,8 +39,8 @@ router.post("/register", (req, res) => {
     lastname
   } = req.body;
   User.findOne({
-      email,
-    },
+    email,
+  },
     (err, user) => {
       if (err)
         res.status(500).json({
@@ -172,24 +173,82 @@ router.post(
               },
             });
           else {
-            let amountOfTags = processedTags.length;
-            let usedTags = {};
-            for (let i = 0; i < amountOfTags; i++) {
-              let mainTag = processedTags.shift();
-              let tagObject = {
-                mainTag: mainTag,
-                subTags: processedTags[0],
-              };
-              console.log(tagObject);
-            }
-            console.log(usedTags);
             User.exists({
-                _id: req.user._id,
-              },
+              _id: req.user._id,
+            },
               (err, result) => {
-                if (result) {
-                  req.user.tags.push(usedTags);
+
+                let tagList = req.user.tags
+              
+                class Tag {
+                  constructor(value) {
+                    (this.tagName = value), (this.subTags = []), (this._id = new ObjectID);
+                  }
                 }
+              
+                switch (processedTags.length) {
+                  case 1:
+                    if (tagList.some((element) => element.tagName === processedTags[0])) {} else {
+                      let tag = new Tag(processedTags[0]);
+                      tagList.push(tag);
+                    }
+                    break;
+              
+                  case 2:
+                    if (tagList.some((element) => element.tagName === processedTags[0])) {
+                      index = tagList.findIndex((x) => x.tagName === processedTags[0]);
+                      if (
+                        tagList[index].subTags.some((element) => element.tagName === processedTags[1])
+                      ) {} else {
+                        let tag = new Tag(processedTags[1]);
+                        tagList[index].subTags.push(tag);
+                      }
+                    } else {
+                      let tag = new Tag(processedTags[0]);
+                      tagList.push(tag);
+                      tag = new Tag(processedTags[1]);
+                      tagList[1].subTags.push(tag);
+                    }
+                    break;
+              
+                  case 3:
+                    if (tagList.some((element) => element.tagName === processedTags[0])) {
+                      index = tagList.findIndex((x) => x.tagName === processedTags[0]);
+                      if (
+                        tagList[index].subTags.some((element) => element.tagName === processedTags[1])
+                      ) {
+                        index2 = tagList[index].subTags.findIndex(
+                          (x) => x.tagName === processedTags[1]
+                        );
+                        if (
+                          tagList[index].subTags[index2].subTags.some(
+                            (element) => element.tagName === processedTags[2]
+                          )
+                        ) {} else {
+                          let tag = new Tag(processedTags[2]);
+                          tagList[index].subTags[index2].subTags.push(tag);
+                        }
+                      } else {
+                        let tag = new Tag(processedTags[1]);
+                        tagList[index].subTags.push(tag);
+                        tag = new Tag(processedTags[2]);
+                        tagList[index].subTags[
+                          tagList[index].subTags.length - 1
+                        ].subTags.push(tag);
+                      }
+                    } else {
+                      let tag = new Tag(processedTags[0]);
+                      tagList.push(tag);
+                      tag = new Tag(processedTags[1]);
+                      tagList[tagList.length - 1].subTags.push(tag);
+                      tag = new Tag(processedTags[2]);
+                      tagList[tagList.length - 1].subTags[0].subTags.push(tag);
+                    }
+                    break;
+              
+                }
+                var t1 = performance.now();
+                console.log("Tag loop took " + (t1 - t0) + " milliseconds.");
                 req.user.articles.push(newArticle);
                 req.user.save((err) => {
                   if (err)
@@ -219,8 +278,8 @@ router.get(
   }),
   (req, res) => {
     User.findById({
-        _id: req.user._id,
-      })
+      _id: req.user._id,
+    })
       .populate("articles")
       .exec((err, document) => {
         if (err)
@@ -242,8 +301,8 @@ router.get(
 
 router.put("/article", (req, res) => {
   Article.findOne({
-      _id: req.body.article_id,
-    },
+    _id: req.body.article_id,
+  },
     (err, article) => {
       if (err)
         res.status(500).json({
@@ -266,8 +325,8 @@ router.put("/article", (req, res) => {
 
 router.delete("/article", (req, res) => {
   Article.deleteOne({
-      _id: req.body.article_id,
-    },
+    _id: req.body.article_id,
+  },
     (err, article) => {
       console.log(err);
       if (err)
@@ -318,8 +377,8 @@ router.put(
   (req, res) => {
     let tags = req.body.tags;
     User.findById({
-        _id: req.user._id,
-      })
+      _id: req.user._id,
+    })
       .populate({
         path: "articles",
         match: {
@@ -410,100 +469,6 @@ router.post("/articleExtension", (req, res) => {
       });
     }
   });
-});
-
-router.put("/testing/tags", (req, res) => {
-  var t0 = performance.now();
-  pathx = ["financieel", "bitcoin"];
-  pathy = ["nieuws", "corona", "vaccin"];
-  pathz = ["nieuws", "financieel", "bitcoin"];
-
-  let tagList = [{
-    tagName: "nieuws",
-    subTags: [{
-      tagName: "corona",
-      subTags: [{
-          tagName: "dodenaantal",
-          subTags: [],
-        },
-        {
-          tagName: "vaccin",
-          subTags: [],
-        },
-      ],
-    }, ],
-  }, ];
-
-  class Tag {
-    constructor(value) {
-      (this.tagName = value), (this.subTags = []);
-    }
-  }
-
-  switch (pathx.length) {
-    case 1:
-      if (tagList.some((element) => element.tagName === pathx[0])) {} else {
-        let tag = new Tag(pathx[0]);
-        tagList.push(tag);
-      }
-      break;
-
-    case 2:
-      if (tagList.some((element) => element.tagName === pathx[0])) {
-        index = tagList.findIndex((x) => x.tagName === pathx[0]);
-        if (
-          tagList[index].subTags.some((element) => element.tagName === pathx[1])
-        ) {} else {
-          let tag = new Tag(pathx[1]);
-          tagList[index].subTags.push(tag);
-        }
-      } else {
-        let tag = new Tag(pathx[0]);
-        tagList.push(tag);
-        tag = new Tag(pathx[1]);
-        tagList[1].subTags.push(tag);
-      }
-      break;
-
-    case 3:
-      if (tagList.some((element) => element.tagName === pathx[0])) {
-        index = tagList.findIndex((x) => x.tagName === pathx[0]);
-        if (
-          tagList[index].subTags.some((element) => element.tagName === pathx[1])
-        ) {
-          index2 = tagList[index].subTags.findIndex(
-            (x) => x.tagName === pathx[1]
-          );
-          if (
-            tagList[index].subTags[index2].subTags.some(
-              (element) => element.tagName === pathx[2]
-            )
-          ) {} else {
-            let tag = new Tag(pathx[2]);
-            tagList[index].subTags[index2].subTags.push(tag);
-          }
-        } else {
-          let tag = new Tag(pathx[1]);
-          tagList[index].subTags.push(tag);
-          tag = new Tag(pathx[2]);
-          tagList[index].subTags[
-            tagList[index].subTags.length - 1
-          ].subTags.push(tag);
-        }
-      } else {
-        let tag = new Tag(pathx[0]);
-        tagList.push(tag);
-        tag = new Tag(pathx[1]);
-        tagList[tagList.length - 1].subTags.push(tag);
-        tag = new Tag(pathx[2]);
-        tagList[tagList.length - 1].subTags[0].subTags.push(tag);
-      }
-      break;
-
-  }
-  res.json(tagList);
-  var t1 = performance.now();
-  console.log("Tag loop took " + (t1 - t0) + " milliseconds.");
 });
 
 module.exports = router;
