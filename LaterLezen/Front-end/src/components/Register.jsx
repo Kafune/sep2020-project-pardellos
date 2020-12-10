@@ -4,6 +4,9 @@ import { registerUser, loginUser } from '../serverCommunication'
 
 import banner from './../img/wallpaper.jpg';
 
+import M from "materialize-css";
+
+
 export default function Register(props) {
     const [email, setEmail] = useInput({ type: "email", name: "email" });
     const [firstName, setfirstName] = useInput({ type: "text", name: "firstname" });

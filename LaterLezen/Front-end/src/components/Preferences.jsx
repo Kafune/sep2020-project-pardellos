@@ -24,7 +24,7 @@ export default function Preferences(props) {
 
     return <div className="row">
         <div className="center-align preference-button">
-            <button className={'dropdown-trigger btn blue'} data-target={'dropdown1'}><i className="small material-icons">settings</i></button>
+            <button className={'dropdown-trigger btn blue'} data-target={'dropdown1'} id="preferenceButton"><i className="small material-icons">settings</i></button>
         </div>
         <div className={"dropdown-content blue-border no-scroll theme-"+(props.backgroundColor)} id="dropdown1">
             <div className="row">
@@ -34,19 +34,19 @@ export default function Preferences(props) {
             </div>
             <div className="row">
                 <div className="col s12">
-                <div className={'btn-large waves round-icon default' + ('default'=== activeTheme ? " active_theme" : "")} onClick={() => changeTheme("default")}></div>
-                    <div className={'btn-large waves round-icon typewriter' + ('typewriter'=== activeTheme ? " active_theme" : "")} onClick={() => changeTheme("typewriter")}></div>
-                    <div className={'btn-large waves round-icon dark' + ('dark'=== activeTheme ? " active_theme" : "")}onClick={() => changeTheme("dark")}></div>
-                    <div className={'btn-large waves round-icon bluegrey' + ('bluegrey'=== activeTheme ? " active_theme" : "")}onClick={() => changeTheme("bluegrey")}></div>
-                    <div className={'btn-large waves round-icon darkblue' + ('darkblue'=== activeTheme ? " active_theme" : "")}onClick={() => changeTheme("darkblue")}></div>
+                <div className={'btn-large waves round-icon default' + ('default'=== activeTheme ? " active_theme" : "")} id="default" onClick={() => changeTheme("default")}></div>
+                    <div className={'btn-large waves round-icon typewriter' + ('typewriter'=== activeTheme ? " active_theme" : "")} id="typewriter" onClick={() => changeTheme("typewriter")}></div>
+                    <div className={'btn-large waves round-icon dark' + ('dark'=== activeTheme ? " active_theme" : "")} id="dark" onClick={() =>  changeTheme("dark")}></div>
+                    <div className={'btn-large waves round-icon bluegrey' + ('bluegrey'=== activeTheme ? " active_theme" : "")} id="bluegrey" onClick={() => changeTheme("bluegrey")}></div>
+                    <div className={'btn-large waves round-icon darkblue' + ('darkblue'=== activeTheme ? " active_theme" : "")} id="darkblue" onClick={() => changeTheme("darkblue")}></div>
 
                 </div>
             </div>
             <div className="row">
             <div className="col s12">
             <div className="center-align">
-                    <div className="btn waves blue accent-2" onClick={handleSaveButton}>Save</div>
-                    <div className="btn waves blue accent-2" onClick={handleCancelButton}>Cancel</div>
+                    <div className="btn waves blue accent-2" onClick={handleSaveButton} id="savePreferences">Save</div>
+                    <div className="btn waves blue accent-2" onClick={handleCancelButton} id="cancelPreferences" >Cancel</div>
                 </div>
             </div>
             </div>
