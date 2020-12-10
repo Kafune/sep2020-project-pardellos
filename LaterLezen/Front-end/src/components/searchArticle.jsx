@@ -199,8 +199,15 @@ export default function SearchArticle(props) {
                   <p>{data.excerpt}</p>
                 </div>
                 <div class="card-action">
-                  <Link to={`/article/${data._id}`}>
-                    <a>See article</a>
+                <Link to={`/article/${data._id}`}>
+                    <a id="seeArticle" class="btn green">
+                      Read article
+                    </a>
+                  </Link>
+                  <Link to={`/edit/${data._id}`}>
+                    <a id="editArticle" class="btn blue">
+                      Edit article
+                    </a>
                   </Link>
                   <p>
                     Tags:{" "}

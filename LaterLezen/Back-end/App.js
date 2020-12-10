@@ -7,13 +7,13 @@ const morgan = require("morgan");
 const bodyParser = require("body-parser");
 const connectDB = require("./config/db");
 const cookieParser = require("cookie-parser");
-const cors = require('cors');
+const cors = require("cors");
 app.use(cookieParser());
 app.use(express.json());
 
 // Initialize CORS
-app.use(cors({ origin: true, credentials: true}));
-app.options("*", cors({origin: true, credentials: true}))
+app.use(cors({ origin: true, credentials: true }));
+app.options("*", cors({ origin: true, credentials: true }));
 
 // Load config
 dotenv.config({ path: "./config/config.env" });
@@ -29,7 +29,7 @@ if (process.env.NODE_ENV === "development") {
 app.use(bodyParser.json());
 
 // Routes
-app.use("/", require("./routes/index"));
+app.use("/testing", require("./routes/testing"));
 app.use("/user", require("./routes/user"));
 app.use("/articles", require("./routes/articles"));
 

@@ -194,7 +194,7 @@ export async function confirmArticleChanges(
     article_id: article,
     title: title,
     source: source,
-    description: description,
+    excerpt: description,
     author: author,
     tags: tags,
   };

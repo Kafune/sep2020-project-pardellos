@@ -4,7 +4,7 @@ const passport = require("passport");
 const passportConfig = require("../config/passport");
 const JWT = require("jsonwebtoken");
 const Mercury = require("@postlight/mercury-parser");
-var ObjectID = require("mongodb").ObjectID;
+const ObjectID = require("mongodb").ObjectID;
 const { PerformanceObserver, performance } = require("perf_hooks");
 const { extract } = require("article-parser");
 const User = require("../models/User");
@@ -23,10 +23,6 @@ const signToken = (userID) => {
   );
 };
 
-router.get("/test/warning/no/delete", async (req, res) => {
-  await User.deleteMany({});
-  res.sendStatus(200);
-});
 
 router.post("/register", (req, res) => {
   const { email, password, firstname, lastname } = req.body;

@@ -1,3 +1,5 @@
+const fetch = require("node-fetch");
+
 const puppeteer = require("puppeteer");
 jest.setTimeout(250000);
 
@@ -5,10 +7,14 @@ describe("Laterlezer tests", () => {
   it("should register a user", () => {});
   let theBrowser, thePage;
 
+
   beforeAll(async () => {
+    
+    await fetch("http://localhost:4000/testing/set");
+
     theBrowser = await puppeteer.launch({
       headless: false,
-      slowMo: 25,
+      slowMo: 5,
       defaultViewport: null,
       args: [`--window-size=1920,1080`],
     });
@@ -16,12 +22,11 @@ describe("Laterlezer tests", () => {
     await thePage.goto("http://localhost:3000/");
   });
 
-  //   afterEach(async () => {
-
-  // })
 
   afterAll(async () => {
+    await fetch("http://localhost:4000/testing/reset");
     await theBrowser.close();
+
   });
 
   test("User tries to register a new account, where the passwords do not match", async () => {
@@ -214,16 +219,14 @@ describe("Laterlezer tests", () => {
     await thePage.waitFor(2500);
   })
 
+  test('User logs in the webpage', async () => {
+    let email = 'joebiden@usa.com'
+    let password = 'ditiseenwachtwoord'
 
-  // xtest('User navigates to Login',async () => {
-  //     await thePage.$eval('a[href="/login"]', el => el.click())
+    await thePage.waitFor('a[textContent="Log in"]')
+    await thePage.type('input[id="email"]', email);
+    await thePage.type('input[id="password"]', password);
 
-  // })
-  // xtest('User logs in the webpage', async () => {
-  //   let email = 'test@test.net'
-  //   let password = 'test123'
-
-  //   await thePage.waitFor('a[textContent="Log in"]')
-  //   await thePage.type('input#email', email)
-  // })
+    await thePage.waitFor(4000)
+  }) 
 });

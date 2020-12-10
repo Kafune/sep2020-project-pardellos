@@ -90,7 +90,7 @@ export default function DisplayArticle(props) {
         </div>
         <div className="text-flow">
           <h5>
-            <img className="responsive-img" src={article.image} />
+            <img className="responsive-img" src={article.lead_image_url} />
             {Parser(" " + article.content)}
           </h5>
         </div>

@@ -30,7 +30,7 @@ export default function EditArticle(props) {
         } else {
           setArticle(response);
           setTitle(response.title);
-          setDescription(response.description);
+          setDescription(response.excerpt);
           setSource(response.source);
           setTags(response.tags);
           setAuthor(response.author);
@@ -61,7 +61,7 @@ export default function EditArticle(props) {
 
   return (
     <div id="edit-article">
-      <img src={article.image}/>
+      <img src={article.lead_image_url}/>
       <label>Title</label>
       <input
         type="text"

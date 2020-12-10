@@ -49,13 +49,14 @@ export default function Dashboard(props) {
                 <div class="card-action">
                   <span class="author">Author: {data.author}</span>
                   <span class="source">Source: {data.source}</span>
-                  <br />
-                  <p>
+                  <br/>
+                  <span>
                     Tags:{" "}
                     {data.tags.map((data) => {
                       return data + " ";
                     })}
-                  </p>
+                  </span>
+                  <p/>
                   <Link to={`/article/${data._id}`}>
                     <a id="seeArticle" class="btn green">
                       Read article
