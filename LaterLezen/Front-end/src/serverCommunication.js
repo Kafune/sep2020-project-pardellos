@@ -194,7 +194,7 @@ export async function confirmArticleChanges(
     article_id: article,
     title: title,
     source: source,
-    excerpt: description,
+    description: description,
     author: author,
     tags: tags,
   };
@@ -208,4 +208,28 @@ export async function confirmArticleChanges(
     body: JSON.stringify(body),
   };
   return fetch(serverFetchBase + `/user/article`, fetchOptions);
+}
+
+export async function findAuthor(query) {
+  const fetchOptions = {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    credentials: 'include',
+    mode: 'cors'
+  }
+  return fetch(serverFetchBase + `/articles/find/`+ query, fetchOptions)
+}
+
+export async function getAuthors() {
+  const fetchOptions = {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    credentials: 'include',
+    mode: 'cors'
+  }
+  return fetch(serverFetchBase + `/articles/authors`, fetchOptions)
 }

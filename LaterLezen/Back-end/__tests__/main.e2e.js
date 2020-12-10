@@ -14,7 +14,7 @@ describe("Laterlezer tests", () => {
 
     theBrowser = await puppeteer.launch({
       headless: false,
-      slowMo: 5,
+      slowMo: 1,
       defaultViewport: null,
       args: [`--window-size=1920,1080`],
     });
@@ -219,9 +219,31 @@ describe("Laterlezer tests", () => {
     await thePage.waitFor(2500);
   })
 
-  test('User logs in the webpage', async () => {
+  test('User logs in the webpage with wrong password', async () => {
+    let email = 'joebiden@usa.com'
+    let password = 'ditiseenwachtwoord1'
+
+    await thePage.type('input[id="email"]', email);
+    await thePage.type('input[id="password"]', password)
+    await thePage.waitFor(1500)
+    await thePage.click('a[id="login"]')
+
+    await thePage.waitFor(4000)
+  }) 
+
+  test('User logs in the webpage with right password', async () => {
     let email = 'joebiden@usa.com'
     let password = 'ditiseenwachtwoord'
+    await thePage.$eval(
+      "input[name=email]",
+      (input, value) => (input.value = value),
+      ""
+    );
+    await thePage.$eval(
+      "input[name=password]",
+      (input, value) => (input.value = value),
+      ""
+    );
 
     await thePage.type('input[id="email"]', email);
     await thePage.type('input[id="password"]', password)

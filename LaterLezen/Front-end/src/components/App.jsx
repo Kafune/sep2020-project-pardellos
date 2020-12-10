@@ -8,7 +8,7 @@ import Login from "./Login";
 import Register from "./Register";
 import Logout from "./Logout";
 import DisplayArticle from "./displayArticle";
-import EditArticle from "./EditArticle";
+import EditArticle from "./editArticle";
 import "../../src/App.css";
 import M from "materialize-css";
 import background from "../img/pfp_background.jpg";
@@ -41,6 +41,7 @@ export default class App extends React.Component {
           this.handleFirstnameState(response.user.firstname);
           this.handleLastnameState(response.user.lastname);
           this.handleTagsState(response.user.tags);
+          console.log(response.user.tags);
         }
       })
       .catch((e) => {
@@ -172,7 +173,7 @@ export default class App extends React.Component {
               </a>
             </li>
           </Link>
-          <Link to="/tags">
+          {/* <Link to="/tags">
             <li>
               <a>
                 <i class="material-icons" id="tags">
@@ -181,7 +182,7 @@ export default class App extends React.Component {
                 Manage tags
               </a>
             </li>
-          </Link>
+          </Link> */}
           <div class="inner-content">
             <li>
               <a>

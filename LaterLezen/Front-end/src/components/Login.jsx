@@ -29,17 +29,6 @@ export default function Login(props) {
             })
     }
 
-    // function handleTags(tagsArray) {
-    //     let dict = [];
-    //     tagsArray.forEach((element) => {
-    //         dict.push(
-    //             `${element}: null`
-    //         );
-    //     });
-    //     console.log(dict)
-    //     props.handleTagsState(dict)
-    // }
-
     return (
 
         <div className="container">
@@ -65,7 +54,7 @@ export default function Login(props) {
                     </div>
                     <div class="row">
                         <div className="col">
-                            <a className="waves-effect waves-light btn-small blue" onClick={() => { handleLoginUser(email, password) }} id="login">
+                            <a className="waves-effect waves-light btn-small blue" id = "login" onClick={() => { handleLoginUser(email, password) }}>
                                 Log in
                         </a>
                         </div>
