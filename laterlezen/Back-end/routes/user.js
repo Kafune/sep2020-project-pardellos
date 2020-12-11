@@ -23,7 +23,6 @@ const signToken = (userID) => {
   );
 };
 
-
 router.post("/register", (req, res) => {
   const { email, password, firstname, lastname } = req.body;
 
@@ -153,8 +152,7 @@ router.post(
       .then((article) => {
         description = article.description;
       })
-      .catch((err) => {
-      });
+      .catch((err) => {});
     var t1 = performance.now();
     console.log("Call to articleparser took " + (t1 - t0) + " milliseconds.");
     var t2 = performance.now();
@@ -203,7 +201,6 @@ router.post(
     console.log("Call to mercury took " + (t3 - t2) + " milliseconds.");
   }
 );
-
 
 router.get(
   "/articles",
@@ -254,11 +251,12 @@ router.put(
         else {
           if (!req.body.title == "") article.title = req.body.title;
           if (!req.body.author == "") article.author = req.body.author;
-          if (!req.body.description == "") article.excerpt = req.body.description;
+          if (!req.body.description == "")
+            article.excerpt = req.body.description;
           if (!req.body.source == "") article.domain = req.body.source;
           if (!req.body.tags[0] == "") {
             let processedTags = processTags(req.body.tags);
-            article.tags = processedTags
+            article.tags = processedTags;
             req.user.tags = handleUserNestedTags(processedTags, req.user.tags);
             req.user.save();
           }
@@ -410,32 +408,50 @@ router.put("/testing/art/:title", (req, res) => {
 });
 
 router.post("/articleExtension", (req, res) => {
-  const findUser = User.findOne({
+  console.log(req.body.email);
+  let description;
+  User.findOne({
     email: req.body.email,
-  }).then((response) => {
-    if (response) {
+  }).then((user) => {
+    if (user) {
       const { extract } = require("article-parser");
       let url = String(req.body.url);
-      const article = new Article(req.body);
-      extract(url).then((article) => {
-        let newArticle = new Article(article);
-        newArticle.tags = req.body.tags;
-        newArticle.title = req.body.title;
-        newArticle.save((err) => {
-          if (err) {
-            res.status(500).json({
-              message: {
-                msgBody: "Error 2 has occured",
-                msgError: true,
-              },
-            });
-          } else {
-            response.articles.push(newArticle);
-            response.save();
-            res.send(newArticle);
-          }
+      extract(url)
+        .then((article) => {
+          description = article.description;
+        })
+        .catch((err) => {
+          console.log(err);
         });
-      });
+      Mercury.parse(url)
+        .then((response) => {
+          let newArticle = new Article(response);
+          if (!req.body.title == "") newArticle.title = req.body.title;
+          if (description != null) newArticle.excerpt = description;
+          newArticle.save((err) => {
+            if (err)
+              res.status(500).json({
+                message: {
+                  msgBody: "Error 3 has occured",
+                  msgError: true,
+                },
+              });
+            else {
+              user.articles.push(newArticle);
+              user.save((err) => {
+                if (err)
+                  res.status(500).json({
+                    message: {
+                      msgBody: "Error 4 has occured",
+                      msgError: true,
+                    },
+                  });
+                else res.send(newArticle);
+              });
+            }
+          });
+        })
+        .catch((err) => console.log("Error: ", err));
     } else {
       res.status(500).json({
         message: {
@@ -542,7 +558,7 @@ function handleUserNestedTags(processedTags, tagList) {
         tag = new Tag(processedTags[2]);
         tagList[tagList.length - 1].subTags[0].subTags.push(tag);
       }
-      
+
       break;
 
     case 3:
