@@ -328,12 +328,58 @@ Elk gebruiker kan met elk apparaat verbinding met de Laterlezer API maken zolang
 ![infrastructure-diagram.png](infrastructure-diagram.png)
 
 ## Deployment
-De server waar Laterlezer op gaat draaien, heeft minimaal de volgende eisen om alle requests van de webapplicatie en de extensie af te handelen:
-- bCrypt v5.0.0
-- Express v4.17.1
-- Mongoose v5.10.13
-- Passport v0.4.1
-- Jest v26.6.3
+Om LaterLezen te kunnen draain in een testomgeving zijn er een aantal dingen nodig. Zo moet er een database draaien op Atlas Mongo. Hier kan je een gratis test database online laten draaien. Verder moet de frontend op port 3000 gedraaid worden en de backend op port 4000. De extensie moet gebuild worden en vervolgens in de development extensies van chrome geladen worden.
+
+Voor de backend zijn de volgende dependencies nodig voor het succesvol draaien en testen van de applicatie:
+
+- @postlight/mercury-parser: ^2.2.0
+- article-parser: ^4.2.5
+- bcrypt: ^5.0.0
+- connect-mongo: ^3.2.0
+- cookie-parser: ^1.4.5
+- cors: ^2.8.5
+- dotenv: ^8.2.0
+- express: ^4.17.1
+- express-session: ^1.17.1
+- jsdom: ^16.4.0
+- jsonwebtoken: ^8.5.1
+- moment: ^2.29.1
+- mongoose: ^5.10.13
+- morgan: ^1.10.0
+- node-fetch: ^2.6.1
+- passport: ^0.4.1
+- passport-jwt: ^4.0.0
+- passport-local: ^1.0.0
+- puppeteer: ^5.5.0
+- puppeteer-autoscroll-down: ^0.1.6
+
+Voor de frontend zijn de volgende dependencies nodig voor het succesvol draaien en testen van de applicatie:
+
+- @testing-library/jest-dom: ^5.11.5
+- @testing-library/react: ^11.1.2
+- @testing-library/user-event: ^12.2.2
+- article-parser: ^4.2.5
+- axios: ^0.21.0
+- fs: 0.0.1-security
+- html-react-parser: ^0.14.2
+- materialize-css: ^1.0.0
+- react: ^17.0.1
+- react-dom: ^17.0.1
+- react-materialize: ^3.9.3
+- react-router-dom: ^5.2.0
+- react-scripts: ^4.0.0
+- web-vitals: ^0.2.4
+
+Voor de extensie zijn de volgende dependencies nodig voor het succesvol draaien van de applicatie:
+
+- @testing-library/jest-dom: ^5.11.6-
+- @testing-library/react: ^11.2.1-
+- @testing-library/user-event: ^12.2.2-
+- materialize-css: ^1.0.0-rc.2-
+- react: ^17.0.1-
+- react-dom: ^17.0.1-
+- react-scripts: 4.0.0-
+- web-vitals: ^0.2.4
 
 
 ## Werking en ondersteuning
