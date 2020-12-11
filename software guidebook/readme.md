@@ -238,7 +238,7 @@ Door het lezen van dit hoofdstuk krijg je een beter beeld van hoe de structuur v
     ### API component view
     ![API_component.png](API_component.png)
 
-    De API zorgt voor de communicatie tussen de gebruiker en de database. Zodra de API een request ontvangt van de gebruiker, kijkt de API naar de relevante route die de request afhandelt. Dit hangt af van wat welke route de gebruiker aanroept en de type request die de gebruiker meegeeft. Op dit moment ondersteunt de API alleen GET, POST, PUT en DELETE requests naar de routes die behoren tot users en artikelen.
+    De API zorgt voor de communicatie tussen de gebruiker en de database. Zodra de API een request ontvangt van de gebruiker, kijkt de API naar de relevante route die de request afhandelt. Dit hangt af van wat welke route de gebruiker aanroept en de type request die de gebruiker meegeeft. Op dit moment ondersteunt de API alleen GET, POST, PUT en DELETE requests naar de routes die behoren tot users en artikelen. De API zorgt ervoor dat de gebruiker waarvan de API call afkomstig is eerst geverifieerd wordt. Pas wanneer gebleken is dat dit een geldige gebruiker is, laat de API informatie los. De informatie die de API terug geeft, is alleen informatie van de gebruiker waarvan de call afkomstig is. Er is geen manier vor gebruikers om een API call te doen naar informatie van een andere gebruiker zonder ingelogd te zijn op het account van desbetreffende gebruiker.
 
     Een gebruiker bestaat uit de volgende velden:
     ```
