@@ -256,7 +256,7 @@ router.put(
           if (!req.body.author == "") article.author = req.body.author;
           if (!req.body.description == "") article.excerpt = req.body.description;
           if (!req.body.source == "") article.domain = req.body.source;
-          if (!req.body.tags == "") {
+          if (!req.body.tags[0] == "") {
             let processedTags = processTags(req.body.tags);
             article.tags = processedTags
             req.user.tags = handleUserNestedTags(processedTags, req.user.tags);
@@ -523,7 +523,8 @@ function handleUserNestedTags(processedTags, tagList) {
 
     case 2:
       if (tagList.some((element) => element.tagName === processedTags[0])) {
-        index = tagList.findIndex((x) => x.tagName === processedTags[0]);
+        let index = tagList.findIndex((x) => x.tagName === processedTags[0]);
+        console.log(index);
         if (
           tagList[index].subTags.some(
             (element) => element.tagName === processedTags[1]
@@ -534,12 +535,12 @@ function handleUserNestedTags(processedTags, tagList) {
           tagList[index].subTags.push(tag);
         }
       } else {
-        let tag = new Tag(processedTags[1]);
-        tagList[index].subTags.push(tag);
+        let tag = new Tag(processedTags[0]);
+        tagList.push(tag);
+        tag = new Tag(processedTags[1]);
+        tagList[tagList.length - 1].subTags.push(tag);
         tag = new Tag(processedTags[2]);
-        tagList[index].subTags[
-          tagList[index].subTags.length - 1
-        ].subTags.push(tag);
+        tagList[tagList.length - 1].subTags[0].subTags.push(tag);
       }
       
       break;
