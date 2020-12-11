@@ -1,23 +1,24 @@
 import React, { useState, useEffect } from "react";
 import TagList from "./TagsList";
 import { saveArticle } from "../serverCommunication";
+import M from "materialize-css";
 export default function Article(props) {
   const [email, setEmail] = useState(props.email)
   const [url, setUrl] = useState("");
   const [title, setTitle] = useState("")
   const [filter, setFilter] = useState("");
-  const [selectedTags, setSelectedTags] = useState([]);
-  const [filteredTags, setFilteredTags] = useState([props.tags]);
+  // const [selectedTags, setSelectedTags] = useState([]);
+  // const [filteredTags, setFilteredTags] = useState([props.tags]);
 
 
-  useEffect(() => {
-    setFilteredTags([...props.tags])
-  }, [props.tags]);
+  // useEffect(() => {
+  //   setFilteredTags([...props.tags])
+  // }, [props.tags]);
 
-  useEffect(() => {
-    let filtered = props.tags.filter((name) => name.includes(filter));
-    setFilteredTags(filtered);
-  }, [filter]);
+  // useEffect(() => {
+  //   let filtered = props.tags.filter((name) => name.includes(filter));
+  //   setFilteredTags(filtered);
+  // }, [filter]);
 
   function handleUrlChange(e) {
     e.preventDefault();
@@ -35,18 +36,18 @@ export default function Article(props) {
   }
 
 
-  function handleTagSelect(value) {
-    if (selectedTags.includes(value)) {
-      setSelectedTags((oldArray) =>
-        oldArray.filter((currentValues) => currentValues !== value)
-      );
-    } else {
-      setSelectedTags((oldArray) => [...oldArray, value]);
-    }
-  }
+  // function handleTagSelect(value) {
+  //   if (selectedTags.includes(value)) {
+  //     setSelectedTags((oldArray) =>
+  //       oldArray.filter((currentValues) => currentValues !== value)
+  //     );
+  //   } else {
+  //     setSelectedTags((oldArray) => [...oldArray, value]);
+  //   }
+  // }
 
-  function handleSaveArticle(url, tags, title, email) {
-    saveArticle(url, tags, title, email)
+  function handleSaveArticle(url, title, email) {
+    saveArticle(url, title, email)
       .then((response) => response.json())
       .then((response) => {
         console.log(response);
@@ -70,8 +71,8 @@ export default function Article(props) {
         <div>
         </div>
         <h5>Available tags: </h5>
-        <TagList handleTagSelect={handleTagSelect} tags={filteredTags} selectedTags={selectedTags} />
-        <button className="waves-effect waves-light btn" onClick={() => { handleSaveArticle(url, selectedTags, title, email) }}>Save</button>
+        {/* <TagList handleTagSelect={handleTagSelect} tags={filteredTags} selectedTags={selectedTags} /> */}
+        <button className="waves-effect waves-light btn" onClick={() => { handleSaveArticle(url, title, email) }}>Save</button>
         <button className="waves-effect waves-light btn" onClick={() => { handleLogout() }}>Logout</button>
       </div>
     </div>
