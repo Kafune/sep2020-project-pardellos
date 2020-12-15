@@ -16,6 +16,7 @@ export default function SearchArticle(props) {
   const [subTagState, setSubTagState] = useState(false)
   const [lastTagState, setLastTagState] = useState(false)
   const [title, setTitle] = useState('')
+  const [description, setDescription] = useState('')
   const [source, setSource] = useState('')
   const [author, setAuthor] = useState('')
 
@@ -92,11 +93,12 @@ export default function SearchArticle(props) {
   }
 
   const handleSearch = () => {
-    const sanitizeTitle = escapeRegExp(title)
-    const sanitizeSource = escapeRegExp(source)
-    const sanitizeAuthor = escapeRegExp(author)
+    const sanitizedTitle = escapeRegExp(title)
+    const sanitizedDescription = escapeRegExp(description)
+    const sanitizedSource = escapeRegExp(source)
+    const sanitizedAuthor = escapeRegExp(author)
 
-    findArticle(sanitizeTitle, sanitizeSource, sanitizeAuthor)
+    findArticle(sanitizedTitle, sanitizedDescription, sanitizedSource, sanitizedAuthor)
       .then(response => response.json())
       // .then(result => console.log(result))
       .then(result => setArticles(result))
@@ -263,6 +265,15 @@ export default function SearchArticle(props) {
               value={title}
             />
           </div>
+          <h3>Search by description</h3>
+          <div class="s8 search input-field">
+            <input
+              type="text"
+              placeholder="Search"
+              onChange={(e) => setDescription(e.target.value)}
+              value={description}
+            />
+          </div>
           <h3>Search by source</h3>
           <div class="s8 search input-field">
             <input
@@ -288,7 +299,7 @@ export default function SearchArticle(props) {
         </div>
         <button
           className="waves-effect waves-light btn-small blue accent-2"
-          onClick={() => handleSearch()}
+          onClick={handleSearch}
         >
           Search
           </button>

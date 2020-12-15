@@ -222,9 +222,10 @@ export async function getAuthors() {
   return fetch(serverFetchBase + `/articles/authors`, fetchOptions)
 }
 
-export async function findArticle(title, source, author) {
+export async function findArticle(title, description, source, author) {
   const body = {
     title: title,
+    description: description,
     source: source,
     author: author
   }

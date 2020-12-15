@@ -171,6 +171,7 @@ router.put(
     session: false,
   }), async (req, res) => {
     let title = req.body.title;
+    let description = req.body.description
     let author = req.body.author;
     let source = req.body.source;
 
@@ -178,6 +179,10 @@ router.put(
 
     if(title) {
       searchFields.title = {'$regex': new RegExp(title, "i")}
+    }
+
+    if(description) {
+      searchFields.excerpt = {'$regex': new RegExp(description, "i")}
     }
 
     if(author) {
