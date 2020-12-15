@@ -2,6 +2,8 @@
 import React from "react";
 import Login from "./Login";
 import Article from "./Article";
+import 'materialize-css/dist/css/materialize.min.css';
+import M from "materialize-css";
 
 export default class App extends React.Component {
   constructor(props) {

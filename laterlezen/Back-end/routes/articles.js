@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+const passport = require("passport");
 const Article = require("../models/Article");
 const User = require("../models/User")
 
@@ -138,6 +139,62 @@ router.get("/testing/art/:tag", (req, res) =>{
     res.json(art)
   })
 })
+
+router.get(
+  "/authors/",
+  passport.authenticate("jwt", {
+    session: false,
+  }),async (req, res) => {
+
+   User.findById({
+    _id: req.user._id
+  })
+  .populate('articles', 'author')
+    .exec((err, document) => {
+      if (err)
+        res.status(500).json({
+          message: {
+            msgBody: "Error has occured",
+            msgError: true,
+          },
+        });
+      else {
+        res.send(document.articles)
+      }
+    });
+});
+
+router.get(
+  "/find/:author",
+  passport.authenticate("jwt", {
+    session: false,
+  }),async (req, res) => {
+  let author = req.params.author;
+
+   User.findById({
+    _id: req.user._id
+  })
+      .populate({
+        path: 'articles',
+        match: {author: {
+          '$regex': new RegExp(author, "i")
+      }}
+  
+    })
+    .exec((err, document) => {
+      if (err)
+        res.status(500).json({
+          message: {
+            msgBody: "Error has occured",
+            msgError: true,
+          },
+        });
+      else {
+        res.send(document.articles)
+      }
+    });
+});
+
 
 
 module.exports = router;

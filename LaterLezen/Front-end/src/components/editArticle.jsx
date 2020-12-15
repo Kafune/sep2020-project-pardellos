@@ -19,6 +19,24 @@ export default function EditArticle(props) {
   const history = useHistory();
 
   useEffect(() => {
+    handleTagChips();
+  }, []);
+
+  function handleTagChips() {
+    var elems = document.querySelectorAll(".chips");
+    var instances = M.Chips.init(elems, {
+      onChipAdd: (elems) => {
+        setTags(elems[0].M_Chips.chipsData);
+      },
+      onChipDelete: () => {
+        setTags(elems[0].M_Chips.chipsData);
+      },
+      placeholder: "Enter new Tag...",
+      secondaryPlaceholder: "+ Sub Tag...",
+    });
+  }
+
+  useEffect(() => {
     var url = window.location.href;
     var id = url.substring(url.lastIndexOf("/") + 1);
     searchArticleByID(id)
@@ -35,7 +53,7 @@ export default function EditArticle(props) {
           setTags(response.tags);
           setAuthor(response.author);
 
-          let textArea = document.querySelector('.materialize-textarea');
+          let textArea = document.querySelector(".materialize-textarea");
           M.textareaAutoResize(textArea);
         }
       });
@@ -45,14 +63,38 @@ export default function EditArticle(props) {
   }, []);
 
   const saveChanges = () => {
-    confirmArticleChanges(article._id, title, source, description, author, tags)
-    .then(() => {
-      history.push("/dashboard");
-    })
-    .catch(error => {
-      console.log(error)
-    })
-  }
+    let noErrors = true;
+    if (tags !== undefined) {
+      var tagArray = [];
+      tags.forEach((element) => {
+        if (new RegExp("^[a-zA-Z0-9_.-]{1,15}$").test(element.tag)) {
+          tagArray.push(element.tag);
+        } else {
+          M.toast({ html: "Geen geldige tag: " + element.tag });
+          noErrors = false;
+        }
+      });
+      if (noErrors === true) {
+        confirmArticleChanges(
+          article._id,
+          title,
+          source,
+          description,
+          author,
+          tagArray
+        )
+          .then(() => {
+            M.toast({ html: "Article succesfully saved" });
+            history.push("/dashboard");
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      }
+    } else {
+      M.toast({ html: "Please enter atleast one tag" });
+    }
+  };
 
   function cancelChanges(e) {
     console.log("cancel");
@@ -61,7 +103,7 @@ export default function EditArticle(props) {
 
   return (
     <div id="edit-article">
-      <img src={article.lead_image_url}/>
+      <img src={article.lead_image_url} />
       <label>Title</label>
       <input
         type="text"
@@ -91,16 +133,32 @@ export default function EditArticle(props) {
         value={author}
         onChange={(e) => setAuthor(e.target.value)}
       ></input>
+      <div
+        class="chips chips-placeholder chips-autocomplete tooltipped"
+        id="lollig"
+        data-position="bottom"
+        data-tooltip="[Tag requirements] Allow chars: A-Z / 0-9 / _  / - / Max length: 15 chars"
+      ></div>
 
       {/* {tags.map((elem) => {
         return <span 
         key={elem}
         className="tag">{elem}</span>;
       })} */}
-      <button className="btn" id="confirmChanges" onClick={(e) => saveChanges(e)}>
+      <button
+        className="btn"
+        id="confirmChanges"
+        onClick={(e) => saveChanges(e)}
+      >
         Confirm changes
       </button>
-      <button className="btn" id="cancelChanges" onClick={(e) => cancelChanges(e)}>Cancel changes</button>
+      <button
+        className="btn"
+        id="cancelChanges"
+        onClick={(e) => cancelChanges(e)}
+      >
+        Cancel changes
+      </button>
     </div>
   );
 }

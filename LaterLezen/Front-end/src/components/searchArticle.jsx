@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { searchArticleByTags, getAuthors, findAuthors } from "../serverCommunication";
+import { searchArticleByTags, getAuthors, findAuthor } from "../serverCommunication";
 import { Link } from "react-router-dom";
+import M from "materialize-css";
 
 export default function SearchArticle(props) {
   const [tags, setTags] = useState(props.tags);
@@ -16,6 +17,8 @@ export default function SearchArticle(props) {
   const [lastTagState, setLastTagState] = useState(false)
   const [author, setAuthor] = useState('')
   const [showSearch, setShowSearch] = useState(0)
+
+  
 
   useEffect(() => {
     setTags(props.tags)
@@ -36,7 +39,6 @@ export default function SearchArticle(props) {
     } else {
       setSubTagState(false)
     }
-
     if (tagCounter > 2) {
       setLastTagState(true)
     } else {
@@ -53,7 +55,6 @@ export default function SearchArticle(props) {
         selectedTagsList.push(key);
       }
     });
-    console.log(selectedTagsList)
     searchArticleByTags(selectedTagsList)
       .then((response) => response.json())
       .then((response) => {
@@ -100,6 +101,7 @@ export default function SearchArticle(props) {
             setAuthor(value);
           },
         };
+        M.Autocomplete.init(elems, options);
       })
   };
 
