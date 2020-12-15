@@ -17,11 +17,7 @@ export default function SearchArticle(props) {
   const [lastTagState, setLastTagState] = useState(false)
   const [title, setTitle] = useState('')
   const [source, setSource] = useState('')
-  const [excerpt, setExcerpt] = useState('')
   const [author, setAuthor] = useState('')
-
-  const [showSearch, setShowSearch] = useState(0)
-  const [searchResult, setSearchResult] = useState([]);
 
   useEffect(() => {
     getAllAuthors();
