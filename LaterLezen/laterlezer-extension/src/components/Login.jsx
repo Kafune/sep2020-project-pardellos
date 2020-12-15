@@ -1,5 +1,6 @@
 /*global chrome*/
 import React, { useState, useEffect } from "react";
+import M from "materialize-css";
 import { loginUser } from "../serverCommunication";
 
 export default function Login(props) {

@@ -5,11 +5,24 @@
 "use strict";
 
 const User = require("../models/User");
+const mongoose = require('mongoose');
 const fetch = require("node-fetch");
 
-xdescribe("User auth testing", () => {
+describe("User auth integration testing", () => {
+beforeAll(async () =>{
+  await mongoose.connect(
+    "mongodb+srv://Glenn:LaterLezen@laterlezen.tkmyn.mongodb.net/LaterLezen?retryWrites=true&w=majority",
+    {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+      useFindAndModify: false,
+    }
+  );
+})
+
   afterAll(async () => {
-    await fetch("http://localhost:4000/user/test/warning/no/delete");
+    await User.deleteOne({email: "test1@gmail.com"});
+    mongoose.disconnect()
   });
 
   test("Register without password", async () => {
@@ -38,7 +51,7 @@ xdescribe("User auth testing", () => {
   test("Register user", async () => {
     const body = {
       email: "test1@gmail.com",
-      password: "123",
+      password: "12345678",
       firstname: "glenn",
       lastname: "steven",
     };
@@ -61,7 +74,7 @@ xdescribe("User auth testing", () => {
   test("Register user with duplicate emailaddress", async () => {
     const body = {
       email: "test1@gmail.com",
-      password: "123",
+      password: "12345678",
       firstname: "glenn",
       lastname: "steven",
     };
@@ -100,7 +113,7 @@ xdescribe("User auth testing", () => {
   test("Login with wrong email", async () => {
     const body = {
       email: "test2@gmail.com",
-      password: "123",
+      password: "12345678",
     };
     const fetchOptions = {
       method: "POST",
@@ -121,7 +134,7 @@ xdescribe("User auth testing", () => {
   test("Login with wrong password", async () => {
     const body = {
       email: "test1@gmail.com",
-      password: "12",
+      password: "12345",
     };
     const fetchOptions = {
       method: "POST",
@@ -142,7 +155,7 @@ xdescribe("User auth testing", () => {
   test("Login with right email and password", async () => {
     const body = {
       email: "test1@gmail.com",
-      password: "123",
+      password: "12345678",
     };
     const fetchOptions = {
       method: "POST",

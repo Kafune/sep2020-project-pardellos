@@ -238,8 +238,48 @@ Door het lezen van dit hoofdstuk krijg je een beter beeld van hoe de structuur v
     ### API component view
     ![API_component.png](API_component.png)
 
+    De API zorgt voor de communicatie tussen de gebruiker en de database. Zodra de API een request ontvangt van de gebruiker, kijkt de API naar de relevante route die de request afhandelt. Dit hangt af van wat welke route de gebruiker aanroept en de type request die de gebruiker meegeeft. Op dit moment ondersteunt de API alleen GET, POST, PUT en DELETE requests naar de routes die behoren tot users en artikelen. De API zorgt ervoor dat de gebruiker waarvan de API call afkomstig is eerst geverifieerd wordt. Pas wanneer gebleken is dat dit een geldige gebruiker is, laat de API informatie los. De informatie die de API terug geeft, is alleen informatie van de gebruiker waarvan de call afkomstig is. Er is geen manier vor gebruikers om een API call te doen naar informatie van een andere gebruiker zonder ingelogd te zijn op het account van desbetreffende gebruiker.
+
+    Een gebruiker bestaat uit de volgende velden:
+    ```
+    - email. Het mailadres van de gebruiker om elk gebruiker te identificeren
+    - firstname. De voornaam van de gebruiker
+    - lastname. De achternaam van de gebruiker
+    - password. De wachtwoord die de gebruiker heeft ingesteld, gehashed met bCrypt. Dit is de sleutel van een account van elk gebruiker
+    - createdAt. De datum waarin de gebruiker is aangemaakt
+    - articles. Alle artikelen die door de gebruiker is opgeslagen
+    - tags. Alle hoofd en sub tags die de gebruiker opslaat bij zijn artikelen
+    - preferences. De thema die de gebruiker heeft geselecteerd om de artikel te lezen.
+    ```
+
+    Een artikel bestaat uit de volgende velden:
+    ```
+    - url. De link van een artikel waar de gebruiker het artikel vandaan heeft gehaald
+    - title. De titel van een artikel
+    - excerpt. Een korte beschrijving van een artikel
+    - lead_image_url. De thumbnail die de artikel heeft gebruikt
+    - content. De hele tekst van de artikel
+    - author. De auteur die het artikel heeft geschreven
+    - domain. De website waar de artikel vandaan komt
+    - date_published. De datum wanneer het artikel is gepubliceerd
+    - word_count. Het aantal woorden in de artikel. Telt de hele content mee.
+    - tags. De gebruiker kan tags toewijzen aan een artikel om het artikel makkelijker terug te vinden. Ondersteunt hierarchisch structuur met parent tags en children tags.
+    - read. Status of de gebruiker een artikel heeft gelezen
+    - createdAt. De tijdstip waneer de auteur een artikel heeft opgeslagen
+    ```
+
+    
+
     ### Extension view
     ![Component_extension.png](Component_extension.png)
+
+    De webextensie is het meest simpele component van dit project. Op het moment dat je de laterlezer extensie opent, komt er een login scherm tevoorschijn. Hierop is het de bedoeling dat de gebruiker inlogt, om de functionaliteit om een artikel op te slaan te gebruiken. Het login scherm laat ook foutmeldingen zien van een foute inlogpoging.
+
+    Als de gebruiker succesvol is ingelogd komt het article component naar voren. Hierin kan de gebruiker een url invoeren van een artikel die hij/zij wilt opslaan. Daarnaast is er de mogelijkheid om de titel van het artikel te bepalen. Als deze niet wordt ingevuld, pakken we de titel die de artikel/mercury parser ons geeft. daarnaast is het ook mogelijk om tags toe te voegen aan de artikel. Deze staan klaar om geselecteerd te worden.
+
+    Om gebruik te maken van de database vanuit de applicatie, moet er gecommuniceerd worden met de API. De api is een programmeer interface waar je verzoeken aan kan maken. Bij de extensie zijn dit er echter maar 2. Het eerste verzoek is om de gebruiker in te loggen. Het login en de article component maken gebruik van een serverCommunication helper bestand. Hierin staan alle verzoeken die je kan doen aan de API vanuit de webextensie. Als het verzoek aan de API wordt gedaan om in te loggen, communiceert de API met de database. In de database wordt gecontroleerd of er een gebruiker bestaat met de credentials die megegeven staan. Als dit wel of niet zo is geeft de database dit terug aan de api, en de api terug aan het login component.
+
+    Voor het opslaan van een artikel maken we ook gebruik van het serverCommunication helper bestand. Hierin staat de route die nodig is om een verzoek te doen aan de API om een artikel toe te voegen aan de database. Dit verzoek gaat aan de hand van de velden die meegegeven zijn wel of niet goed. Als deze wel goed gaat dan wordt de artikel in de database opgeslagen. Zo niet, dan krijgt de user een notificatie dat er wat mis ging.
 
     ### Database view
     ![database.png](database.png)
@@ -283,19 +323,63 @@ Door het lezen van dit hoofdstuk krijg je een beter beeld van hoe de structuur v
 ## Infrastructuur-architectuur
 Op dit moment draait het Laterlezer project alleen in de lokale pc van de teamleden. Laterlezer gebruikt op dit moment de [online Mongo database](https://www.mongodb.com/) om alle gegevens op te slaan. Zo werken alle teamleden met hetzelfde gegevens. Dit helpt voornamelijk met debuggen. Na het overdragen van Laterlezer kan de opdrachtgever ervoor kiezen om de Mongo database te draaien op een lokale server.
 
+Elk gebruiker kan met elk apparaat verbinding met de Laterlezer API maken zolang er internet verbinding beschikbaar is die het verzenden en ontvangen van JSON berichten ondersteund. Alle requests van de gebruikers gaan via HTTP requests naar de API. De API handelt alle data die bij de gebruiker hoort zolang de gebruiker erom vraagt.
 
-
-
-
+![infrastructure-diagram.png](infrastructure-diagram.png)
 
 ## Deployment
-De server waar Laterlezer op gaat draaien, heeft minimaal de volgende eisen om alle requests van de webapplicatie en de extensie af te handelen:
-- bCrypt v5.0.0
-- Express v4.17.1
-- Mongoose v5.10.13
-- Passport v0.4.1
-- Jest v26.6.3
+Om LaterLezen te kunnen draain in een testomgeving zijn er een aantal dingen nodig. Zo moet er een database draaien op Atlas Mongo. Hier kan je een gratis test database online laten draaien. Verder moet de frontend op port 3000 gedraaid worden en de backend op port 4000. De extensie moet gebuild worden en vervolgens in de development extensies van chrome geladen worden.
 
+Voor de backend zijn de volgende dependencies nodig voor het succesvol draaien en testen van de applicatie:
+
+- @postlight/mercury-parser: ^2.2.0
+- article-parser: ^4.2.5
+- bcrypt: ^5.0.0
+- connect-mongo: ^3.2.0
+- cookie-parser: ^1.4.5
+- cors: ^2.8.5
+- dotenv: ^8.2.0
+- express: ^4.17.1
+- express-session: ^1.17.1
+- jsdom: ^16.4.0
+- jsonwebtoken: ^8.5.1
+- moment: ^2.29.1
+- mongoose: ^5.10.13
+- morgan: ^1.10.0
+- node-fetch: ^2.6.1
+- passport: ^0.4.1
+- passport-jwt: ^4.0.0
+- passport-local: ^1.0.0
+- puppeteer: ^5.5.0
+- puppeteer-autoscroll-down: ^0.1.6
+
+Voor de frontend zijn de volgende dependencies nodig voor het succesvol draaien en testen van de applicatie:
+
+- @testing-library/jest-dom: ^5.11.5
+- @testing-library/react: ^11.1.2
+- @testing-library/user-event: ^12.2.2
+- article-parser: ^4.2.5
+- axios: ^0.21.0
+- fs: 0.0.1-security
+- html-react-parser: ^0.14.2
+- materialize-css: ^1.0.0
+- react: ^17.0.1
+- react-dom: ^17.0.1
+- react-materialize: ^3.9.3
+- react-router-dom: ^5.2.0
+- react-scripts: ^4.0.0
+- web-vitals: ^0.2.4
+
+Voor de extensie zijn de volgende dependencies nodig voor het succesvol draaien van de applicatie:
+
+- @testing-library/jest-dom: ^5.11.6-
+- @testing-library/react: ^11.2.1-
+- @testing-library/user-event: ^12.2.2-
+- materialize-css: ^1.0.0-rc.2-
+- react: ^17.0.1-
+- react-dom: ^17.0.1-
+- react-scripts: 4.0.0-
+- web-vitals: ^0.2.4
 
 
 ## Werking en ondersteuning

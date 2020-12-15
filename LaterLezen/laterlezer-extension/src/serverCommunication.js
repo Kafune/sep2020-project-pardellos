@@ -42,14 +42,13 @@ export async function logoutUser() {
   }
   return fetch(baseurl + `/user/logout`, fetchOptions)
 }
-export async function saveArticle(url, tags, title, email) {
+export async function saveArticle(url, title, email) {
   const body = {
     url: url,
-    tags: tags,
     title: title,
     email: email
   };
-
+  console.log(email);
   const fetchOptions = {
     method: 'POST',
     headers: {
