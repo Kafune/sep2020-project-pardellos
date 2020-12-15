@@ -211,15 +211,19 @@ export async function confirmArticleChanges(
 }
 
 export async function findAuthor(query) {
+  const body = {
+    author: query,
+  };
   const fetchOptions = {
-    method: 'GET',
+    method: 'PUT',
     headers: {
       'Content-Type': 'application/json'
     },
     credentials: 'include',
-    mode: 'cors'
+    mode: 'cors',
+    body: JSON.stringify(body)
   }
-  return fetch(serverFetchBase + `/articles/find/`+ query, fetchOptions)
+  return fetch(serverFetchBase + `/articles/author/`, fetchOptions)
 }
 
 export async function getAuthors() {

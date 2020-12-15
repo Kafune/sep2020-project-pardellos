@@ -83,10 +83,15 @@ export default function SearchArticle(props) {
   };
 
   const handleSearchByAuthor = () => {
-    findAuthor(author)
+    let newAuthor = escapeRegExp(author)
+    findAuthor(newAuthor)
       .then((result) => result.json())
       .then((response) => setArticles(response))
   };
+
+  function escapeRegExp(string) {
+    return string.replace(/[.*+\-?^${}()|[\]\\]/g, '\\$&');
+  }
 
   const getAllAuthors = () => {
     getAuthors()
@@ -97,6 +102,7 @@ export default function SearchArticle(props) {
         var elems = document.querySelector(".autocomplete");
         let options = {
           data: result,
+          // minLength: 2,
           onAutocomplete: (value) => {
             setAuthor(value);
           },

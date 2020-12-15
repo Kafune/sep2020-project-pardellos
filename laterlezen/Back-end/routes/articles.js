@@ -164,13 +164,12 @@ router.get(
     });
 });
 
-router.get(
-  "/find/:author",
+router.put(
+  "/author/",
   passport.authenticate("jwt", {
     session: false,
   }),async (req, res) => {
-  let author = req.params.author;
-
+  let author = req.body.author;
    User.findById({
     _id: req.user._id
   })
