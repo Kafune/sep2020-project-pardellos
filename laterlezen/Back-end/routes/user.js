@@ -521,86 +521,168 @@ function processTags(rawTags) {
   return processedTags;
 }
 
-function handleUserNestedTags(processedTags, tagList) {
-  class Tag {
-    constructor(value) {
-      (this.tagName = value), (this.subTags = []), (this._id = new ObjectID());
+// function handleUserNestedTags(processedTags, tagList) {
+//   class Tag {
+//     constructor(value) {
+//       (this.tagName = value), (this.subTags = []), (this._id = new ObjectID());
+//     }
+//   }
+
+//   switch (processedTags.length) {
+//     case 1:
+//       if (tagList.some((element) => element.tagName === processedTags[0])) {
+//       } else {
+//         let tag = new Tag(processedTags[0]);
+//         tagList.push(tag);
+//       }
+//       break;
+
+//     case 2:
+//       if (tagList.some((element) => element.tagName === processedTags[0])) {
+//         let index = tagList.findIndex((x) => x.tagName === processedTags[0]);
+//         console.log(index);
+//         if (
+//           tagList[index].subTags.some(
+//             (element) => element.tagName === processedTags[1]
+//           )
+//         ) {
+//         } else {
+//           let tag = new Tag(processedTags[1]);
+//           tagList[index].subTags.push(tag);
+//         }
+//       } else {
+//         let tag = new Tag(processedTags[0]);
+//         tagList.push(tag);
+//         tag = new Tag(processedTags[1]);
+//         tagList[tagList.length - 1].subTags.push(tag);
+//         tag = new Tag(processedTags[2]);
+//         tagList[tagList.length - 1].subTags[0].subTags.push(tag);
+//       }
+
+//       break;
+
+//     case 3:
+//       if (tagList.some((element) => element.tagName === processedTags[0])) {
+//         index = tagList.findIndex((x) => x.tagName === processedTags[0]);
+//         if (
+//           tagList[index].subTags.some(
+//             (element) => element.tagName === processedTags[1]
+//           )
+//         ) {
+//           index2 = tagList[index].subTags.findIndex(
+//             (x) => x.tagName === processedTags[1]
+//           );
+//           if (
+//             tagList[index].subTags[index2].subTags.some(
+//               (element) => element.tagName === processedTags[2]
+//             )
+//           ) {
+//           } else {
+//             let tag = new Tag(processedTags[2]);
+//             tagList[index].subTags[index2].subTags.push(tag);
+//           }
+//         } else {
+//           let tag = new Tag(processedTags[1]);
+//           tagList[index].subTags.push(tag);
+//           tag = new Tag(processedTags[2]);
+//           tagList[index].subTags[
+//             tagList[index].subTags.length - 1
+//           ].subTags.push(tag);
+//         }
+//       } else {
+//         let tag = new Tag(processedTags[0]);
+//         tagList.push(tag);
+//         tag = new Tag(processedTags[1]);
+//         tagList[tagList.length - 1].subTags.push(tag);
+//         tag = new Tag(processedTags[2]);
+//         tagList[tagList.length - 1].subTags[0].subTags.push(tag);
+//       }
+//       break;
+//   }
+
+//   return tagList;
+// }
+
+router.put(
+  "/tags/edit",
+  passport.authenticate("jwt", {
+    session: false,
+  }),
+  async (req, res) => {
+      const tree = req.body.tree;
+      const tagName = req.body.tagName;
+      const childName = req.body.childName;
+      const newName = req.body.newName;
+
+      // const user = await User.
+    }
+);
+
+
+
+function findInTree(treeNode, filterFunc) {
+  if (filterFunc(treeNode)) {
+    return treeNode;
+  } else if (treeNode.subTags && treeNode.subTags.length > 0) {
+    let childResult = undefined;
+    for (child of treeNode.subTags) {
+      childResult = findInTree(child, filterFunc);
+      if (childResult) {
+        break;
+      }
+    }
+    return childResult;
+  } else {
+    return undefined;
+  }
+  throw "THIS SHOULD NEVER HAPPEN";
+}
+
+function addChild(tree, tagName, childName) {
+  const parent = findInTree(tree, (treenode) => treenode.tagName === tagName);
+  if (!parent) {
+    throw "PARENT '" + tagName + "' NOT FOUND";
+  }
+  if (parent.subTags == undefined) {
+    parent.subTags = [];
+  }
+  parent.subTags.push({ tagName: childName, subTags: [] });
+}
+
+function deleteChild(tree, tagName, childName) {
+  const parent = findInTree(tree, (treenode) => treenode.tagName === tagName);
+  const tempArray = [];
+  if (!parent) {
+    throw "PARENT '" + tagName + "' NOT FOUND";
+  }
+  if (parent.subTags.length > 0 && parent.subTags) {
+    console.log(parent.subTags);
+    parent.subTags.forEach((element) => {
+      tempArray.push(element.tagName);
+    });
+
+    const index = tempArray.indexOf(childName);
+    if (index > -1) {
+      parent.subTags.splice(index, 1);
     }
   }
+}
 
-  switch (processedTags.length) {
-    case 1:
-      if (tagList.some((element) => element.tagName === processedTags[0])) {
-      } else {
-        let tag = new Tag(processedTags[0]);
-        tagList.push(tag);
-      }
-      break;
-
-    case 2:
-      if (tagList.some((element) => element.tagName === processedTags[0])) {
-        let index = tagList.findIndex((x) => x.tagName === processedTags[0]);
-        console.log(index);
-        if (
-          tagList[index].subTags.some(
-            (element) => element.tagName === processedTags[1]
-          )
-        ) {
-        } else {
-          let tag = new Tag(processedTags[1]);
-          tagList[index].subTags.push(tag);
-        }
-      } else {
-        let tag = new Tag(processedTags[0]);
-        tagList.push(tag);
-        tag = new Tag(processedTags[1]);
-        tagList[tagList.length - 1].subTags.push(tag);
-        tag = new Tag(processedTags[2]);
-        tagList[tagList.length - 1].subTags[0].subTags.push(tag);
-      }
-
-      break;
-
-    case 3:
-      if (tagList.some((element) => element.tagName === processedTags[0])) {
-        index = tagList.findIndex((x) => x.tagName === processedTags[0]);
-        if (
-          tagList[index].subTags.some(
-            (element) => element.tagName === processedTags[1]
-          )
-        ) {
-          index2 = tagList[index].subTags.findIndex(
-            (x) => x.tagName === processedTags[1]
-          );
-          if (
-            tagList[index].subTags[index2].subTags.some(
-              (element) => element.tagName === processedTags[2]
-            )
-          ) {
-          } else {
-            let tag = new Tag(processedTags[2]);
-            tagList[index].subTags[index2].subTags.push(tag);
-          }
-        } else {
-          let tag = new Tag(processedTags[1]);
-          tagList[index].subTags.push(tag);
-          tag = new Tag(processedTags[2]);
-          tagList[index].subTags[
-            tagList[index].subTags.length - 1
-          ].subTags.push(tag);
-        }
-      } else {
-        let tag = new Tag(processedTags[0]);
-        tagList.push(tag);
-        tag = new Tag(processedTags[1]);
-        tagList[tagList.length - 1].subTags.push(tag);
-        tag = new Tag(processedTags[2]);
-        tagList[tagList.length - 1].subTags[0].subTags.push(tag);
-      }
-      break;
+function editChild(tree, tagName, childName, newName) {
+  const parent = findInTree(tree, (treenode) => treenode.tagName === tagName);
+  const tempArray = [];
+  if (!parent) {
+    throw "PARENT '" + tagName + "' NOT FOUND";
   }
 
-  return tagList;
+  if (parent.subTags && parent.subTags.length > 0) {
+    parent.subTags.forEach((element) => {
+      tempArray.push(element.tagName);
+    });
+    const index = tempArray.indexOf(childName);
+
+    parent.subTags[index].tagName = newName
+  }
 }
 
 module.exports = router;
