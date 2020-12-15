@@ -252,11 +252,19 @@ router.put(
             },
           });
         else {
+<<<<<<< Updated upstream
           if (!req.body.title == "") article.title = req.body.title;
           if (!req.body.author == "") article.author = req.body.author;
           if (!req.body.description == "") article.excerpt = req.body.description;
           if (!req.body.source == "") article.domain = req.body.source;
           if (!req.body.tags == "") {
+=======
+          article.title = req.body.title;
+          article.author = req.body.author;
+          article.excerpt = req.body.description;
+          article.domain = req.body.source;
+          if (!req.body.tags[0] == "") {
+>>>>>>> Stashed changes
             let processedTags = processTags(req.body.tags);
             article.tags = processedTags
             req.user.tags = handleUserNestedTags(processedTags, req.user.tags);

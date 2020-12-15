@@ -6,7 +6,7 @@ import {
   savePreference,
 } from "../serverCommunication";
 import Parser from "html-react-parser/dist/html-react-parser";
-import { useHistory } from "react-router-dom";
+import { useHistory, Link } from "react-router-dom";
 import Preferences from "./Preferences";
 import M from "materialize-css";
 
@@ -80,20 +80,21 @@ export default function DisplayArticle(props) {
       <div className="article">
         <div className="center">
           <h2>{article.title}</h2>
-          <h4>
-            {" "}
-            Published by:{" "}
+          Publisher:{" "}
             <b>
-              {article.author} {article.domain}
+               {article.domain}
             </b>
-          </h4>
           <img className="responsive-img" src={article.lead_image_url} />
         </div>
         <div className="text-flow">
-          <h5>
-            {Parser(" " + article.content)}
-          </h5>
+        Auteur: {article.author}
+          <h5>{Parser(" " + article.content)}</h5>
         </div>
+        <Link to={`/edit/${article._id}`}>
+          <a id="editArticle" class="btn blue">
+            Edit article
+          </a>
+        </Link>
         <a href={article.url} id="originalArticle">
           <button className="waves-effect waves-light btn-small blue accent-2">
             Go to original article
