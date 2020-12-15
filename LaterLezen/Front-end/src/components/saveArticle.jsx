@@ -23,7 +23,7 @@ export default function SaveArticle(props) {
                 setTags(elems[0].M_Chips.chipsData)
             },
             placeholder: 'Enter Tag...',
-            secondaryPlaceholder: '+Tag',
+            secondaryPlaceholder: '+ Sub Tag...',
         });
     }
 
@@ -58,7 +58,7 @@ export default function SaveArticle(props) {
         <h2 class="center">Save Web Article</h2>
         <input type="text" id="url" placeholder="URL..." onChange={(e) => setUrl(e.target.value)} value={url} />
         <input type="text" id="title" placeholder="Title..." onChange={(e) => setTitle(e.target.value)} value={title} />
-        <div class="chips chips-placeholder chips-autocomplete tooltipped" data-position="bottom" data-tooltip="[Tag requirements] Allow chars: A-Z / 0-9 / _  / - / Max length: 15 chars" ></div>        
+        <div class="chips chips-placeholder chips-autocomplete tooltipped" id="lollig" data-position="bottom" data-tooltip="[Tag requirements] Allow chars: A-Z / 0-9 / _  / - / Max length: 15 chars" ></div>        
         <button className="waves-effect waves-light btn-small blue accent-2" id="saveArticle" onClick={() => { handleSaveArticle(url, tags, title) }}>Save</button>
     </div >
 }

@@ -14,6 +14,7 @@ export default function Login(props) {
             .then((response) => response.json())
             .then((response) => {
                 if (response.isAuthenticated === true) {
+                    console.log(response)
                     props.handleLoginState(true)
                     props.handleEmailState(email)
                     props.handleFirstnameState(response.firstname)
@@ -28,17 +29,6 @@ export default function Login(props) {
             })
     }
 
-    // function handleTags(tagsArray) {
-    //     let dict = [];
-    //     tagsArray.forEach((element) => {
-    //         dict.push(
-    //             `${element}: null`
-    //         );
-    //     });
-    //     console.log(dict)
-    //     props.handleTagsState(dict)
-    // }
-
     return (
 
         <div className="container">
@@ -48,7 +38,7 @@ export default function Login(props) {
                         <h5>Email</h5>
                         <input
                             type="email"
-                            id="Email"
+                            id="email"
                             placeholder="Please enter your email here.."
                             onChange={(e) => setEmail(e.target.value)} value={email}
                         ></input>
@@ -64,7 +54,7 @@ export default function Login(props) {
                     </div>
                     <div class="row">
                         <div className="col">
-                            <a className="waves-effect waves-light btn-small blue" onClick={() => { handleLoginUser(email, password) }}>
+                            <a className="waves-effect waves-light btn-small blue" id = "login" onClick={() => { handleLoginUser(email, password) }}>
                                 Log in
                         </a>
                         </div>

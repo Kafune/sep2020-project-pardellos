@@ -3,6 +3,10 @@ const router = express.Router();
 const passport = require("passport");
 const passportConfig = require("../config/passport");
 const JWT = require("jsonwebtoken");
+const Mercury = require("@postlight/mercury-parser");
+const ObjectID = require("mongodb").ObjectID;
+const { PerformanceObserver, performance } = require("perf_hooks");
+const { extract } = require("article-parser");
 const User = require("../models/User");
 const Article = require("../models/Article");
 
@@ -22,7 +26,7 @@ const signToken = (userID) => {
 router.post("/register", (req, res) => {
   const { email, password, firstname, lastname } = req.body;
 
-  //Back-end account checks. Can be adjusted at any time
+  // Back-end account checks. Can be adjusted at any time
   // For now, only checks if email format is valid with regex, and the password length.
   let emailFormat = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
   let minPasswordLength = 7;
@@ -73,7 +77,6 @@ router.post("/register", (req, res) => {
             });
           }
         }
-
       );
     } else {
       res.status(500).json({
@@ -102,7 +105,6 @@ router.post(
     if (req.isAuthenticated()) {
       const { _id, email, firstname, lastname } = req.user;
       const token = signToken(_id);
-      console.log(req.user);
       res.cookie("access_token", token, {
         httpOnly: true,
         sameSite: true,
@@ -141,26 +143,24 @@ router.post(
     session: false,
   }),
   (req, res) => {
-    const { extract } = require("article-parser");
     let url = String(req.body.url);
-    const article = new Article(req.body);
-    console.log(article);
     let rawTags = req.body.tags;
-    let userTags = req.user.tags;
-    let processedTags = [];
-    processedTags = rawTags
-      .map(function (value) {
-        return value.toLowerCase();
-      })
-      .sort();
-    console.log("lowecase and sorted tags: " + processedTags);
-    const uniqueTags = new Set(processedTags);
-    processedTags = [...uniqueTags];
-    console.log("Lowercase, sorted and unique tags: " + processedTags);
-
+    let description;
+    let processedTags = processTags(rawTags);
+    var t0 = performance.now();
     extract(url)
       .then((article) => {
-        let newArticle = new Article(article);
+        description = article.description;
+      })
+      .catch((err) => {});
+    var t1 = performance.now();
+    console.log("Call to articleparser took " + (t1 - t0) + " milliseconds.");
+    var t2 = performance.now();
+    Mercury.parse(url)
+      .then((response) => {
+        let newArticle = new Article(response);
+        if (!req.body.title == "") newArticle.title = req.body.title;
+        if (description != null) newArticle.excerpt = description;
         newArticle.tags = processedTags;
         newArticle.save((err) => {
           if (err)
@@ -171,54 +171,36 @@ router.post(
               },
             });
           else {
-            let allTags = userTags.concat(processedTags);
-            const allUniqueTags = new Set(allTags);
-            allTags = [...allUniqueTags];
-            req.user.tags = allTags;
-            req.user.title = req.body.title
-            req.user.articles.push(newArticle);
-            req.user.save((err) => {
-              if (err)
-                res.status(500).json({
-                  message: {
-                    msgBody: "Error 4 has occured",
-                    msgError: true,
-                  },
+            User.exists(
+              {
+                _id: req.user._id,
+              },
+              (err, result) => {
+                let tagList = req.user.tags;
+                handleUserNestedTags(processedTags, tagList);
+                var t1 = performance.now();
+                console.log("Tag loop took " + (t1 - t0) + " milliseconds.");
+                req.user.articles.push(newArticle);
+                req.user.save((err) => {
+                  if (err)
+                    res.status(500).json({
+                      message: {
+                        msgBody: "Error 4 has occured",
+                        msgError: true,
+                      },
+                    });
+                  else res.send(newArticle);
                 });
-              else res.send(newArticle);
-            });
+              }
+            );
           }
         });
       })
-      .catch((err) => {
-        console.log(err);
-      });
+      .catch((err) => console.log("Error: ", err));
+    var t3 = performance.now();
+    console.log("Call to mercury took " + (t3 - t2) + " milliseconds.");
   }
 );
-
-router.put("/article", (req, res) => {
-  Article.findOne({
-    _id: req.body.article_id,
-  }, (err, article) => {
-    console.log(article)
-
-    if (err) {
-      res.status(500).json({
-        message: {
-          msgBody: "Error has occured",
-          msgError: true
-        }
-      });
-    } else {
-      if (!req.body.title == "") article.title = req.body.title
-      if (!req.body.author == "") article.author = req.body.author
-      if (!req.body.description == "") article.description = req.body.description
-      if (!req.body.source == "") article.source = req.body.source
-      article.save();
-      res.json(article);
-    }
-  })
-})
 
 router.get(
   "/articles",
@@ -247,6 +229,69 @@ router.get(
       });
   }
 );
+
+router.put(
+  "/article",
+  passport.authenticate("jwt", {
+    session: false,
+  }),
+  (req, res) => {
+    Article.findOne(
+      {
+        _id: req.body.article_id,
+      },
+      (err, article) => {
+        if (err)
+          res.status(500).json({
+            message: {
+              msgBody: "Error has occured",
+              msgError: true,
+            },
+          });
+        else {
+          if (!req.body.title == "") article.title = req.body.title;
+          if (!req.body.author == "") article.author = req.body.author;
+          if (!req.body.description == "")
+            article.excerpt = req.body.description;
+          if (!req.body.source == "") article.domain = req.body.source;
+          if (!req.body.tags[0] == "") {
+            let processedTags = processTags(req.body.tags);
+            article.tags = processedTags;
+            req.user.tags = handleUserNestedTags(processedTags, req.user.tags);
+            req.user.save();
+          }
+          article.save();
+          res.json(article);
+        }
+      }
+    );
+  }
+);
+
+router.delete("/article", (req, res) => {
+  Article.deleteOne(
+    {
+      _id: req.body.article_id,
+    },
+    (err, article) => {
+      if (err)
+        res.status(500).json({
+          message: {
+            msgBody: "Error has occured",
+            msgError: true,
+          },
+        });
+      else {
+        res.status(200).json({
+          message: {
+            msgBody: "succes",
+            msgError: false,
+          },
+        });
+      }
+    }
+  );
+});
 
 router.put(
   "/tag",
@@ -362,48 +407,61 @@ router.put("/testing/art/:title", (req, res) => {
   );
 });
 
-router.post(
-  "/articleExtension",
-  (req, res) => {
-    const findUser = User.findOne({ email: req.body.email })
-      .then((response) => {
-        if (response) {
-          console.log(response)
-          const { extract } = require("article-parser");
-          let url = String(req.body.url);
-          const article = new Article(req.body);
-          console.log(article);
-          extract(url)
-            .then((article) => {
-              let newArticle = new Article(article);
-              newArticle.tags = req.body.tags;
-              newArticle.title = req.body.title;
-              newArticle.save((err) => {
-                if (err) {
+router.post("/articleExtension", (req, res) => {
+  console.log(req.body.email);
+  let description;
+  User.findOne({
+    email: req.body.email,
+  }).then((user) => {
+    if (user) {
+      const { extract } = require("article-parser");
+      let url = String(req.body.url);
+      extract(url)
+        .then((article) => {
+          description = article.description;
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+      Mercury.parse(url)
+        .then((response) => {
+          let newArticle = new Article(response);
+          if (!req.body.title == "") newArticle.title = req.body.title;
+          if (description != null) newArticle.excerpt = description;
+          newArticle.save((err) => {
+            if (err)
+              res.status(500).json({
+                message: {
+                  msgBody: "Error 3 has occured",
+                  msgError: true,
+                },
+              });
+            else {
+              user.articles.push(newArticle);
+              user.save((err) => {
+                if (err)
                   res.status(500).json({
                     message: {
-                      msgBody: "Error 2 has occured",
+                      msgBody: "Error 4 has occured",
                       msgError: true,
                     },
                   });
-                } else {
-                  response.articles.push(newArticle);
-                  response.save()
-                  res.send(newArticle);
-                }
-              })
-            })
-        } else {
-          res.status(500).json({
-            message: {
-              msgBody: "Error 1 has occured",
-              msgError: true
+                else res.send(newArticle);
+              });
             }
-          })
-        }
-      })
-  }
-);
+          });
+        })
+        .catch((err) => console.log("Error: ", err));
+    } else {
+      res.status(500).json({
+        message: {
+          msgBody: "Error 1 has occured",
+          msgError: true,
+        },
+      });
+    }
+  });
+});
 
 router.put(
   "/preference",
@@ -452,5 +510,97 @@ router.get(
   }
 );
 
+function processTags(rawTags) {
+  let processedTags = [];
+  console.log(rawTags);
+  processedTags = rawTags.map(function (value) {
+    return value.toLowerCase();
+  });
+  const uniqueTags = new Set(processedTags);
+  processedTags = [...uniqueTags];
+  return processedTags;
+}
+
+function handleUserNestedTags(processedTags, tagList) {
+  class Tag {
+    constructor(value) {
+      (this.tagName = value), (this.subTags = []), (this._id = new ObjectID());
+    }
+  }
+
+  switch (processedTags.length) {
+    case 1:
+      if (tagList.some((element) => element.tagName === processedTags[0])) {
+      } else {
+        let tag = new Tag(processedTags[0]);
+        tagList.push(tag);
+      }
+      break;
+
+    case 2:
+      if (tagList.some((element) => element.tagName === processedTags[0])) {
+        let index = tagList.findIndex((x) => x.tagName === processedTags[0]);
+        console.log(index);
+        if (
+          tagList[index].subTags.some(
+            (element) => element.tagName === processedTags[1]
+          )
+        ) {
+        } else {
+          let tag = new Tag(processedTags[1]);
+          tagList[index].subTags.push(tag);
+        }
+      } else {
+        let tag = new Tag(processedTags[0]);
+        tagList.push(tag);
+        tag = new Tag(processedTags[1]);
+        tagList[tagList.length - 1].subTags.push(tag);
+        tag = new Tag(processedTags[2]);
+        tagList[tagList.length - 1].subTags[0].subTags.push(tag);
+      }
+
+      break;
+
+    case 3:
+      if (tagList.some((element) => element.tagName === processedTags[0])) {
+        index = tagList.findIndex((x) => x.tagName === processedTags[0]);
+        if (
+          tagList[index].subTags.some(
+            (element) => element.tagName === processedTags[1]
+          )
+        ) {
+          index2 = tagList[index].subTags.findIndex(
+            (x) => x.tagName === processedTags[1]
+          );
+          if (
+            tagList[index].subTags[index2].subTags.some(
+              (element) => element.tagName === processedTags[2]
+            )
+          ) {
+          } else {
+            let tag = new Tag(processedTags[2]);
+            tagList[index].subTags[index2].subTags.push(tag);
+          }
+        } else {
+          let tag = new Tag(processedTags[1]);
+          tagList[index].subTags.push(tag);
+          tag = new Tag(processedTags[2]);
+          tagList[index].subTags[
+            tagList[index].subTags.length - 1
+          ].subTags.push(tag);
+        }
+      } else {
+        let tag = new Tag(processedTags[0]);
+        tagList.push(tag);
+        tag = new Tag(processedTags[1]);
+        tagList[tagList.length - 1].subTags.push(tag);
+        tag = new Tag(processedTags[2]);
+        tagList[tagList.length - 1].subTags[0].subTags.push(tag);
+      }
+      break;
+  }
+
+  return tagList;
+}
 
 module.exports = router;
