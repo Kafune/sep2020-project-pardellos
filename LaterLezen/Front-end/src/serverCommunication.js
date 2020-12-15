@@ -233,3 +233,34 @@ export async function getAuthors() {
   }
   return fetch(serverFetchBase + `/articles/authors`, fetchOptions)
 }
+
+export async function findArticle(title, source, author) {
+  const body = {
+    title: title,
+    source: source,
+    author: author
+  }
+
+  const fetchOptions = {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    credentials: 'include',
+    mode: 'cors',
+    body: JSON.stringify(body)
+  }
+  return fetch(serverFetchBase + `/articles/search`, fetchOptions)
+}
+
+export async function getSources() {
+  const fetchOptions = {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    credentials: 'include',
+    mode: 'cors'
+  }
+  return fetch(serverFetchBase + `/articles/sources`, fetchOptions)
+}
