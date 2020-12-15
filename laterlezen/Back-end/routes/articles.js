@@ -164,39 +164,6 @@ router.get(
       });
   });
 
-router.get(
-  "/find/:author",
-  passport.authenticate("jwt", {
-    session: false,
-  }), async (req, res) => {
-    let author = req.params.author;
-
-    User.findById({
-      _id: req.user._id
-    })
-      .populate({
-        path: 'articles',
-        match: {
-          author: {
-            '$regex': new RegExp(author, "i")
-          }
-        }
-
-      })
-      .exec((err, document) => {
-        if (err)
-          res.status(500).json({
-            message: {
-              msgBody: "Error has occured",
-              msgError: true,
-            },
-          });
-        else {
-          res.send(document.articles)
-        }
-      });
-  });
-
   // find/testtitle/testsource/author
 router.put(
   "/search",
@@ -208,7 +175,6 @@ router.put(
     let source = req.body.source;
 
     let searchFields = {}
-    console.log(author)
 
     if(title) {
       searchFields.title = {'$regex': new RegExp(title, "i")}

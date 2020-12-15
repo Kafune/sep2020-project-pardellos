@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { searchArticleByTags, getAuthors, findAuthor, findArticle, getSources } from "../serverCommunication";
+import { searchArticleByTags, getAuthors, findArticle, getSources } from "../serverCommunication";
 import { Link } from "react-router-dom";
 import M from "materialize-css";
 
@@ -102,6 +102,7 @@ export default function SearchArticle(props) {
       .then(result => setArticles(result))
   }
 
+
   const getAllAuthors = () => {
     getAuthors()
       .then((response) => response.json())
@@ -111,6 +112,7 @@ export default function SearchArticle(props) {
         var elems = document.querySelector(".autocomplete");
         let options = {
           data: result,
+          // minLength: 2,
           onAutocomplete: (value) => {
             setAuthor(value);
           },
