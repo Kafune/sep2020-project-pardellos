@@ -47,24 +47,30 @@ export default function Dashboard(props) {
                   <p>{data.excerpt}</p>
                   <span class="author">Author: {data.author}</span>
                   <span class="source">Source: {data.domain}</span>
-                  <br/>
+                  <br />
                   <span>
                     Tags:{" "}
                     {data.tags.map((data) => {
                       return data + " ";
                     })}
                   </span>
-                  <p/>
-                  <Link to={`/article/${data._id}`}>
-                    <a id="seeArticle" class="btn green">
-                      Read article
-                    </a>
-                  </Link>
-                  <Link to={`/edit/${data._id}`}>
-                    <a id="editArticle" class="btn blue">
-                      Edit article
-                    </a>
-                  </Link>
+                  <div class="row">
+                    <br/>
+                    <div class="col">
+                      <Link to={`/article/${data._id}`}>
+                        <a id="seeArticle" class="btn green">
+                          Read article
+                        </a>
+                      </Link>
+                    </div>
+                    <div class="col">
+                      <Link to={`/edit/${data._id}`}>
+                        <a id="editArticle" class="btn blue">
+                          Edit article
+                        </a>
+                      </Link>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>

@@ -82,7 +82,7 @@ export default function EditArticle(props) {
         )
           .then(() => {
             M.toast({ html: "Article succesfully saved" });
-            history.push("/dashboard");
+            history.push(`/article/${article._id}`);
           })
           .catch((error) => {
             console.log(error);
