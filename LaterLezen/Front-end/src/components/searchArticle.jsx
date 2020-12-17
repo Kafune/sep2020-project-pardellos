@@ -15,16 +15,15 @@ export default function SearchArticle(props) {
   const [mainTagState, setMainTagState] = useState(false)
   const [subTagState, setSubTagState] = useState(false)
   const [lastTagState, setLastTagState] = useState(false)
-  const [title, setTitle] = useState('')
-  const [description, setDescription] = useState('')
-  const [source, setSource] = useState('')
-  const [author, setAuthor] = useState('')
 
-  useEffect(() => {
-    getAllAuthors();
-    getAllSources();
+  const [query, setQuery] = useState('');
+  const [searchContent, setSearchContent] = useState(false);
 
-  }, []);
+  // useEffect(() => {
+  //   getAllAuthors();
+  //   getAllSources();
+
+  // }, []);
 
   useEffect(() => {
     setTags(props.tags)
@@ -93,61 +92,18 @@ export default function SearchArticle(props) {
   }
 
   const handleSearch = () => {
-    const sanitizedTitle = escapeRegExp(title)
-    const sanitizedDescription = escapeRegExp(description)
-    const sanitizedSource = escapeRegExp(source)
-    const sanitizedAuthor = escapeRegExp(author)
+    // const sanitizedTitle = escapeRegExp(title)
+    // const sanitizedDescription = escapeRegExp(description)
+    // const sanitizedSource = escapeRegExp(source)
+    // const sanitizedAuthor = escapeRegExp(author)
+    const sanitizedSearch = escapeRegExp(query)
 
-    findArticle(sanitizedTitle, sanitizedDescription, sanitizedSource, sanitizedAuthor)
+    // findArticle(sanitizedTitle, sanitizedDescription, sanitizedSource, sanitizedAuthor)
+    findArticle(sanitizedSearch, searchContent)
       .then(response => response.json())
       // .then(result => console.log(result))
       .then(result => setArticles(result))
   }
-
-
-  const getAllAuthors = () => {
-    getAuthors()
-      .then((response) => response.json())
-      .then((result) => result.filter((values) => values.author != ""))
-      .then((result) => populateAutocomplete(result, 'author'))
-      .then((result) => {
-        var elems = document.querySelector(".autocomplete");
-        let options = {
-          data: result,
-          // minLength: 2,
-          onAutocomplete: (value) => {
-            setAuthor(value);
-          },
-        };
-        M.Autocomplete.init(elems, options);
-      })
-  };
-  const getAllSources = () => {
-    getSources()
-    .then((response) => response.json())
-    .then((result) => result.filter((values) => values.domain != ""))
-    .then((result) => populateAutocomplete(result, 'domain'))
-    .then((result) => {
-      var elems = document.querySelector(".autocomplete-sources");
-      let options = {
-        data: result,
-        onAutocomplete: (value) => {
-          setSource(value);
-        },
-      };
-      M.Autocomplete.init(elems, options);
-    })
-  }
-
-  const populateAutocomplete = (result, field) => {
-    let authors = {};
-
-    result.forEach((element) => {
-      authors[element[field]] = null;
-    });
-
-    return authors;
-  };
 
   return (
     <div>
@@ -256,46 +212,24 @@ export default function SearchArticle(props) {
 
       <div>
         <div className="row">
-        <h3>Search by title</h3>
+          <h3>Search article</h3>
           <div class="s8 search input-field">
             <input
               type="text"
               placeholder="Search"
-              onChange={(e) => setTitle(e.target.value)}
-              value={title}
+              onChange={(e) => setQuery(e.target.value)}
+              value={query}
             />
           </div>
-          <h3>Search by description</h3>
-          <div class="s8 search input-field">
+          <label>
             <input
-              type="text"
-              placeholder="Search"
-              onChange={(e) => setDescription(e.target.value)}
-              value={description}
+              type="checkbox"
+              onClick={() => setSearchContent(!searchContent)}
             />
-          </div>
-          <h3>Search by source</h3>
-          <div class="s8 search input-field">
-            <input
-              class="autocomplete-sources"
-              type="text"
-              id="autocomplete-input"
-              placeholder="Search"
-              onChange={(e) => setSource(e.target.value)}
-              value={source}
-            />
-          </div>
-          <h3>Search by author</h3>
-          <div class="s8 search input-field">
-            <input
-              class="autocomplete"
-              type="text"
-              id="autocomplete-input"
-              placeholder="Search"
-              onChange={(e) => setAuthor(e.target.value)}
-              value={author}
-            />
-          </div>
+            <span>Enable search by content?</span>
+          </label>
+
+
         </div>
         <button
           className="waves-effect waves-light btn-small blue accent-2"

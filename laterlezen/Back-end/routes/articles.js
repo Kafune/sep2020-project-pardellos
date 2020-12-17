@@ -164,36 +164,45 @@ router.get(
       });
   });
 
-  // find/testtitle/testsource/author
+// find/testtitle/testsource/author
 router.put(
   "/search",
   passport.authenticate("jwt", {
     session: false,
   }), async (req, res) => {
-    let title = req.body.title;
-    let description = req.body.description
-    let author = req.body.author;
-    let source = req.body.source;
+    // let title = req.body.title;
+    // let description = req.body.description
+    // let author = req.body.author;
+    // let source = req.body.source;
+    let query = req.body.query;
+    let searchContent = req.body.searchContent;
 
     let searchFields = {}
 
-    if(title) {
-      searchFields.title = {'$regex': new RegExp(title, "i")}
+    if (query) {
+      if (searchContent) {
+        searchFields = {
+          $or: [
+            { title: { '$regex': new RegExp(query, "i") } },
+            { excerpt: { '$regex': new RegExp(query, "i") } },
+            { author: { '$regex': new RegExp(query, "i") } },
+            { domain: { '$regex': new RegExp(query, "i") } },
+            { content: { '$regex': new RegExp(query, "i") } },
+          ]
+        }
+      } else {
+        searchFields = {
+          $or: [
+            { title: { '$regex': new RegExp(query, "i") } },
+            { excerpt: { '$regex': new RegExp(query, "i") } },
+            { author: { '$regex': new RegExp(query, "i") } },
+            { domain: { '$regex': new RegExp(query, "i") } }
+          ]
+        }
+      }
     }
 
-    if(description) {
-      searchFields.excerpt = {'$regex': new RegExp(description, "i")}
-    }
-
-    if(author) {
-      searchFields.author = {'$regex': new RegExp(author, "i")}
-    }
-
-    if(source) {
-      searchFields.domain = {'$regex': new RegExp(source, "i")}
-    }
-
-    console.log(searchFields)
+    // console.log(searchFields)
 
     User.findById({
       _id: req.user._id
@@ -203,6 +212,7 @@ router.put(
         match: searchFields
       })
       .exec((err, document) => {
+        // console.log(document)
         if (err)
           res.status(500).json({
             message: {
@@ -211,34 +221,35 @@ router.put(
             },
           });
         else {
-          console.log(document)
+          // console.log(document)
+
           res.send(document.articles)
         }
       });
   });
 
-  router.get(
-    "/sources/",
-    passport.authenticate("jwt", {
-      session: false,
-    }), async (req, res) => {
-  
-      User.findById({
-        _id: req.user._id
-      })
-        .populate('articles', 'domain')
-        .exec((err, document) => {
-          if (err)
-            res.status(500).json({
-              message: {
-                msgBody: "Error has occured",
-                msgError: true,
-              },
-            });
-          else {
-            res.send(document.articles)
-          }
-        });
-    });
+router.get(
+  "/sources/",
+  passport.authenticate("jwt", {
+    session: false,
+  }), async (req, res) => {
+
+    User.findById({
+      _id: req.user._id
+    })
+      .populate('articles', 'domain')
+      .exec((err, document) => {
+        if (err)
+          res.status(500).json({
+            message: {
+              msgBody: "Error has occured",
+              msgError: true,
+            },
+          });
+        else {
+          res.send(document.articles)
+        }
+      });
+  });
 
 module.exports = router;
