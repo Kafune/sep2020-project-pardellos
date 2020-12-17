@@ -80,27 +80,31 @@ export default function DisplayArticle(props) {
       <div className="article">
         <div className="center">
           <h2>{article.title}</h2>
-          Publisher:{" "}
-            <b>
-               {article.domain}
-            </b>
+          Publisher: <b>{article.domain}</b>
           <img className="responsive-img" src={article.lead_image_url} />
         </div>
         <div className="text-flow">
-        Auteur: {article.author}
+          Auteur: {article.author}
           <h5>{Parser(" " + article.content)}</h5>
         </div>
-        <Link to={`/edit/${article._id}`}>
-          <a id="editArticle" class="btn blue">
-            Edit article
-          </a>
-        </Link>
-        <a href={article.url} id="originalArticle">
-          <button className="waves-effect waves-light btn-small blue accent-2">
-            Go to original article
-          </button>
-          {/* <button className="waves-effect waves-light btn-small blue accent-2" onClick={() => { handleDeleteArticle(article._id) }}>Unsave this article</button> */}
-        </a>
+        <div class="row">
+          <div class="col">
+            <Link to={`/edit/${article._id}`}>
+              <a class="waves-effect waves-light btn-small blue accent-2">
+                Edit article
+              </a>
+            </Link>
+          </div>
+          <div class="col">
+            <a href={article.url} id="originalArticle">
+              <button className="waves-effect waves-light btn-small blue accent-2">
+                Go to original article
+              </button>
+
+              {/* <button className="waves-effect waves-light btn-small blue accent-2" onClick={() => { handleDeleteArticle(article._id) }}>Unsave this article</button> */}
+            </a>
+          </div>
+        </div>
       </div>
     </>
   );
