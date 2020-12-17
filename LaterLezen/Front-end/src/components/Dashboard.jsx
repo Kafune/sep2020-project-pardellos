@@ -4,7 +4,7 @@ import {
   getAllArticles,
   getArticleByUser,
 } from "../serverCommunication";
-import { Link } from "react-router-dom";
+import { Link, Redirect } from "react-router-dom";
 
 export default function Dashboard(props) {
   const [firstname, setFirstname] = useState(props.firstname);
@@ -47,24 +47,25 @@ export default function Dashboard(props) {
                   <p>{data.excerpt}</p>
                   <span class="author">Author: {data.author}</span>
                   <span class="source">Source: {data.domain}</span>
-                  <br/>
+                  <br />
                   <span>
                     Tags:{" "}
                     {data.tags.map((data) => {
                       return data + " ";
                     })}
                   </span>
-                  <p/>
+                  <p />
                   <Link to={`/article/${data._id}`}>
                     <a id="seeArticle" class="btn green">
                       Read article
                     </a>
                   </Link>
-                  <Link to={`/edit/${data._id}`}>
+
+                  {/* <Link to={`/edit/${data._id}`}>
                     <a id="editArticle" class="btn blue">
                       Edit article
                     </a>
-                  </Link>
+                  </Link> */}
                 </div>
               </div>
             </div>

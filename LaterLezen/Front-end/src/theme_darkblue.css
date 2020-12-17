@@ -31,7 +31,16 @@
 .theme-darkblue .article a {
     color: #fff !important;
 }
-
 .theme-darkblue .article .btn {
     color: rgb(117, 0, 0);
+}
+
+.theme-darkblue .article input[type="text"] 
+{
+    color: #fff;
+}
+
+.theme-darkblue textarea.materialize-textarea
+{
+    color: #fff;
 }
