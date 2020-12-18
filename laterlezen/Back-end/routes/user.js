@@ -23,7 +23,6 @@ const signToken = (userID) => {
   );
 };
 
-
 router.post("/register", (req, res) => {
   const { email, password, firstname, lastname } = req.body;
 
@@ -60,6 +59,11 @@ router.post("/register", (req, res) => {
               firstname,
               lastname,
             });
+            let defaultTag = {
+              tagName: "/",
+              subTags: [],
+            };
+            newUser.tags = defaultTag;
             newUser.save((err) => {
               if (err)
                 res.status(500).json({
@@ -153,8 +157,7 @@ router.post(
       .then((article) => {
         description = article.description;
       })
-      .catch((err) => {
-      });
+      .catch((err) => {});
     var t1 = performance.now();
     console.log("Call to articleparser took " + (t1 - t0) + " milliseconds.");
     var t2 = performance.now();
@@ -178,11 +181,14 @@ router.post(
                 _id: req.user._id,
               },
               (err, result) => {
-                let tagList = req.user.tags;
-                handleUserNestedTags(processedTags, tagList);
+                let templist = [];
+                templist.push(processedTags);
+                // CHANGE TEMPLIST. FRONT-END SHOULD SEND ARRAY OF ARRAYS
+                handleUserNestedTags(templist, req.user.tags);
                 var t1 = performance.now();
                 console.log("Tag loop took " + (t1 - t0) + " milliseconds.");
                 req.user.articles.push(newArticle);
+                req.user.markModified("tags");
                 req.user.save((err) => {
                   if (err)
                     res.status(500).json({
@@ -191,7 +197,9 @@ router.post(
                         msgError: true,
                       },
                     });
-                  else res.send(newArticle);
+                  else {
+                    res.json(req.user);
+                  }
                 });
               }
             );
@@ -203,7 +211,6 @@ router.post(
     console.log("Call to mercury took " + (t3 - t2) + " milliseconds.");
   }
 );
-
 
 router.get(
   "/articles",
@@ -258,7 +265,7 @@ router.put(
           article.domain = req.body.source;
           if (!req.body.tags[0] == "") {
             let processedTags = processTags(req.body.tags);
-            article.tags = processedTags
+            article.tags = processedTags;
             req.user.tags = handleUserNestedTags(processedTags, req.user.tags);
             req.user.save();
           }
@@ -381,7 +388,9 @@ router.put("/testing/tags", (req, res) => {
     "mapping",
     "objectmapping",
   ];
-  let article = { title: "test3" };
+  let article = {
+    title: "test3",
+  };
   let art = new Article(article);
   art.tags2 = tags;
   art.save();
@@ -390,19 +399,31 @@ router.put("/testing/tags", (req, res) => {
 
 router.get("/testing/art/:tag", (req, res) => {
   let tag = req.params.tag;
-  Article.find({ tags2: { $in: tag } }, (err, art) => {
-    res.json(art);
-  });
+  Article.find(
+    {
+      tags2: {
+        $in: tag,
+      },
+    },
+    (err, art) => {
+      res.json(art);
+    }
+  );
 });
 
-// route to edit the tags list
 router.put("/testing/art/:title", (req, res) => {
   let taglist = req.body.taglist;
   let title = req.params.title;
 
   Article.updateOne(
-    { title: title },
-    { $set: { tags2: taglist } },
+    {
+      title: title,
+    },
+    {
+      $set: {
+        tags2: taglist,
+      },
+    },
     (err, art) => {
       res.json(art);
     }
@@ -461,8 +482,12 @@ router.put(
       req.body.theme === "darkblue"
     ) {
       await User.findOneAndUpdate(
-        { _id: req.user._id },
-        { preferences: req.body.theme }
+        {
+          _id: req.user._id,
+        },
+        {
+          preferences: req.body.theme,
+        }
       ).catch(() => {
         res.status(500).json({
           message: {
@@ -489,14 +514,15 @@ router.get(
     session: false,
   }),
   async (req, res) => {
-    var query = await User.findOne({ _id: req.user._id }).select("preferences");
+    var query = await User.findOne({
+      _id: req.user._id,
+    }).select("preferences");
     res.send(JSON.stringify(query.preferences));
   }
 );
 
 function processTags(rawTags) {
   let processedTags = [];
-  console.log(rawTags);
   processedTags = rawTags.map(function (value) {
     return value.toLowerCase();
   });
@@ -505,85 +531,30 @@ function processTags(rawTags) {
   return processedTags;
 }
 
-function handleUserNestedTags(processedTags, tagList) {
-  class Tag {
-    constructor(value) {
-      (this.tagName = value), (this.subTags = []), (this._id = new ObjectID());
+function handleUserNestedTags(data, userTags) {
+  const node = (tagName, parent = null) => ({ tagName, parent, _id : new ObjectID, subTags: [] });
+  const addNode = (parent, child) => (parent.subTags.push(child), child);
+  const findNamed = (name, parent) => {
+    for (const child of parent.subTags) {
+      if (child.tagName === name) {
+        return child;
+      }
+      const found = findNamed(name, child);
+      if (found) {
+        return found;
+      }
+    }
+  };
+  const TOP_NAME = "Top",
+    top = node(TOP_NAME);
+  for (const children of data) {
+    let parent = userTags;
+    for (const name of children) {
+      const found = findNamed(name, parent);
+      parent = found ? found : addNode(parent, node(name, parent.tagName));
     }
   }
-
-  switch (processedTags.length) {
-    case 1:
-      if (tagList.some((element) => element.tagName === processedTags[0])) {
-      } else {
-        let tag = new Tag(processedTags[0]);
-        tagList.push(tag);
-      }
-      break;
-
-    case 2:
-      if (tagList.some((element) => element.tagName === processedTags[0])) {
-        index = tagList.findIndex((x) => x.tagName === processedTags[0]);
-        if (
-          tagList[index].subTags.some(
-            (element) => element.tagName === processedTags[1]
-          )
-        ) {
-        } else {
-          let tag = new Tag(processedTags[1]);
-          tagList[index].subTags.push(tag);
-        }
-      } else {
-        let tag = new Tag(processedTags[1]);
-        tagList[index].subTags.push(tag);
-        tag = new Tag(processedTags[2]);
-        tagList[index].subTags[
-          tagList[index].subTags.length - 1
-        ].subTags.push(tag);
-      }
-      
-      break;
-
-    case 3:
-      if (tagList.some((element) => element.tagName === processedTags[0])) {
-        index = tagList.findIndex((x) => x.tagName === processedTags[0]);
-        if (
-          tagList[index].subTags.some(
-            (element) => element.tagName === processedTags[1]
-          )
-        ) {
-          index2 = tagList[index].subTags.findIndex(
-            (x) => x.tagName === processedTags[1]
-          );
-          if (
-            tagList[index].subTags[index2].subTags.some(
-              (element) => element.tagName === processedTags[2]
-            )
-          ) {
-          } else {
-            let tag = new Tag(processedTags[2]);
-            tagList[index].subTags[index2].subTags.push(tag);
-          }
-        } else {
-          let tag = new Tag(processedTags[1]);
-          tagList[index].subTags.push(tag);
-          tag = new Tag(processedTags[2]);
-          tagList[index].subTags[
-            tagList[index].subTags.length - 1
-          ].subTags.push(tag);
-        }
-      } else {
-        let tag = new Tag(processedTags[0]);
-        tagList.push(tag);
-        tag = new Tag(processedTags[1]);
-        tagList[tagList.length - 1].subTags.push(tag);
-        tag = new Tag(processedTags[2]);
-        tagList[tagList.length - 1].subTags[0].subTags.push(tag);
-      }
-      break;
-  }
-
-  return tagList;
+  return top;
 }
 
 module.exports = router;
