@@ -49,7 +49,7 @@ export default function EditArticle(props) {
           setArticle(response);
           setTitle(response.title);
           setDescription(response.excerpt);
-          setSource(response.source);
+          setSource(response.domain);
           setTags(response.tags);
           setAuthor(response.author);
 
@@ -57,9 +57,6 @@ export default function EditArticle(props) {
           M.textareaAutoResize(textArea);
         }
       });
-
-
-
   }, []);
 
   const saveChanges = () => {
