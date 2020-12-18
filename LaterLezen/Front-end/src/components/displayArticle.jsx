@@ -44,6 +44,14 @@ export default function DisplayArticle(props) {
   };
 
   const saveChanges = () => {
+    let title_input = document.querySelector("#title-input");
+    let author_input = document.querySelector("#author-input");
+    let source_input = document.querySelector("#source-input");
+    let description_input = document.querySelector("#description-input");
+    if(title_input.value.length <= 0 || author_input.value.length <=0 || source_input.value.length <=0 || description_input.value.length <= 0) {
+      M.toast({ html: "Required fields can not be empty!" });
+    }
+    else {
     confirmArticleChanges(article._id, title, source, description, author, tags)
       .then(() => {
         M.toast({ html: "Article succesfully saved" });
@@ -52,18 +60,16 @@ export default function DisplayArticle(props) {
       .catch(() => {
         M.toast({ html: "Article could not be saved" });
       });
+    }
   };
 
   const cancelChanges = () => {
-    setTitle(article.title);
-    setDescription(article.excerpt);
-    setSource(article.domain);
-    setAuthor(article.author);
+    getArticleContent();
     setEditFields(false);
   };
 
   useEffect(() => {
-    
+    getArticleContent()
     let dropdown1 = document.querySelector(".dropdown-trigger");
     let dropdownOptions = {
       closeOnClick: false,
@@ -74,6 +80,10 @@ export default function DisplayArticle(props) {
     };
     M.Dropdown.init(dropdown1, dropdownOptions);
     getPreferences();
+    return () => (document.body.className = "");
+  }, []);
+
+  const getArticleContent = () => {
     let url = window.location.href;
     let id = url.substring(url.lastIndexOf("/") + 1);
     searchArticleByID(id)
@@ -83,7 +93,6 @@ export default function DisplayArticle(props) {
           history.push("/search");
           M.toast({ html: "Cannot find article" });
         } else {
-          console.log(response);
           setArticle(response);
           setTitle(response.title);
           setDescription(response.excerpt);
@@ -94,8 +103,7 @@ export default function DisplayArticle(props) {
           M.textareaAutoResize(textArea);
         }
       });
-    return () => (document.body.className = "");
-  }, []);
+  }
 
   function handleDeleteArticle(id) {
     deleteArticleByID(id).then((response) => {
@@ -138,13 +146,14 @@ export default function DisplayArticle(props) {
 
       <div className="article">
         <div className="center">
-          
             {editFields ? (
               <React.Fragment>
                 <h5>Title:
               <div className="input-field inline">
                 <input
-                  id="author-input"
+                  required
+                  className="validate"
+                  id="title-input"
                   type="text"
                   value={title}
                   onChange={(e) => setTitle(e.target.value)}
@@ -161,6 +170,8 @@ export default function DisplayArticle(props) {
             {editFields ? (
               <div className="input-field inline">
                 <input
+                  required
+                  className="validate"
                   id="author-input"
                   type="text"
                   value={author}
@@ -174,9 +185,11 @@ export default function DisplayArticle(props) {
           <h5 className={"hover-show"}>
             Source:
             {editFields ? (
-              <div className="input-field inline">
+              <div className="input-field inline">                   
                 <input
-                  id="domain-input"
+                  required
+                  className="validate"
+                  id="source-input"
                   type="text"
                   value={source}
                   onChange={(e) => setSource(e.target.value)}
@@ -187,7 +200,9 @@ export default function DisplayArticle(props) {
             )}
           </h5>
         <textarea 
-          className={editFields ? "materialize-textarea" : "materialize-textarea hidden" } 
+          required
+          className={editFields ? "materialize-textarea validate" : "materialize-textarea hidden" } 
+          id={"description-input"}
           value={description}
           onChange={(e) => setDescription(e.target.value)}
           >
