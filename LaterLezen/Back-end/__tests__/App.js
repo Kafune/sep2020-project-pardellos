@@ -5,7 +5,7 @@ const app = express();
 const dotenv = require("dotenv");
 const morgan = require("morgan");
 const bodyParser = require("body-parser");
-const connectDB = require("./config/db");
+const connectDB = require("../config/db");
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
 app.use(cookieParser());
@@ -29,9 +29,9 @@ if (process.env.NODE_ENV === "development") {
 app.use(bodyParser.json());
 
 // Routes
-app.use("/testing", require("./routes/testing"));
-app.use("/user", require("./routes/user"));
-app.use("/articles", require("./routes/articles"));
+app.use("/testing", require("../routes/testing"));
+app.use("/user", require("../routes/user"));
+app.use("/articles", require("../routes/articles"));
 
 const PORT = process.env.PORT || 4000;
 
