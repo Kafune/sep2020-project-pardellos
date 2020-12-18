@@ -47,8 +47,7 @@ export default function DisplayArticle(props) {
     let title_input = document.querySelector("#title-input");
     let author_input = document.querySelector("#author-input");
     let source_input = document.querySelector("#source-input");
-    let description_input = document.querySelector("#description-input");
-    if(title_input.value.length <= 0 || author_input.value.length <=0 || source_input.value.length <=0 || description_input.value.length <= 0) {
+    if(title_input.value.length <= 0 || author_input.value.length <=0 || source_input.value.length <=0) {
       M.toast({ html: "Required fields can not be empty!" });
     }
     else {
@@ -201,13 +200,12 @@ export default function DisplayArticle(props) {
           </h5>
         <textarea 
           required
-          className={editFields ? "materialize-textarea validate" : "materialize-textarea hidden" } 
+          className={editFields ? "materialize-textarea" : "materialize-textarea hidden" } 
           id={"description-input"}
           value={description}
           onChange={(e) => setDescription(e.target.value)}
           >
           </textarea> 
-
           <img className="responsive-img" src={article.lead_image_url} />
         </div>
         <div className="text-flow">
