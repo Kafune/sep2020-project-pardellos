@@ -6,7 +6,7 @@ import {
   savePreference,
 } from "../serverCommunication";
 import Parser from "html-react-parser/dist/html-react-parser";
-import { useHistory } from "react-router-dom";
+import { useHistory, Link } from "react-router-dom";
 import Preferences from "./Preferences";
 import M from "materialize-css";
 
@@ -80,26 +80,31 @@ export default function DisplayArticle(props) {
       <div className="article">
         <div className="center">
           <h2>{article.title}</h2>
-          <h4>
-            {" "}
-            Published by:{" "}
-            <b>
-              {article.author} {article.domain}
-            </b>
-          </h4>
+          Publisher: <b>{article.domain}</b>
           <img className="responsive-img" src={article.lead_image_url} />
         </div>
         <div className="text-flow">
-          <h5>
-            {Parser(" " + article.content)}
-          </h5>
+          Auteur: {article.author}
+          <h5>{Parser(" " + article.content)}</h5>
         </div>
-        <a href={article.url} id="originalArticle">
-          <button className="waves-effect waves-light btn-small blue accent-2">
-            Go to original article
-          </button>
-          {/* <button className="waves-effect waves-light btn-small blue accent-2" onClick={() => { handleDeleteArticle(article._id) }}>Unsave this article</button> */}
-        </a>
+        <div class="row">
+          <div class="col">
+            <Link to={`/edit/${article._id}`}>
+              <a class="waves-effect waves-light btn-small blue accent-2">
+                Edit article
+              </a>
+            </Link>
+          </div>
+          <div class="col">
+            <a href={article.url} id="originalArticle">
+              <button className="waves-effect waves-light btn-small blue accent-2">
+                Go to original article
+              </button>
+
+              {/* <button className="waves-effect waves-light btn-small blue accent-2" onClick={() => { handleDeleteArticle(article._id) }}>Unsave this article</button> */}
+            </a>
+          </div>
+        </div>
       </div>
     </>
   );

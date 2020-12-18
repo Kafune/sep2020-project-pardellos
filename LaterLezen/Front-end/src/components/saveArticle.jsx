@@ -43,7 +43,9 @@ export default function SaveArticle(props) {
                 })
                 if (noErrors === true) {
                     saveArticle(url, tagArray, title)
-                        .then(() => M.toast({ html: 'Article succesfully saved' }))
+                    .then((response) => {response.json()})
+                    .then((response) => {console.log(response)})
+                    .then(() => M.toast({ html: 'Article succesfully saved' }))
                 }
             }
             else {
