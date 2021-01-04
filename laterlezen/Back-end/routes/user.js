@@ -249,11 +249,11 @@ router.put(
             },
           });
         else {
-          console.log("haai")
+  
           if (!req.body.title == "") article.title = req.body.title;
-          if (!req.body.author == "") article.author = req.body.author;
+          article.author = req.body.author;
           article.excerpt = req.body.description;
-          if (!req.body.source == "") article.domain = req.body.source;
+          article.domain = req.body.source;
           if (!req.body.tags[0] == "") {
             let processedTags = processTags(req.body.tags);
             article.tags = processedTags;
