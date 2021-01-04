@@ -97,6 +97,14 @@ Door het lezen van dit hoofdstuk krijg je een beter beeld van hoe de structuur v
     ### Extension view
     ![Component_extension.png](Component_extension.png)
 
+    De webextensie is het meest simpele component van dit project. Op het moment dat je de laterlezer extensie opent, komt er een login scherm tevoorschijn. Hierop is het de bedoeling dat de gebruiker inlogt, om de functionaliteit om een artikel op te slaan te gebruiken. Het login scherm laat ook foutmeldingen zien van een foute inlogpoging. 
+
+    Als de gebruiker succesvol is ingelogd komt het article component naar voren. Hierin kan de gebruiker een url invoeren van een artikel die hij/zij wilt opslaan. Daarnaast is er de mogelijkheid om de titel van het artikel te bepalen. Als deze niet wordt ingevuld, pakken we de titel die de artikel/mercury parser ons geeft. daarnaast is het ook mogelijk om tags toe te voegen aan de artikel. Deze staan klaar om geselecteerd te worden. 
+
+    Om gebruik te maken van de database vanuit de applicatie, moet er gecommuniceerd worden met de API. De api is een programmeer interface waar je verzoeken aan kan maken. Bij de extensie zijn dit er echter maar 2. Het eerste verzoek is om de gebruiker in te loggen. Het login en de article component maken gebruik van een serverCommunication helper bestand. Hierin staan alle verzoeken die je kan doen aan de API vanuit de webextensie. Als het verzoek aan de API wordt gedaan om in te loggen, communiceert de API met de database. In de database wordt gecontroleerd of er een gebruiker bestaat met de credentials die megegeven staan. Als dit wel of niet zo is geeft de database dit terug aan de api, en de api terug aan het login component.
+
+    Voor het opslaan van een artikel maken we ook gebruik van het serverCommunication helper bestand. Hierin staat de route die nodig is om een verzoek te doen aan de API om een artikel toe te voegen aan de database. Dit verzoek gaat aan de hand van de velden die meegegeven zijn wel of niet goed. Als deze wel goed gaat dan wordt de artikel in de database opgeslagen. Zo niet, dan krijgt de user een notificatie dat er wat mis ging. 
+
     ### Database view
     ![database.png](database.png)
 
