@@ -3,12 +3,6 @@ import { saveArticle } from '../serverCommunication'
 
 import M from 'materialize-css'
 
-import IconButton from '@material-ui/core/IconButton';
-import RemoveIcon from '@material-ui/icons/Remove';
-import AddIcon from '@material-ui/icons/Add';
-
-
-
 export default function SaveArticle(props) {
     const [url, setUrl] = useState('');
     const [tags, setTags] = useState([[]]);
@@ -96,9 +90,6 @@ export default function SaveArticle(props) {
                         <div class="chips">
                             <input class="custom class"></input>
                         </div>
-                    <IconButton onClick={() => handleRemoveFields(index)}>
-                        <RemoveIcon/>
-                    </IconButton>
                 </div>
             ))
         }
