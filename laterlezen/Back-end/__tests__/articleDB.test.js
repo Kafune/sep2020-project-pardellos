@@ -21,6 +21,7 @@ describe('Article Model Tests', () => {
         await Article.deleteOne({title: 'Test1'})
         await Article.deleteOne({title: 'Test2'})
         await Article.deleteOne({title: 'Test3'})
+        await Article.deleteOne({title: 'Storm'})
         await User.deleteOne({email: 'testje@test.nl'})
         await mongoose.disconnect();
     });
@@ -68,5 +69,26 @@ describe('Article Model Tests', () => {
         //Should pass, cause it should keep the old description
         expect(newArticle.excerpt).toBe("Dit is een beschrijving")
     })
+
+    test('Edit multiple metadata from a specific article', async () => {
+        let conditions = {
+            title: "Test1",
+          };
+          let update = {
+            title: "Storm",
+            author: "Jan Jansen",
+            domain: "www.nu.nl",
+            excerpt: "Dit is nieuws over stormen"
+          };
+          await Article.findOneAndUpdate(conditions, update, { new: true }, (err) => {
+          });
+        const article = await Article.findOne({ title: "Storm"})
+        expect(article.title).toBe("Storm")
+        expect(article.author).toBe("Jan Jansen")
+        expect(article.domain).toBe("www.nu.nl")
+        expect(article.excerpt).toBe("Dit is nieuws over stormen")
+
+    });
+
     
 });
