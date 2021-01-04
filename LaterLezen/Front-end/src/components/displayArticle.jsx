@@ -169,8 +169,6 @@ export default function DisplayArticle(props) {
             {editFields ? (
               <div className="input-field inline">
                 <input
-                  required
-                  className="validate"
                   id="author-input"
                   type="text"
                   value={author}
@@ -186,8 +184,6 @@ export default function DisplayArticle(props) {
             {editFields ? (
               <div className="input-field inline">                   
                 <input
-                  required
-                  className="validate"
                   id="source-input"
                   type="text"
                   value={source}
