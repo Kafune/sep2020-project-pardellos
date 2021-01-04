@@ -3,7 +3,8 @@ import React from "react";
 import Login from "./Login";
 import Article from "./Article";
 import 'materialize-css/dist/css/materialize.min.css';
-import M from "materialize-css";
+import M from "materialize-css";  
+import {checkAuthenticated} from '../serverCommunication'
 
 import { checkAuthenticated } from "../serverCommunication";
 
@@ -25,8 +26,7 @@ export default class App extends React.Component {
         if (response.isAuthenticated === true) {
           this.handleLoginState(true);
           this.handleEmailState(response.user.email);
-          this.handleTagsState(response.user.tags);
-
+          this.handleTagState(response.user.tags);
         }
       })
       .catch((e) => {
@@ -52,7 +52,7 @@ export default class App extends React.Component {
     }));
   }
 
-  handleTagsState(value) {
+  handleTagState(value) {
     this.setState(() => ({
       tags: value,
     }));
@@ -62,6 +62,7 @@ export default class App extends React.Component {
     const currentLoginState = (c) => this.handleLoginState(c);
     const currentEmailState = (c) => this.handleEmailState(c);
     const setTags = (c) => this.setTags(c);
+    const handleTagsState = (c) => this.handleTagState(c);
 
     return (
       <div class="container">

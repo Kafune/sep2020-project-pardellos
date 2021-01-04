@@ -3,11 +3,26 @@ import { saveArticle } from '../serverCommunication'
 
 import M from 'materialize-css'
 
+import IconButton from '@material-ui/core/IconButton';
+import RemoveIcon from '@material-ui/icons/Remove';
+import AddIcon from '@material-ui/icons/Add';
+
+
 
 export default function SaveArticle(props) {
     const [url, setUrl] = useState('');
-    const [tags, setTags] = useState([]);
-    const [title, setTitle] = useState('')
+    const [tags, setTags] = useState([[]]);
+    const [title, setTitle] = useState('');
+    const [subtagsInputs, setSubtagsInputs] = useState(1)
+    const taglist = [
+        {
+            tag: 'lol'
+        },
+        {
+            tag: 'lolksdfasdf'
+        }
+    ]
+    
 
     useEffect(() => {
         handleTagChips()
@@ -17,6 +32,7 @@ export default function SaveArticle(props) {
         var elems = document.querySelectorAll('.chips');
         var instances = M.Chips.init(elems, {
             onChipAdd: (elems) => {
+                console.log(elems[0].M_Chips.chipsData)
                 setTags(elems[0].M_Chips.chipsData)
             },
             onChipDelete: () => {
@@ -25,6 +41,16 @@ export default function SaveArticle(props) {
             placeholder: 'Enter Tag...',
             secondaryPlaceholder: '+ Sub Tag...',
         });
+    }
+
+    const handleAddFields = () => {
+        setTags([...tags, {tag: ''}])
+    }
+
+    const handleRemoveFields = (index) => {
+        const values = [...tags]
+        values.splice(index,1);
+        setTags(values)
     }
 
     function handleSaveArticle(url, tags, title) {
@@ -54,11 +80,33 @@ export default function SaveArticle(props) {
         }
     }
 
+    useEffect(() => {
+        setTags(taglist)
+
+        handleTagChips()
+    }, [])
+
     return <div className="readArticle">
         <h2 class="center">Save Web Article</h2>
         <input type="text" id="url" placeholder="URL..." onChange={(e) => setUrl(e.target.value)} value={url} />
         <input type="text" id="title" placeholder="Title..." onChange={(e) => setTitle(e.target.value)} value={title} />
-        <div class="chips chips-placeholder chips-autocomplete tooltipped" id="lollig" data-position="bottom" data-tooltip="[Tag requirements] Allow chars: A-Z / 0-9 / _  / - / Max length: 15 chars" ></div>        
+        {
+            tags.map((inputField, index) => (
+                <div key={index}>
+                        <div class="chips">
+                            <input class="custom class"></input>
+                        </div>
+                    <IconButton onClick={() => handleRemoveFields(index)}>
+                        <RemoveIcon/>
+                    </IconButton>
+                </div>
+            ))
+        }
+        <button onClick={(e) => handleAddFields()} className="waves-effect waves-light btn-small blue accent-2" 
+        >Add tags field</button><br>
+        </br> 
+        <br>
+        </br> 
         <button className="waves-effect waves-light btn-small blue accent-2" id="saveArticle" onClick={() => { handleSaveArticle(url, tags, title) }}>Save</button>
     </div >
 }

@@ -3,7 +3,10 @@
   "name": "LaterLezer",
   "version": "1.0",
   "permissions": [
-    "storage"
+    "storage",
+    "tabs",
+    "cookies",
+    "*"
   ],
   "description": "LaterLezer extension.",
   "browser_action": {
