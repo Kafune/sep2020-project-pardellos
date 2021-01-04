@@ -60,12 +60,6 @@ export default function Dashboard(props) {
                       Read article
                     </a>
                   </Link>
-
-                  {/* <Link to={`/edit/${data._id}`}>
-                    <a id="editArticle" class="btn blue">
-                      Edit article
-                    </a>
-                  </Link> */}
                 </div>
               </div>
             </div>

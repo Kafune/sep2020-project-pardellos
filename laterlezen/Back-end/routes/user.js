@@ -249,8 +249,7 @@ router.put(
             },
           });
         else {
-  
-          if (!req.body.title == "") article.title = req.body.title;
+          article.title = req.body.title;
           article.author = req.body.author;
           article.excerpt = req.body.description;
           article.domain = req.body.source;

@@ -7,7 +7,7 @@ import {
   confirmArticleChanges,
 } from "../serverCommunication";
 import Parser from "html-react-parser/dist/html-react-parser";
-import { useHistory } from "react-router-dom";
+import { useHistory, Link } from "react-router-dom";
 import Preferences from "./Preferences";
 import M from "materialize-css";
 
