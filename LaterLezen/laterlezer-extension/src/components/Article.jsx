@@ -35,8 +35,6 @@ export default function Article(props) {
     e.preventDefault();
     setTitle(e.target.value);
   }
-
-
   // function handleTagSelect(value) {
   //   if (selectedTags.includes(value)) {
   //     setSelectedTags((oldArray) =>
