@@ -210,18 +210,6 @@ export async function confirmArticleChanges(
   return fetch(serverFetchBase + `/user/article`, fetchOptions);
 }
 
-export async function findAuthor(query) {
-  const fetchOptions = {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    credentials: 'include',
-    mode: 'cors'
-  }
-  return fetch(serverFetchBase + `/articles/find/`+ query, fetchOptions)
-}
-
 export async function getAuthors() {
   const fetchOptions = {
     method: 'GET',
@@ -232,4 +220,34 @@ export async function getAuthors() {
     mode: 'cors'
   }
   return fetch(serverFetchBase + `/articles/authors`, fetchOptions)
+}
+
+export async function findArticle(query, searchContent) {
+  const body = {
+    query: query,
+    searchContent: searchContent
+  }
+
+  const fetchOptions = {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    credentials: 'include',
+    mode: 'cors',
+    body: JSON.stringify(body)
+  }
+  return fetch(serverFetchBase + `/articles/search`, fetchOptions)
+}
+
+export async function getSources() {
+  const fetchOptions = {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    credentials: 'include',
+    mode: 'cors'
+  }
+  return fetch(serverFetchBase + `/articles/sources`, fetchOptions)
 }

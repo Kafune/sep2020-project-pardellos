@@ -66,7 +66,7 @@
 .preference-button {
   position: fixed;
   bottom: 0;
-  right: 16%;
+  right: 2%;
 }
 
 .preference-button .btn {
@@ -111,4 +111,45 @@
 
 .readArticle .tag {
   color: #000000;
+}
+
+.hover-show i {
+  display: none
+}
+
+.hover-show:hover i {
+  display: inline
+}
+
+.article .input-field.inline {
+  margin: 0;
+  vertical-align: baseline;
+}
+
+.edit-button {
+  position: fixed;
+  bottom: 0;
+  right: 6%;
+}
+.edit-button .btn {
+  margin: 5px 0
+}
+
+.cancel-button {
+  position: fixed;
+  bottom: 0;
+  right: 10%;
+}
+.cancel-button .btn {
+  margin: 5px 0
+}
+
+.article input[type="text"]
+{
+    font-size:x-large !important;
+    font-weight:  bold;
+}
+
+.hidden {
+  display: none;
 }
