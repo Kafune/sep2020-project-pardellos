@@ -5,6 +5,8 @@ import Article from "./Article";
 import 'materialize-css/dist/css/materialize.min.css';
 import M from "materialize-css";
 
+import { checkAuthenticated } from "../serverCommunication";
+
 export default class App extends React.Component {
   constructor(props) {
     super(props);
@@ -17,6 +19,19 @@ export default class App extends React.Component {
 
   componentDidMount() {
     M.AutoInit();
+    checkAuthenticated()
+      .then((response) => response.json())
+      .then(response => {
+        if (response.isAuthenticated === true) {
+          this.handleLoginState(true);
+          this.handleEmailState(response.user.email);
+          this.handleTagsState(response.user.tags);
+
+        }
+      })
+      .catch((e) => {
+        M.toast({ html: "Unauthorized user, please login first" });
+      });
   }
 
   setTags(value) {
@@ -34,6 +49,12 @@ export default class App extends React.Component {
   handleEmailState(value) {
     this.setState(() => ({
       email: value,
+    }));
+  }
+
+  handleTagsState(value) {
+    this.setState(() => ({
+      tags: value,
     }));
   }
 
