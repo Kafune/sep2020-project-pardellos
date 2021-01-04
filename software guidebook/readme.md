@@ -4,7 +4,23 @@
 Aangezien het lezen van de code van de LaterLezer niet het hele verhaal verteld en de redenatie achter het design van LaterLezen niet in code te beschrijven is, is ervoor gekozen om een software guidebook te schrijven. Dit maakt het gemakkelijk voor de programmeurs die verder willen bouwen op de bestaande applicatie. In dit software guidebook staat dan ook beschreven hoe de LaterLezer applicatie in elkaar steekt. 
 
 ## Table of Contents
-[TOC]
+- [Software Guidebook](#software-guidebook)
+  * [Table of Contents](#table-of-contents)
+  * [Context](#context)
+  * [Functioneel Overzicht](#functioneel-overzicht)
+  * [Kwaliteitsattributen](#kwaliteitsattributen)
+  * [Beperkingen](#beperkingen)
+  * [Principes](#principes)
+  * [Software-architectuur](#software-architectuur)
+    + [API component view](#api-component-view)
+      - [Artikel meta data bewerken](#artikel-meta-data-bewerken)
+      - [Zoeken op verschillende meta data](#zoeken-op-verschillende-meta-data)
+  * [Infrastructuur-architectuur](#infrastructuur-architectuur)
+  * [Deployment](#deployment)
+  * [Werking en ondersteuning](#werking-en-ondersteuning)
+    + [Front-end webapplicatie](#front-end-webapplicatie)
+    + [Back-end server](#back-end-server)
+    + [Extensie](#extensie)
 
 
 ## Context
