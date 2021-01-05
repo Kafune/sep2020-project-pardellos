@@ -45,9 +45,7 @@ export default function DisplayArticle(props) {
 
   const saveChanges = () => {
     let title_input = document.querySelector("#title-input");
-    let author_input = document.querySelector("#author-input");
-    let source_input = document.querySelector("#source-input");
-    if(title_input.value.length <= 0 || author_input.value.length <=0 || source_input.value.length <=0) {
+    if(title_input.value.length <= 0 ) {
       M.toast({ html: "Required fields can not be empty!" });
     }
     else {
