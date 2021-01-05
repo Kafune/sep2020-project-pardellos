@@ -9,7 +9,7 @@
 - Keep part of metadata of an article filled, even when empty
   - Only when creating a new article
 - Edit multiple metadata from a specific article
-- **Randvoorwaarden checken bij edit article**
+- Edit article and submit only empty fields
 
 ### User
 - Email format
@@ -18,8 +18,6 @@
   - Check if the password is correctly hashed and not saved as plain text
 - Add correct article object to user
   - This test creates a new article on a user account 
-- **Add tag to user (!OUDE TEST)**
-- **Check for duplicate tags (!OUDE TEST)**
 - Add new theme to user 
 - Theme stays on the current theme when changing it to a invalid theme
 
@@ -35,7 +33,6 @@
 - Login with wrong password
 - Login with right email and password
 
-
 ## End to End tests
 - User tries to register a new account, where the passwords do not match
 - User registers a new account that already exists
@@ -47,3 +44,7 @@
 - User logs in the webpage with wrong password
 - User logs in the webpage with right password
 
+## To be tested
+- Tags
+- **Add tag to user (!OUDE TEST)**
+- **Check for duplicate tags (!OUDE TEST)**
