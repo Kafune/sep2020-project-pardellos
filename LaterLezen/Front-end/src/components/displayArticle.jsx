@@ -102,16 +102,16 @@ export default function DisplayArticle(props) {
       });
   }
 
-  function handleDeleteArticle(id) {
-    deleteArticleByID(id).then((response) => {
-      if (response.msgError === true) {
-        M.toast({ html: "Failed to delete article" });
-      } else {
-        history.push("/dashboard");
-        M.toast({ html: "Successfully deleted article" });
-      }
-    });
-  }
+  // function handleDeleteArticle(id) {
+  //   deleteArticleByID(id).then((response) => {
+  //     if (response.msgError === true) {
+  //       M.toast({ html: "Failed to delete article" });
+  //     } else {
+  //       history.push("/dashboard");
+  //       M.toast({ html: "Successfully deleted article" });
+  //     }
+  //   });
+  // }
   return (
     <>
       <Preferences

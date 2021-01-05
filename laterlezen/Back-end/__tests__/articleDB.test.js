@@ -23,7 +23,6 @@ describe("Article Model Tests", () => {
     await Article.deleteOne({ title: "Test3" });
     await Article.deleteOne({ title: "Storm" });
     await Article.deleteOne({ title: "Dit is een titel" });
-    await Article.deleteOne({ title: "Gebruik van OV gehalveerd" });
     await User.deleteOne({ email: "ditiseentest@test.nl" });
     await mongoose.disconnect();
   });
