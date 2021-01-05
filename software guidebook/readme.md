@@ -5,7 +5,6 @@ Aangezien het lezen van de code van de LaterLezer niet het hele verhaal verteld 
 
 ## Table of Contents
 - [Software Guidebook](#software-guidebook)
-  * [Table of Contents](#table-of-contents)
   * [Context](#context)
   * [Functioneel Overzicht](#functioneel-overzicht)
   * [Kwaliteitsattributen](#kwaliteitsattributen)
@@ -25,20 +24,20 @@ Aangezien het lezen van de code van de LaterLezer niet het hele verhaal verteld 
 
 ## Context
 
-De opdrachtgever is als onderzoeker bij ons langsgekomen met de vraag of wij een reader-app voor hem willen ontwikkelen. De bestaande reader-apps voldoen niet aan de eisen die hij stelt. Hij denkt dat het waard is om een nieuwe reader-app te laten maken die wel aan zijn eisen voldoen. De eisen zijn beschreven in de hoofdstuk Functioneel Overzicht. Deze reader-app is bedoeld om hem en andere onderzoekers te ondersteunen met het opslaan van wetenschappelijke artikelen zodat zij deze later kunnen lezen.
+De opdrachtgever is als onderzoeker bij ons langsgekomen met de vraag of wij een reader-app voor hem willen ontwikkelen. De bestaande reader-apps voldoen niet aan de eisen die hij stelt. Hij denkt dat het waard is om een nieuwe reader-app te laten maken die wel aan zijn eisen voldoen. De eisen zijn beschreven in het hoofdstuk Functioneel Overzicht. Deze reader-app is bedoeld om hem en andere onderzoekers te ondersteunen met het opslaan van wetenschappelijke artikelen zodat zij deze later kunnen lezen.
 
-Met deze reader-app hoopt de opdrachtgever dat deze app wel aan zijn eisen voldoet, en dat andere onderzoekers naar deze reader-app overstappen. Dit betekent dat de Laterlezer een concurrent wordt voor de andere reader-apps, zoals Instapaper, Raindrop, Pocket.io, etc. De oprachtgever heeft als doel om een reader-app te ontwikkelen die meer gebruikersvriendelijk is voor lezers die frequent (wetenschappelijke) artikelen opslaan, dus Laterlezer is bedoeld voor een ander doelgroep dan de hiervoor genoemde reader-apps.
+Met deze reader-app hoopt de opdrachtgever dat deze app wel aan zijn eisen voldoet, en dat andere onderzoekers naar deze reader-app overstappen. Dit betekent dat de Laterlezer een concurrent wordt voor de andere reader-apps, zoals Instapaper, Raindrop, Pocket.io, etc. De opdrachtgever heeft als doel om een reader-app te ontwikkelen die meer gebruikersvriendelijk is voor lezers die frequent (wetenschappelijke) artikelen opslaan.
 
 ## Functioneel Overzicht
 
-De Laterlezer app bestaat uit een mobiele webapplicatie waarin de gebruiker zijn artikelen op kan slaan en kan lezen. Daarnaast bestaat Laterlezer uit een extensie, waarmee gebruikers artikelen snel op kan slaan op een andere website.
+De Laterlezer app bestaat uit een mobiele webapplicatie waarin de gebruiker zijn artikelen op kan slaan en kan lezen. Daarnaast heeft de Laterlezer app ook een extensie, waarmee gebruikers artikelen snel op kan slaan terwijl deze gebruiker op een andere website aan het surfen is. Dit kan zonder gebruik te maken van de Laterlezer website en je gemakkelijk en spontaan een artikel kan opslaan.
 
-De Laterlezer app slaat (wetenschappelijke) artikelen op die vanuit andere websites zijn gehaald. Elk artikel heeft een URL waarvan de artikel vandaan komt, en optioneel een aantal tags om het artikel snel terug te vinden m.b.v. het filtersysteem voor tags. Bij het lezen van een artikel kan de gebruiker een aantal functies gebruiken om het lezen makkelijker te maken, bijvoorbeeld het groter maken van tekst, of het veranderen van de achtergrond kleur. Om een artikel bij een gebruiker, moet deze natuurlijk ook kunnen registreren en inloggen. 
+De Laterlezer app slaat artikelen op die van andere websites zijn gehaald. Elk artikel heeft een URL waarvan de artikel vandaan komt, en optioneel een aantal tags om het artikel snel terug te vinden m.b.v. het filtersysteem voor tags. Bij het lezen van een artikel kan de gebruiker een aantal functies gebruiken om het lezen makkelijker te maken, bijvoorbeeld het groter maken van tekst, of het veranderen van de achtergrond kleur. Om een artikel bij een gebruiker op te slaan, moet deze natuurlijk ook kunnen registreren en inloggen. Na het inloggen heeft de gebruiker de optie om een artikel op te slaan en te koppelen aan zijn account.  
 
-Zonder deze basisfunctionaliteit kan de applicatie niet werken. Het is van belang dat deze functies als eerst zijn uitgevoerd voordat we verder kunnen met de extra functies. De opdrachtgever wilt dat wij een aantal extra functionaliteiten implementeren zodat de app daadwerkelijk zijn eigen functies heeft. Deze functionaliteiten zijn als volgt:
+Zonder deze basisfunctionaliteit kan de applicatie niet werken. Het is van belang dat deze functies als eerst zijn uitgevoerd voordat we verder kunnen met de extra functies. De opdrachtgever heeft graag dat wij een aantal extra functionaliteiten implementeren zodat de app daadwerkelijk zijn eigen functies heeft. Deze functionaliteiten zijn als volgt:
 
 - Pay-walls omzeilen
-- Hiërarchische tags
+- Van hiërarchische tags gebruik maken
 - Opslaan van PDF's
 - Metadata ophalen
 - Importeer data van andere reader-apps
@@ -57,7 +56,7 @@ Natuurlijk zijn er tijdens de ontwikkeling van een app ook niet functionele eise
 
   Daarnaast willen wij ten alle koste inbraken zoals SQL Injectie voorkomen, dit doen we door middel van meerdere RegEx controles uitvoeren voordat de invoer verstuurd naar de server. Behalve de Front-end bevat de Back-end ook een aantal controles.
 
-- Compatibiliteit: de LaterLezer app wordt uiteindelijk ook een web-extensie. Daarom moet deze extensie beschikbaar zijn voor alle browsers. Hiernaast willen wij het ook mogelijk maken dat alle artikelen toegevoegd kunnen worden bij onze app.
+- Compatibiliteit: de LaterLezer app heeft uiteindelijk ook een web-extensie. 
 
 - Gebruikersvriendelijkheid: om alle gebruikers tevreden te houden moet de app gebruikersvriendelijk zijn. Dit doen met een menu waarin je jouw voorkeur kan aangeven tijdens het lezen van een artikel. Denk hierbij aan de achtergrond kleur, het lettertype en lettergrootte. Daarnaast zullen de gebruikers een mogelijkheid hebben om een van de vaste thema's te kiezen die LaterLezen aanbied.
 - Efficiëntie: natuurlijk wilt een gebruiker niet teveel tijd en moeite insteken tijdens het toevoegen van een artikel. Daarom houdt LaterLezen het erg compact en makkelijk. De gebruiker hoeft eenvoudig een URL van het artikel in te voeren en eventueel een of meerdere tags.
@@ -72,14 +71,14 @@ Tijdens het ontwikkelen van de app zijn er een aantal beperkingen, deze beperkin
 - Het team bestaat uit 5 man.
 - Ieder teamlid werkt tijdens het project ook aan zijn leerdoelen.
 - Het team ontwikkelt de app d.m.v. Node, Express, MongoDB/Mongoose en React omdat het team daarmee de meeste kennis heeft.
-- Het team maakt gebruik van onbekende technieken, zoals ontwikkeling van extensies en login met oAuth
+- Het team maakt gebruik van onbekende technieken, zoals ontwikkeling van extensies 
 - De server stuurt en ontvangt berichten van de client in de vorm van JSON
 
 Een beperkingen hoeft niet altijd meteen negatief te zijn, kijk hierbij naar de grootte van ons team, met een klein groepje van 5 is het makkelijker om samen te werken en het overzicht van het gehele team te behouden. Ook is het hierdoor simpeler om gebruik te maken van elkaars sterke punten.
 
 
 ## Principes
-Wij hebben op dit moment niet over bepaalde principes nagedacht tijdens het ontwerpen en het bouwen van de Laterlezer app.
+Wij hebben op dit moment niet over principes nagedacht tijdens het ontwerpen en het bouwen van de Laterlezer app.
 
 ## Software-architectuur
 Door het lezen van dit hoofdstuk krijg je een beter beeld van hoe de structuur van de software eruit ziet. Deze schetsen zijn gebaseerd op het C4 model.
@@ -261,7 +260,7 @@ Voor de extensie zijn de volgende dependencies nodig voor het succesvol draaien 
 ## Werking en ondersteuning
 Om alle onderdelen van Laterlezer te installeren, heeft Laterlezer de volgende vereisten:
 - Git, om het project binnen te halen
-- Node, om alle onderdelen van de applicatie te installeren
+- Node of Yarn, om alle onderdelen van de applicatie te installeren. In dit onderdeel beschrijven we alleen de npm versie.
 
 Om dit project op te halen, navigeer naar de map waarin het project wordt opgeslagen.
 
