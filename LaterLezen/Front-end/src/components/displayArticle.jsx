@@ -54,7 +54,7 @@ export default function DisplayArticle(props) {
         setCurrentTags(elems[0].M_Chips.chipsData);
       },
       placeholder: "Enter Tag",
-      secondaryPlaceholder: "+ Sub Tag"
+      secondaryPlaceholder: "+ Sub Tag",
     });
   }
 
@@ -99,16 +99,15 @@ export default function DisplayArticle(props) {
     if (title_input.value.length <= 0) {
       M.toast({ html: "Required fields can not be empty!" });
     } else {
-      // if (tags !== undefined) {
-      //   tags.forEach((data) => {
-      //     data.forEach((element) => {
-      //       if (!new RegExp("^[a-zA-Z0-9_.-]{1,15}$").test(element)) {
-      //         M.toast({ html: 'Geen geldige tag: ' + element })
-            
-      //       }
-      //     })
-      //   })
-      // }
+      if (tags !== undefined) {
+        tags.forEach((data) => {
+          data.forEach((element) => {
+            if (!new RegExp("^[a-zA-Z0-9_.-]{1,15}$").test(element)) {
+              M.toast({ html: "Geen geldige tag: " + element });
+            }
+          });
+        });
+      }
       confirmArticleChanges(
         article._id,
         title,
@@ -246,26 +245,26 @@ export default function DisplayArticle(props) {
             )}
           </h5>
           <div className={editFields ? "col-md-10" : "hidden"}>
-            <h5>Tags: 
-            <div
-              class="inline chips chips-placeholder chips-autocomplete tooltipped"
-              data-position="bottom"
-              data-tooltip="[Tag requirements] Allow chars: A-Z / 0-9 / _  / - / Max length: 15 chars"
-            ></div>
-            
-            <button
-              className="inline waves-effect waves-light btn-small blue accent-2"
-              onClick={() => {
-                handleAddClick();
-              }}
-            >
-              Add
-            </button>
+            <h5>
+              Tags:
+              <div
+                class="inline chips chips-placeholder chips-autocomplete tooltipped"
+                data-position="bottom"
+                data-tooltip="[Tag requirements] Allow chars: A-Z / 0-9 / _  / - / Max length: 15 chars"
+              ></div>
+              <button
+                className="inline waves-effect waves-light btn-small blue accent-2"
+                onClick={() => {
+                  handleAddClick();
+                }}
+              >
+                Add
+              </button>
             </h5>
             <h5>Used Tags:</h5>
             {tags.map((element, i) => {
               return (
-                <h4 key={i}>
+                <p key={i}>
                   <li>
                     {element + " "}
                     <button
@@ -277,7 +276,7 @@ export default function DisplayArticle(props) {
                       <i class="material-icons">delete</i>
                     </button>
                   </li>
-                </h4>
+                </p>
               );
             })}
           </div>
@@ -292,8 +291,6 @@ export default function DisplayArticle(props) {
             value={description}
             onChange={(e) => setDescription(e.target.value)}
           ></textarea>
-
-          
           <img className="responsive-img" src={article.lead_image_url} />
         </div>
         <div className="text-flow">
