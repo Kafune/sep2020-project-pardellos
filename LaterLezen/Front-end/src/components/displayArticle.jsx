@@ -284,17 +284,16 @@ export default function DisplayArticle(props) {
               );
             })}
           </div>
+          <div className={editFields ? "" : "hidden"}>
+            <h5>Description:</h5>
           <textarea
             required
-            className={
-              editFields
-                ? "materialize-textarea"
-                : "materialize-textarea hidden"
-            }
+            className="materialize-textarea"
             id={"description-input"}
             value={description}
             onChange={(e) => setDescription(e.target.value)}
           ></textarea>
+          </div>
           <img className="responsive-img" src={article.lead_image_url} />
         </div>
         <div className="text-flow">
