@@ -19,7 +19,6 @@ export default function Login(props) {
                     props.handleEmailState(email)
                     props.handleFirstnameState(response.firstname)
                     props.handleLastnameState(response.lastname)
-                    // handleTags(response.tags)
                     props.handleTagsState(response.tags)
                     history.push('/dashboard')
                 }

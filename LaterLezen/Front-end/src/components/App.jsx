@@ -2,7 +2,6 @@ import React from "react";
 import { Link, Switch, Route } from "react-router-dom";
 import Dashboard from "./Dashboard";
 import SaveArticle from "./saveArticle";
-import SaveArticlePdf from "./saveArticlePdf";
 import SearchArticle from "./searchArticle";
 import Login from "./Login";
 import Register from "./Register";
@@ -41,7 +40,6 @@ export default class App extends React.Component {
           this.handleFirstnameState(response.user.firstname);
           this.handleLastnameState(response.user.lastname);
           this.handleTagsState(response.user.tags);
-          console.log(response.user.tags);
         }
       })
       .catch((e) => {
@@ -153,16 +151,6 @@ export default class App extends React.Component {
               </a>
             </li>
           </Link>
-          <Link to="/save/pdf">
-            <li>
-              <a>
-                <i class="material-icons" id="savePDF">
-                  picture_as_pdf
-                </i>
-                Save PDF Article
-              </a>
-            </li>
-          </Link>
           <Link to="/search">
             <li>
               <a>
@@ -216,9 +204,6 @@ export default class App extends React.Component {
             </Route>
             <Route path="/save/web">
               <SaveArticle />
-            </Route>
-            <Route path="/save/pdf">
-              <SaveArticlePdf tags={this.state.tags} />
             </Route>
             <Route path="/search">
               <SearchArticle

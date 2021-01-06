@@ -79,7 +79,7 @@
 .inner-content{
   position: absolute;
   bottom: 65px;
-  left: 0;
+  width: inherit;
 }
 
 .tag {

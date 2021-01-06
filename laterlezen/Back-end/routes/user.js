@@ -157,7 +157,7 @@ router.post(
       .then((article) => {
         description = article.description;
       })
-      .catch((err) => {});
+      .catch((err) => { });
     var t1 = performance.now();
     console.log("Call to articleparser took " + (t1 - t0) + " milliseconds.");
     var t2 = performance.now();
@@ -264,9 +264,9 @@ router.put(
           article.excerpt = req.body.description;
           article.domain = req.body.source;
           if (!req.body.tags[0] == "") {
-            let processedTags = processTags(req.body.tags);
-            article.tags = processedTags;
-            req.user.tags = handleUserNestedTags(processedTags, req.user.tags);
+            article.tags = req.body.tags;
+            handleUserNestedTags(req.body.tags, req.user.tags);
+            req.user.markModified("tags");
             req.user.save();
           }
           article.save();
@@ -324,25 +324,25 @@ router.put(
   }),
   (req, res) => {
     let tags = req.body.tags;
+
     User.findById({
       _id: req.user._id,
     })
       .populate({
         path: "articles",
         match: {
-          tags: {
-            $all: tags,
-          },
+          "tags": tags
         },
       })
       .exec((err, document) => {
-        if (err)
+        if (err) {
           res.status(500).json({
             message: {
               msgBody: "Error has occured",
               msgError: true,
             },
           });
+        }
         else {
           res.status(200).json({
             articles: document.articles,
@@ -523,7 +523,7 @@ router.get(
 // }
 
 function handleUserNestedTags(data, userTags) {
-  const node = (tagName, parent = null) => ({ tagName, parent, _id : new ObjectID, subTags: [] });
+  const node = (tagName, parent = null) => ({ tagName, parent, _id: new ObjectID, subTags: [] });
   const addNode = (parent, child) => (parent.subTags.push(child), child);
   const findNamed = (name, parent) => {
     for (const child of parent.subTags) {
@@ -536,7 +536,7 @@ function handleUserNestedTags(data, userTags) {
       }
     }
   };
-  const TOP_NAME = "Top",
+  const TOP_NAME = "/",
     top = node(TOP_NAME);
   for (const children of data) {
     let parent = userTags;

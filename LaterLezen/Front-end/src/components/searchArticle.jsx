@@ -4,82 +4,66 @@ import { Link } from "react-router-dom";
 import M from "materialize-css";
 
 export default function SearchArticle(props) {
-  const [tags, setTags] = useState(props.tags);
-  const [isChecked, setIsChecked] = useState("");
-  const [selectedTags, setSelectedTags] = useState("")
+  const [tags, setTags] = useState([]);
+  const [isChecked, setIsChecked] = useState(false);
+  const [selectedTags, setSelectedTags] = useState([])
   const [articles, setArticles] = useState(props.articles);
   const [tagCounter, setTagCounter] = useState(0);
-  const [isLoading, setIsLoading] = useState(true)
-  const [searchMainTag, setSearchMainTag] = useState('')
-  const [searchSubTag, setSearchSubTag] = useState('')
-  const [mainTagState, setMainTagState] = useState(false)
-  const [subTagState, setSubTagState] = useState(false)
-  const [lastTagState, setLastTagState] = useState(false)
   const [author, setAuthor] = useState('')
   const [showSearch, setShowSearch] = useState(0)
-
-  
+  const [tagState, setTagState] = useState(tags)
 
   useEffect(() => {
     setTags(props.tags)
-    if (tags.length >= 1) {
-      setIsLoading(false)
-    }
-  }, [props.tags, tags]);
+    setTagState(props.tags)
+    console.log(props.tags)
+  }, [props.tags])
 
-  useEffect(() => {
-    if (tagCounter > 0) {
-      setMainTagState(true)
-    } else {
-      setMainTagState(false)
-    }
+  function printTree(treeNode, indent = "") {
+    let tempArray = []
+      treeNode.subTags.forEach(element => {
+        tempArray.push(element)
+      });
 
-    if (tagCounter > 1) {
-      setSubTagState(true)
-    } else {
-      setSubTagState(false)
-    }
-    if (tagCounter > 2) {
-      setLastTagState(true)
-    } else {
-      setLastTagState(false)
-    }
+    setTagState(tempArray)
+  }
 
-  }, [tagCounter])
+  function handleSelectTag(index, event) {
+    printTree(tagState[index])
+    handleCheckBox(event)
+    setIsChecked(false)
+    // tags.subTags[index].subTags.forEach((element) => {
+    //   // console.log(element)
+    //   extraction(element)
+    //   if (element.tagName === undefined || null) {
+    //     return ''
+    //   } else {
+    //     setTagState(tags.subTags[index])
+    //   }
+    // })
+  }
 
   function handleSearchArticleByTag() {
-    let selectedTagsList = []
-
-    Object.keys(selectedTags).map((key) => {
-      if (selectedTags[key] === true) {
-        selectedTagsList.push(key);
-      }
-    });
-    searchArticleByTags(selectedTagsList)
+    console.log(selectedTags)
+    searchArticleByTags(selectedTags)
       .then((response) => response.json())
       .then((response) => {
+        console.log(response)
         setArticles(response.articles);
       });
   }
 
   function handleClearTags() {
-    setTagCounter(0)
     setIsChecked('');
-    setSelectedTags('')
+    setSelectedTags([])
     setArticles([])
+    printTree(tags)
   }
 
   const handleCheckBox = (e) => {
-    let isSelected = e.target.checked;
-    if (isSelected) {
       setIsChecked({ ...isChecked, [e.target.id]: true });
-      setSelectedTags({ ...selectedTags, [e.target.name]: true })
+      selectedTags.push(e.target.name)
       setTagCounter(tagCounter + 1)
-    } else {
-      setIsChecked({ ...isChecked, [e.target.name]: false });
-      setSelectedTags({ ...selectedTags, [e.target.name]: false })
-      setTagCounter(tagCounter - 1)
-    }
   };
 
   const handleSearchByAuthor = () => {
@@ -116,13 +100,14 @@ export default function SearchArticle(props) {
   };
 
   const handleSearchState = (state) => {
+    printTree(tags)
+    handleClearTags()
     setShowSearch(state)
     if (state == 2) {
       getAllAuthors()
     }
   }
-
-
+  
   return (
     <div>
       <h2 class="center">Search Article</h2>
@@ -143,81 +128,19 @@ export default function SearchArticle(props) {
               <div>
                 <div class="row">
                   <h3>Select your tag(s)</h3>
-                  {tags.map((mainTag) => {
-                    return (
-                      <div class="col" key={mainTag._id}>
-                        <p>
-                          <label>
-                            <input
-                              type="checkbox"
-                              name={mainTag.tagName}
-                              id={mainTag._id}
-                              checked={isChecked[mainTag._id]}
-                              onClick={(e) => {
-                                handleCheckBox(e)
-                                setSearchMainTag(mainTag.tagName)
-                              }}
-                              disabled={mainTagState}
-                            />
-                            <span>{mainTag.tagName}</span>
-                          </label>
-                        </p>
-                      </div>
-                    )
+                  {tagState.map((element, i) => {
+                    return <div>
+                      <p>
+                        <label>
+                          <input name={element.tagName} type="checkbox" onClick={(e) => handleSelectTag(i, e)}
+                            id={element._id}
+                            checked={isChecked}
+                          />
+                          <span>{element.tagName}</span>
+                        </label>
+                      </p>
+                    </div>
                   })}
-                  {tags.filter((tag) => (tag.tagName.includes(searchMainTag))).map((filteredTags) => {
-                    return filteredTags.subTags.map((subTag) => {
-                      return (
-                        <div class="col" key={subTag._id}>
-                          { tagCounter > 0
-                            ? <p>
-                              <label>
-                                <input
-                                  type="checkbox"
-                                  name={subTag.tagName}
-                                  id={subTag._id}
-                                  checked={isChecked[subTag._id]}
-                                  onClick={(e) => {
-                                    handleCheckBox(e)
-                                    setSearchSubTag(subTag.tagName)
-                                  }}
-                                  disabled={subTagState}
-                                />
-                                <span>{subTag.tagName}</span>
-                              </label>
-                            </p>
-                            : null}
-                        </div>
-                      )
-                    })
-                  })}
-                  {
-                    tags.filter((tag) => (tag.tagName.includes(searchMainTag))).map((filteredTags) => {
-                      return filteredTags.subTags.filter((element) => (element.tagName.includes(searchSubTag))).map((filteredSubTags) => {
-                        return filteredSubTags.subTags.map((filteredSubTag) => {
-                          return (
-                            <div class="col" key={filteredSubTag._id}>
-                              { tagCounter > 1
-                                ? <p>
-                                  <label>
-                                    <input
-                                      type="checkbox"
-                                      name={filteredSubTag.tagName}
-                                      id={filteredSubTag._id}
-                                      checked={isChecked[filteredSubTag._id]}
-                                      onClick={handleCheckBox}
-                                      disabled={lastTagState}
-                                    />
-                                    <span>{filteredSubTag.tagName}</span>
-                                  </label>
-                                </p>
-                                : null}
-                            </div>
-                          )
-                        })
-                      })
-                    })
-                  }
                 </div>
                 <div class="row">
                   <div class="col">
@@ -269,6 +192,10 @@ export default function SearchArticle(props) {
             return null;
         }
       })()}
+      <h3>Selected tag(s):</h3>
+      {selectedTags.map((element) => {
+        return <li>{element}</li>
+      })}
       <div class="row">
         {articles.map((data) => {
           return (
@@ -294,8 +221,8 @@ export default function SearchArticle(props) {
                   </Link>
                   <p>
                     Tags:{" "}
-                    {data.tags.map((data) => {
-                      return data + " ";
+                    {data.tags.map((element, i) => {
+                      return <li key={i}>{element + " "}</li>
                     })}
                   </p>
                 </div>
