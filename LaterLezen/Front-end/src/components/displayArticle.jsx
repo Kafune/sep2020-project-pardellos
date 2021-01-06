@@ -99,30 +99,34 @@ export default function DisplayArticle(props) {
     if (title_input.value.length <= 0) {
       M.toast({ html: "Required fields can not be empty!" });
     } else {
+      let noErrors = true;
       if (tags !== undefined) {
         tags.forEach((data) => {
           data.forEach((element) => {
             if (!new RegExp("^[a-zA-Z0-9_.-]{1,15}$").test(element)) {
               M.toast({ html: "Geen geldige tag: " + element });
+              noErrors = false;
             }
           });
         });
       }
-      confirmArticleChanges(
-        article._id,
-        title,
-        source,
-        description,
-        author,
-        tags
-      )
-        .then(() => {
-          M.toast({ html: "Article succesfully saved" });
-          setEditFields(false);
-        })
-        .catch(() => {
-          M.toast({ html: "Article could not be saved" });
-        });
+      if (noErrors === true) {
+        confirmArticleChanges(
+          article._id,
+          title,
+          source,
+          description,
+          author,
+          tags
+        )
+          .then(() => {
+            M.toast({ html: "Article succesfully saved" });
+            setEditFields(false);
+          })
+          .catch(() => {
+            M.toast({ html: "Article could not be saved" });
+          });
+      }
     }
   };
 
