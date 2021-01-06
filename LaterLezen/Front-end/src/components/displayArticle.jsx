@@ -21,6 +21,57 @@ export default function DisplayArticle(props) {
   const [description, setDescription] = useState("");
   const [author, setAuthor] = useState("");
   const [tags, setTags] = useState([]);
+  const [currentTags, setCurrentTags] = useState([]);
+
+  useEffect(() => {
+    getArticleContent();
+    let dropdown1 = document.querySelector(".dropdown-trigger");
+    let dropdownOptions = {
+      closeOnClick: false,
+      constrainWidth: false,
+      onCloseStart: () => {
+        handleCancelButton();
+      },
+    };
+    M.Dropdown.init(dropdown1, dropdownOptions);
+    getPreferences();
+    return () => (document.body.className = "");
+  }, []);
+
+  useEffect(() => {
+    handleTagChips();
+  }, [tags]);
+
+  function handleTagChips() {
+    setCurrentTags([]);
+
+    var elems = document.querySelectorAll(".chips");
+    var instances = M.Chips.init(elems, {
+      onChipAdd: () => {
+        setCurrentTags(elems[0].M_Chips.chipsData);
+      },
+      onChipDelete: () => {
+        setCurrentTags(elems[0].M_Chips.chipsData);
+      },
+      placeholder: "Enter Tag",
+      secondaryPlaceholder: "+ Sub Tag"
+    });
+  }
+
+  const handleRemoveClick = (index) => {
+    const List = [...tags];
+    List.splice(index, 1);
+    setTags(List);
+  };
+
+  function handleAddClick() {
+    var tagArray = [];
+
+    currentTags.forEach((element) => {
+      tagArray.push(element.tag);
+    });
+    setTags([...tags, tagArray]);
+  }
 
   const checkTheme = (newTheme) => {
     setBackground(newTheme);
@@ -45,18 +96,34 @@ export default function DisplayArticle(props) {
 
   const saveChanges = () => {
     let title_input = document.querySelector("#title-input");
-    if(title_input.value.length <= 0 ) {
+    if (title_input.value.length <= 0) {
       M.toast({ html: "Required fields can not be empty!" });
-    }
-    else {
-    confirmArticleChanges(article._id, title, source, description, author, tags)
-      .then(() => {
-        M.toast({ html: "Article succesfully saved" });
-        setEditFields(false);
-      })
-      .catch(() => {
-        M.toast({ html: "Article could not be saved" });
-      });
+    } else {
+      // if (tags !== undefined) {
+      //   tags.forEach((data) => {
+      //     data.forEach((element) => {
+      //       if (!new RegExp("^[a-zA-Z0-9_.-]{1,15}$").test(element)) {
+      //         M.toast({ html: 'Geen geldige tag: ' + element })
+            
+      //       }
+      //     })
+      //   })
+      // }
+      confirmArticleChanges(
+        article._id,
+        title,
+        source,
+        description,
+        author,
+        tags
+      )
+        .then(() => {
+          M.toast({ html: "Article succesfully saved" });
+          setEditFields(false);
+        })
+        .catch(() => {
+          M.toast({ html: "Article could not be saved" });
+        });
     }
   };
 
@@ -64,21 +131,6 @@ export default function DisplayArticle(props) {
     getArticleContent();
     setEditFields(false);
   };
-
-  useEffect(() => {
-    getArticleContent()
-    let dropdown1 = document.querySelector(".dropdown-trigger");
-    let dropdownOptions = {
-      closeOnClick: false,
-      constrainWidth: false,
-      onCloseStart: () => {
-        handleCancelButton();
-      },
-    };
-    M.Dropdown.init(dropdown1, dropdownOptions);
-    getPreferences();
-    return () => (document.body.className = "");
-  }, []);
 
   const getArticleContent = () => {
     let url = window.location.href;
@@ -100,7 +152,7 @@ export default function DisplayArticle(props) {
           M.textareaAutoResize(textArea);
         }
       });
-  }
+  };
 
   // function handleDeleteArticle(id) {
   //   deleteArticleByID(id).then((response) => {
@@ -143,25 +195,26 @@ export default function DisplayArticle(props) {
 
       <div className="article">
         <div className="center">
-            {editFields ? (
-              <React.Fragment>
-                <h5>Title:
-              <div className="input-field inline">
-                <input
-                  required
-                  className="validate"
-                  id="title-input"
-                  type="text"
-                  value={title}
-                  onChange={(e) => setTitle(e.target.value)}
-                ></input>
-              </div>
+          {editFields ? (
+            <React.Fragment>
+              <h5>
+                Title:
+                <div className="input-field inline">
+                  <input
+                    required
+                    className="validate"
+                    id="title-input"
+                    type="text"
+                    value={title}
+                    onChange={(e) => setTitle(e.target.value)}
+                  ></input>
+                </div>
               </h5>
-              </React.Fragment>
-            ) : (
-              <h2 className={"hover-show"}>{title}</h2>
-            )}
-        
+            </React.Fragment>
+          ) : (
+            <h2 className={"hover-show"}>{title}</h2>
+          )}
+
           <h5 className={"hover-show"}>
             Published by:
             {editFields ? (
@@ -180,7 +233,7 @@ export default function DisplayArticle(props) {
           <h5 className={"hover-show"}>
             Source:
             {editFields ? (
-              <div className="input-field inline">                   
+              <div className="input-field inline">
                 <input
                   id="source-input"
                   type="text"
@@ -192,14 +245,55 @@ export default function DisplayArticle(props) {
               <b>{" " + source + " "}</b>
             )}
           </h5>
-        <textarea 
-          required
-          className={editFields ? "materialize-textarea" : "materialize-textarea hidden" } 
-          id={"description-input"}
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
-          >
-          </textarea> 
+          <div className={editFields ? "col-md-10" : "hidden"}>
+            <h5>Tags: 
+            <div
+              class="inline chips chips-placeholder chips-autocomplete tooltipped"
+              data-position="bottom"
+              data-tooltip="[Tag requirements] Allow chars: A-Z / 0-9 / _  / - / Max length: 15 chars"
+            ></div>
+            
+            <button
+              className="inline waves-effect waves-light btn-small blue accent-2"
+              onClick={() => {
+                handleAddClick();
+              }}
+            >
+              Add
+            </button>
+            </h5>
+            <h5>Used Tags:</h5>
+            {tags.map((element, i) => {
+              return (
+                <h4 key={i}>
+                  <li>
+                    {element + " "}
+                    <button
+                      className="btn-floating btn-small waves-effect waves-light red"
+                      onClick={() => {
+                        handleRemoveClick(i);
+                      }}
+                    >
+                      <i class="material-icons">delete</i>
+                    </button>
+                  </li>
+                </h4>
+              );
+            })}
+          </div>
+          <textarea
+            required
+            className={
+              editFields
+                ? "materialize-textarea"
+                : "materialize-textarea hidden"
+            }
+            id={"description-input"}
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+          ></textarea>
+
+          
           <img className="responsive-img" src={article.lead_image_url} />
         </div>
         <div className="text-flow">
