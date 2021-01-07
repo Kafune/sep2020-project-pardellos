@@ -78,7 +78,15 @@ export default function SearchArticle(props) {
     const sanitizedSearch = escapeRegExp(query);
     findArticle(sanitizedSearch, searchContent)
       .then((response) => response.json())
-      .then((result) => setArticles(result));
+      // .then(response => console.log(response))
+      .then(result => {
+        if (result.length <= 0) {
+          console.log("hier")
+          M.toast({ html: "No article found!" })
+        } else {
+          setArticles(result)
+        }
+      });
   };
 
   const handleSearchState = (state) => {
