@@ -142,6 +142,7 @@ export default function Article(props) {
   }
 
   return (
+    <div className="article">
     <div className="container">
       <h3 className="h1">LaterLezer</h3>
       <h4 className="h2">Add article:</h4>
@@ -153,9 +154,6 @@ export default function Article(props) {
           onChange={(e) => handleUrlChange(e)}
           value={url}
         />
-        <button onClick={(e) => handleGetUrl(e)}>
-          get url from active tab
-        </button>
         <input
           type="text"
           placeholder="Title.."
@@ -176,10 +174,10 @@ export default function Article(props) {
         >
           Add
         </button>
-        <h3>Used Tags:</h3>
+        <h5>Used Tags:</h5>
         {tags.map((element, i) => {
           return (
-            <h4 key={i}>
+            <h6 key={i}>
               <li>
                 {element + " "}
                 <button
@@ -191,7 +189,7 @@ export default function Article(props) {
                   <i class="material-icons">delete</i>
                 </button>
               </li>
-            </h4>
+            </h6>
           );
         })}
         <button
@@ -211,6 +209,7 @@ export default function Article(props) {
           Logout
         </button>
       </div>
+    </div>
     </div>
   );
 }
