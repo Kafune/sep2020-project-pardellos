@@ -422,6 +422,8 @@ router.put("/testing/art/:title", (req, res) => {
 });
 
 router.post("/articleExtension", (req, res) => {
+  console.log(req.user);
+  req.body.tags = []
   const findUser = User.findOne({
     email: req.body.email,
   }).then((response) => {

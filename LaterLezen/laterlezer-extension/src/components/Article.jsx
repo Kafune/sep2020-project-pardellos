@@ -3,14 +3,16 @@ import React, { useState, useEffect } from "react";
 import TagList from "./TagsList";
 import { saveArticle } from "../serverCommunication";
 import M from "materialize-css";
+
 export default function Article(props) {
-  const [email, setEmail] = useState(props.email)
+  const [email, setEmail] = useState(props.email);
   const [url, setUrl] = useState("");
-  const [title, setTitle] = useState("")
+  const [title, setTitle] = useState("");
   const [filter, setFilter] = useState("");
+  const [tags, setTags] = useState([]);
+  const [currentTags, setCurrentTags] = useState([]);
   // const [selectedTags, setSelectedTags] = useState([]);
   // const [filteredTags, setFilteredTags] = useState([props.tags]);
-
 
   // useEffect(() => {
   //   setFilteredTags([...props.tags])
@@ -20,6 +22,26 @@ export default function Article(props) {
   //   let filtered = props.tags.filter((name) => name.includes(filter));
   //   setFilteredTags(filtered);
   // }, [filter]);
+
+  useEffect(() => {
+    handleTagChips();
+  }, [tags]);
+
+  function handleTagChips() {
+    setCurrentTags([]);
+
+    var elems = document.querySelectorAll(".chips");
+    var instances = M.Chips.init(elems, {
+      onChipAdd: () => {
+        setCurrentTags(elems[0].M_Chips.chipsData);
+      },
+      onChipDelete: () => {
+        setCurrentTags(elems[0].M_Chips.chipsData);
+      },
+      placeholder: "Enter Tag...",
+      secondaryPlaceholder: "+ Sub Tag...",
+    });
+  }
 
   function handleUrlChange(e) {
     e.preventDefault();
@@ -36,7 +58,6 @@ export default function Article(props) {
     setTitle(e.target.value);
   }
 
-
   // function handleTagSelect(value) {
   //   if (selectedTags.includes(value)) {
   //     setSelectedTags((oldArray) =>
@@ -46,28 +67,68 @@ export default function Article(props) {
   //     setSelectedTags((oldArray) => [...oldArray, value]);
   //   }
   // }
-
-  function handleSaveArticle(url, title, email) {
-    saveArticle(url, title, email)
-      .then((response) => response.json())
-      .then((response) => {
-        console.log(response);
-        M.toast({ html: "Article successfully saved" });
-      });
+  function handleSaveArticle(url, title, email, tags) {
+    let noErrors = true;
+    if (
+      new RegExp(
+        "([a-zA-Z0-9]+://)?([a-zA-Z0-9_]+:[a-zA-Z0-9_]+@)?([a-zA-Z0-9.-]+\\.[A-Za-z]{2,4})(:[0-9]+)?(/.*)?"
+      ).test(url)
+    ) {
+      if (tags !== undefined) {
+        tags.forEach((data) => {
+          data.forEach((element) => {
+            if (!new RegExp("^[a-zA-Z0-9_.-]{1,15}$").test(element)) {
+              M.toast({ html: "Geen geldige tag: " + element });
+              noErrors = false;
+            }
+          });
+        });
+        if (noErrors === true) {
+          console.log(tags);
+          saveArticle(url, title, email, tags)
+            .then((response) => {
+              response.json();
+            })
+            .then((response) => {
+              console.log(response);
+            })
+            .then(() => M.toast({ html: "Article succesfully saved" }));
+        }
+      } else {
+        M.toast({ html: "Please enter atleast one tag" });
+      }
+    } else {
+      M.toast({ html: "Geen geldige URL" });
+    }
   }
 
   function handleLogout() {
-    props.handleEmailState("")
-    props.handleLoginState(false)
+    props.handleEmailState("");
+    props.handleLoginState(false);
   }
 
-  function handleGetUrl (e) {
+  function handleGetUrl(e) {
     e.preventDefault();
     chrome.tabs.query({ active: true, lastFocusedWindow: true }, (tabs) => {
       let url = tabs[0].url;
       setUrl(url);
-      console.log(url)
+      console.log(url);
     });
+  }
+
+  const handleRemoveClick = (index) => {
+    const List = [...tags];
+    List.splice(index, 1);
+    setTags(List);
+  };
+
+  function handleAddClick() {
+    var tagArray = [];
+
+    currentTags.forEach((element) => {
+      tagArray.push(element.tag);
+    });
+    setTags([...tags, tagArray]);
   }
 
   return (
@@ -75,16 +136,70 @@ export default function Article(props) {
       <h3 className="h1">LaterLezer</h3>
       <h4 className="h2">Add article:</h4>
       <div className="row input-form">
-      <input type="text" placeholder="URL.." className="input" onChange={(e) => handleUrlChange(e)} value={url} />
-      <button onClick={(e) => handleGetUrl(e)}>get url from active tab</button>
-        <input type="text" placeholder="Title.." className="input" onChange={(e) => handleTitleChange(e)} value={title} />
-        <input type="text" placeholder="Search Tag(s).." className="input" onChange={(e) => handleFilterChange(e)} value={filter} />
-        <div>
-        </div>
-        <h5>Available tags: </h5>
-        {/* <TagList handleTagSelect={handleTagSelect} tags={filteredTags} selectedTags={selectedTags} /> */}
-        <button className="waves-effect waves-light btn" onClick={() => { handleSaveArticle(url, title, email) }}>Save</button>
-        <button className="waves-effect waves-light btn" onClick={() => { handleLogout() }}>Logout</button>
+        <input
+          type="text"
+          placeholder="URL.."
+          className="input"
+          onChange={(e) => handleUrlChange(e)}
+          value={url}
+        />
+        <button onClick={(e) => handleGetUrl(e)}>
+          get url from active tab
+        </button>
+        <input
+          type="text"
+          placeholder="Title.."
+          className="input"
+          onChange={(e) => handleTitleChange(e)}
+          value={title}
+        />
+        <div
+          class="chips chips-placeholder chips-autocomplete tooltipped"
+          data-position="bottom"
+          data-tooltip="[Tag requirements] Allow chars: A-Z / 0-9 / _  / - / Max length: 15 chars"
+        ></div>
+        <button
+          className="waves-effect waves-light btn-small blue accent-2"
+          onClick={() => {
+            handleAddClick();
+          }}
+        >
+          Add
+        </button>
+        <h3>Used Tags:</h3>
+        {tags.map((element, i) => {
+          return (
+            <h4 key={i}>
+              <li>
+                {element + " "}
+                <button
+                  className="btn-floating btn-small waves-effect waves-light red"
+                  onClick={() => {
+                    handleRemoveClick(i);
+                  }}
+                >
+                  <i class="material-icons">delete</i>
+                </button>
+              </li>
+            </h4>
+          );
+        })}
+        <button
+          className="waves-effect waves-light btn"
+          onClick={() => {
+            handleSaveArticle(url, title, email, tags);
+          }}
+        >
+          Save
+        </button>
+        <button
+          className="waves-effect waves-light btn"
+          onClick={() => {
+            handleLogout();
+          }}
+        >
+          Logout
+        </button>
       </div>
     </div>
   );
