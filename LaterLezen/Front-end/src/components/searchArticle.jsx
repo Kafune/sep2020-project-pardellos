@@ -32,15 +32,6 @@ export default function SearchArticle(props) {
     printTree(tagState[index])
     handleCheckBox(event)
     setIsChecked(false)
-    // tags.subTags[index].subTags.forEach((element) => {
-    //   // console.log(element)
-    //   extraction(element)
-    //   if (element.tagName === undefined || null) {
-    //     return ''
-    //   } else {
-    //     setTagState(tags.subTags[index])
-    //   }
-    // })
   }
 
   function handleSearchArticleByTag() {
