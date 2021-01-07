@@ -285,7 +285,9 @@ describe("Laterlezer e2e tests", () => {
     await thePage.waitForTimeout(1500)
     await thePage.click('i[id="search"]');
     await thePage.waitForTimeout(1500)
-    await thePage.type('input[id="search"]', 'rutte');
+    await thePage.click('button[id="metaData"]');
+    await thePage.waitForTimeout(7500)
+    await thePage.type('input[id="searchArticle"]', 'rutte');
     await thePage.waitForTimeout(1500)
     await thePage.click('button[id="searchButton"]');
     await thePage.waitForTimeout(3500)
@@ -300,12 +302,12 @@ describe("Laterlezer e2e tests", () => {
 
     await thePage.waitForTimeout(2000)
     await thePage.$eval(
-      "input[id=search]",
+      "input[id=searchArticle]",
       (input, value) => (input.value = value),
       ""
     );
 
-    await thePage.type('input[id="search"]', 'coalitie');
+    await thePage.type('input[id="searchArticle"]', 'coalitie');
     await thePage.waitForTimeout(1500)
     await thePage.click('input[id="contentSearch"]');
     await thePage.waitForTimeout(1500)

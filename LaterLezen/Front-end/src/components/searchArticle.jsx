@@ -36,15 +36,6 @@ export default function SearchArticle(props) {
     printTree(tagState[index]);
     handleCheckBox(event);
     setIsChecked(false);
-    // tags.subTags[index].subTags.forEach((element) => {
-    //   // console.log(element)
-    //   extraction(element)
-    //   if (element.tagName === undefined || null) {
-    //     return ''
-    //   } else {
-    //     setTagState(tags.subTags[index])
-    //   }
-    // })
   }
 
   function handleSearchArticleByTag() {
@@ -103,7 +94,7 @@ export default function SearchArticle(props) {
           Search by tags
         </button>
         <div className="col">
-          <button className="btn btn blue" onClick={() => handleSearchState(2)}>
+          <button className="btn btn blue" id="metaData" onClick={() => handleSearchState(2)}>
             Search by metadata
           </button>
         </div>
@@ -170,6 +161,7 @@ export default function SearchArticle(props) {
                   <div class="s8 search input-field">
                     <input
                       type="text"
+                      id="searchArticle"
                       placeholder="Search"
                       onChange={(e) => setQuery(e.target.value)}
                       value={query}
@@ -178,6 +170,7 @@ export default function SearchArticle(props) {
                   <label>
                     <input
                       type="checkbox"
+                      id="contentSearch"
                       onClick={() => setSearchContent(!searchContent)}
                     />
                     <span>Include search by content</span>
@@ -185,6 +178,7 @@ export default function SearchArticle(props) {
                 </div>
                 <button
                   className="waves-effect waves-light btn-small blue accent-2"
+                  id="searchButton"
                   onClick={handleSearch}
                 >
                   Search
