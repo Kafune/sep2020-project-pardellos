@@ -21,16 +21,7 @@ const UserSchema = new mongoose.Schema({
     default: Date.now,
   },
   articles: [{ type: mongoose.Schema.Types.ObjectId, ref: "Article" }],
-  tags: [
-    {
-      tagName: {
-        type: String,
-      },
-      subTags: {
-        type: [],
-      },
-    },
-  ],
+  tags: {},
   preferences: {
     default: "default",
     type: String,

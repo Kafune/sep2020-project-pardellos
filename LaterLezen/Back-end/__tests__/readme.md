@@ -39,7 +39,6 @@
 - User registers a new account that does not exist yet
 - User clicks the hamburger menu and selects the option to safe an article
 - User clicks an article to read
-- User clicks on edit article in the dashboard
 - User logs out of the LaterLezer app
 - User logs in the webpage with wrong password
 - User logs in the webpage with right password
@@ -48,3 +47,5 @@
 - Tags
 - **Add tag to user (!OUDE TEST)**
 - **Check for duplicate tags (!OUDE TEST)**
+- **User clicks on edit article in the dashboard(!OUDE TEST)**
+

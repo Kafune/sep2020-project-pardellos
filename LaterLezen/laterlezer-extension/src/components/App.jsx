@@ -3,7 +3,9 @@ import React from "react";
 import Login from "./Login";
 import Article from "./Article";
 import 'materialize-css/dist/css/materialize.min.css';
-import M from "materialize-css";
+import M from "materialize-css";  
+
+import { checkAuthenticated } from "../serverCommunication";
 
 export default class App extends React.Component {
   constructor(props) {
@@ -17,6 +19,22 @@ export default class App extends React.Component {
 
   componentDidMount() {
     M.AutoInit();
+    console.log(this.state)
+    checkAuthenticated()
+      .then((response) => response.json())
+      .then(response => {
+        console.log(response)
+        if (response.isAuthenticated === true) {
+          this.handleLoginState(true);
+          this.handleEmailState(response.user.email);
+          this.handleTagState(response.user.tags);
+        }
+        console.log(this.state)
+
+      })
+      .catch((e) => {
+        M.toast({ html: "Unauthorized user, please login first" });
+      });
   }
 
   setTags(value) {
@@ -37,10 +55,17 @@ export default class App extends React.Component {
     }));
   }
 
+  handleTagState(value) {
+    this.setState(() => ({
+      tags: value,
+    }));
+  }
+
   render() {
     const currentLoginState = (c) => this.handleLoginState(c);
     const currentEmailState = (c) => this.handleEmailState(c);
     const setTags = (c) => this.setTags(c);
+    const handleTagsState = (c) => this.handleTagState(c);
 
     return (
       <div class="container">

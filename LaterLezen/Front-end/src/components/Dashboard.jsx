@@ -50,16 +50,20 @@ export default function Dashboard(props) {
                   <br />
                   <span>
                     Tags:{" "}
-                    {data.tags.map((data) => {
-                      return data + " ";
+                    {data.tags.map((element, i) => {
+                      return <li key={i}>{element + " "}</li>
                     })}
                   </span>
-                  <p />
-                  <Link to={`/article/${data._id}`}>
-                    <a id="seeArticle" class="btn green">
-                      Read article
-                    </a>
-                  </Link>
+                  <div class="row">
+                    <br />
+                    <div class="col">
+                      <Link to={`/article/${data._id}`}>
+                        <a id="seeArticle" class="btn green">
+                          Read article
+                        </a>
+                      </Link>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>

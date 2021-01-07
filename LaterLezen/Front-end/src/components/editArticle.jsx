@@ -15,24 +15,27 @@ export default function EditArticle(props) {
   const [description, setDescription] = useState("");
   const [author, setAuthor] = useState("");
   const [tags, setTags] = useState([]);
+  const [currentTags, setCurrentTags] = useState([]);
 
   const history = useHistory();
 
   useEffect(() => {
-    handleTagChips();
-  }, []);
+    handleTagChips()
+  }, [tags])
 
   function handleTagChips() {
-    var elems = document.querySelectorAll(".chips");
+    setCurrentTags([]);
+
+    var elems = document.querySelectorAll('.chips');
     var instances = M.Chips.init(elems, {
-      onChipAdd: (elems) => {
-        setTags(elems[0].M_Chips.chipsData);
+      onChipAdd: () => {
+        setCurrentTags(elems[0].M_Chips.chipsData)
       },
       onChipDelete: () => {
-        setTags(elems[0].M_Chips.chipsData);
+        setCurrentTags(elems[0].M_Chips.chipsData)
       },
-      placeholder: "Enter new Tag...",
-      secondaryPlaceholder: "+ Sub Tag...",
+      placeholder: 'Enter Tag...',
+      secondaryPlaceholder: '+ Sub Tag...',
     });
   }
 
@@ -52,7 +55,6 @@ export default function EditArticle(props) {
           setSource(response.domain);
           setTags(response.tags);
           setAuthor(response.author);
-
           let textArea = document.querySelector(".materialize-textarea");
           M.textareaAutoResize(textArea);
         }
@@ -62,33 +64,35 @@ export default function EditArticle(props) {
   const saveChanges = () => {
     let noErrors = true;
     if (tags !== undefined) {
-      var tagArray = [];
-      tags.forEach((element) => {
-        if (new RegExp("^[a-zA-Z0-9_.-]{1,15}$").test(element.tag)) {
-          tagArray.push(element.tag);
-        } else {
-          M.toast({ html: "Geen geldige tag: " + element.tag });
-          noErrors = false;
-        }
-      });
-      if (noErrors === true) {
-        confirmArticleChanges(
-          article._id,
-          title,
-          source,
-          description,
-          author,
-          tagArray
-        )
-          .then(() => {
-            M.toast({ html: "Article succesfully saved" });
-            history.push(`/article/${article._id}`);
-          })
-          .catch((error) => {
-            console.log(error);
-          });
-      }
-    } else {
+      tags.forEach((data) => {
+        data.forEach((element) => {
+          if (!new RegExp("^[a-zA-Z0-9_.-]{1,15}$").test(element)) {
+            M.toast({ html: 'Geen geldige tag: ' + element })
+            noErrors = false
+          }
+        })
+      })
+    }
+    if (noErrors === true) {
+      console.log(tags)
+      confirmArticleChanges(
+        article._id,
+        title,
+        source,
+        description,
+        author,
+        tags
+      )
+        .then(() => {
+          M.toast({ html: "Article succesfully saved" });
+          history.push(`/article/${article._id}`);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
+
+    else {
       M.toast({ html: "Please enter atleast one tag" });
     }
   };
@@ -97,6 +101,21 @@ export default function EditArticle(props) {
     console.log("cancel");
     history.push("/dashboard");
   }
+
+  const handleRemoveClick = index => {
+    const List = [...tags];
+    List.splice(index, 1);
+    setTags(List);
+  };
+
+  function handleAddClick() {
+    var tagArray = []
+
+    currentTags.forEach((element) => {
+      tagArray.push(element.tag)
+    })
+    setTags([...tags, tagArray])
+  };
 
   return (
     <div id="edit-article">
@@ -130,18 +149,18 @@ export default function EditArticle(props) {
         value={author}
         onChange={(e) => setAuthor(e.target.value)}
       ></input>
-      <div
-        class="chips chips-placeholder chips-autocomplete tooltipped"
-        id="lollig"
-        data-position="bottom"
-        data-tooltip="[Tag requirements] Allow chars: A-Z / 0-9 / _  / - / Max length: 15 chars"
-      ></div>
-
-      {/* {tags.map((elem) => {
-        return <span 
-        key={elem}
-        className="tag">{elem}</span>;
-      })} */}
+      <label>Tag</label>
+      <div class="chips chips-placeholder chips-autocomplete tooltipped" data-position="bottom" data-tooltip="[Tag requirements] Allow chars: A-Z / 0-9 / _  / - / Max length: 15 chars" ></div><button className="waves-effect waves-light btn-small blue accent-2" onClick={() => { handleAddClick() }}>Add</button>
+      <h3>Used Tags:</h3>
+      {tags.map((element, i) => {
+        return <h4 key={i}>
+          <li>{element + " "}
+            <button className="btn-floating btn-small waves-effect waves-light red" onClick={() => { handleRemoveClick(i) }}>
+              <i class="material-icons">delete</i>
+            </button>
+          </li>
+        </h4>
+      })}
       <button
         className="btn"
         id="confirmChanges"
