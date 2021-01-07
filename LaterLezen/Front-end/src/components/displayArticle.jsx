@@ -197,12 +197,12 @@ export default function DisplayArticle(props) {
       </div>
 
       <div className="article">
-        <div className="center">
+        <div className={editFields ? "" : "center"}>
           {editFields ? (
             <React.Fragment>
               <h5>
                 Title:
-                <div className="input-field inline">
+                <div className="input-field">
                   <input
                     required
                     className="validate"
@@ -221,7 +221,7 @@ export default function DisplayArticle(props) {
           <h5 className={"hover-show"}>
             Published by:
             {editFields ? (
-              <div className="input-field inline">
+              <div className="input-field">
                 <input
                   id="author-input"
                   type="text"
@@ -236,7 +236,7 @@ export default function DisplayArticle(props) {
           <h5 className={"hover-show"}>
             Source:
             {editFields ? (
-              <div className="input-field inline">
+              <div className="input-field">
                 <input
                   id="source-input"
                   type="text"
@@ -248,11 +248,21 @@ export default function DisplayArticle(props) {
               <b>{" " + source + " "}</b>
             )}
           </h5>
+          <div className={editFields ? "" : "hidden"}>
+            <h5>Description:</h5>
+            <textarea
+              required
+              className="materialize-textarea"
+              id={"description-input"}
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+            ></textarea>
+          </div>
           <div className={editFields ? "col-md-10" : "hidden"}>
             <h5>
               Tags:
               <div
-                class="inline chips chips-placeholder chips-autocomplete tooltipped"
+                class=" chips chips-placeholder chips-autocomplete tooltipped"
                 data-position="bottom"
                 data-tooltip="[Tag requirements] Allow chars: A-Z / 0-9 / _  / - / Max length: 15 chars"
               ></div>
@@ -283,16 +293,6 @@ export default function DisplayArticle(props) {
                 </p>
               );
             })}
-          </div>
-          <div className={editFields ? "" : "hidden"}>
-            <h5>Description:</h5>
-          <textarea
-            required
-            className="materialize-textarea"
-            id={"description-input"}
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-          ></textarea>
           </div>
           <img className="responsive-img" src={article.lead_image_url} />
         </div>
