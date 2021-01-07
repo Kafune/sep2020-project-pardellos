@@ -1,8 +1,6 @@
 .article {
   min-width: 800px; 
   min-height: 450px;
-  position: relative;
-  vertical-align: middle;
 }
 
 .login {
