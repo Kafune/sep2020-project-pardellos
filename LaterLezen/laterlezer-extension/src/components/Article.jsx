@@ -14,9 +14,9 @@ export default function Article(props) {
   // const [selectedTags, setSelectedTags] = useState([]);
   // const [filteredTags, setFilteredTags] = useState([props.tags]);
 
-  useEffect(() => {
-    handleGetUrl();
-  });
+  useEffect(()=>{
+    handleGetUrl()
+  })
   // useEffect(() => {
   //   setFilteredTags([...props.tags])
   // }, [props.tags]);
@@ -59,6 +59,7 @@ export default function Article(props) {
     e.preventDefault();
     setTitle(e.target.value);
   }
+
   // function handleTagSelect(value) {
   //   if (selectedTags.includes(value)) {
   //     setSelectedTags((oldArray) =>
@@ -103,13 +104,21 @@ export default function Article(props) {
     }
   }
 
-  function handleLogout() {
-    props.handleEmailState("");
-    props.handleLoginState(false);
-  }
-
   function handleGetUrl(e) {
     e.preventDefault();
+  }
+
+
+  function handleLogout() {
+    logoutUser()
+    .then(() => {
+      props.handleEmailState("")
+      props.handleLoginState(false)
+    })
+  }
+
+  function handleGetUrl () {
+    // e.preventDefault();
     chrome.tabs.query({ active: true, lastFocusedWindow: true }, (tabs) => {
       let url = tabs[0].url;
       setUrl(url);

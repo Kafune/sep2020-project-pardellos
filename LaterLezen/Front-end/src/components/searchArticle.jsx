@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { searchArticleByTags, getAuthors, findAuthor } from "../serverCommunication";
+import { searchArticleByTags } from "../serverCommunication";
 import { Link } from "react-router-dom";
 import M from "materialize-css";
 
@@ -66,28 +66,28 @@ export default function SearchArticle(props) {
       setTagCounter(tagCounter + 1)
   };
 
-  const handleSearchByAuthor = () => {
-    findAuthor(author)
-      .then((result) => result.json())
-      .then((response) => setArticles(response))
-  };
+  // const handleSearchByAuthor = () => {
+  //   findAuthor(author)
+  //     .then((result) => result.json())
+  //     .then((response) => setArticles(response))
+  // };
 
-  const getAllAuthors = () => {
-    getAuthors()
-      .then((response) => response.json())
-      .then((result) => result.filter((values) => values.author != ""))
-      .then((result) => populateAutocomplete(result))
-      .then((result) => {
-        var elems = document.querySelector(".autocomplete");
-        let options = {
-          data: result,
-          onAutocomplete: (value) => {
-            setAuthor(value);
-          },
-        };
-        M.Autocomplete.init(elems, options);
-      })
-  };
+  // const getAllAuthors = () => {
+  //   getAuthors()
+  //     .then((response) => response.json())
+  //     .then((result) => result.filter((values) => values.author != ""))
+  //     .then((result) => populateAutocomplete(result))
+  //     .then((result) => {
+  //       var elems = document.querySelector(".autocomplete");
+  //       let options = {
+  //         data: result,
+  //         onAutocomplete: (value) => {
+  //           setAuthor(value);
+  //         },
+  //       };
+  //       M.Autocomplete.init(elems, options);
+  //     })
+  // };
 
   const populateAutocomplete = (result) => {
     let authors = {};
@@ -104,7 +104,7 @@ export default function SearchArticle(props) {
     handleClearTags()
     setShowSearch(state)
     if (state == 2) {
-      getAllAuthors()
+      //getAllAuthors()
     }
   }
   
@@ -147,7 +147,7 @@ export default function SearchArticle(props) {
                     <button
                       className="waves-effect waves-light btn-small blue accent-2"
                       onClick={() => {
-                        handleSearchArticleByTag();
+                        //handleSearchArticleByTag();
                       }}
                     >
                       Search
@@ -182,7 +182,8 @@ export default function SearchArticle(props) {
                 </div>
                 <button
                   className="waves-effect waves-light btn-small blue accent-2"
-                  onClick={() => handleSearchByAuthor()}
+                  // onClick={() => //handleSearchByAuthor()
+                  // }
                 >
                   Search
                     </button>
