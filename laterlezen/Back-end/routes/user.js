@@ -150,6 +150,7 @@ router.post(
   (req, res) => {
     let url = String(req.body.url);
     let rawTags = req.body.tags;
+    let usedids;
     let description;
     let tagids = req.body.tagids;
     var t0 = performance.now();
@@ -235,6 +236,7 @@ router.put(
     session: false,
   }),
   (req, res) => {
+    let usedids
     Article.findOne(
       {
         _id: req.body.article_id,
@@ -254,7 +256,8 @@ router.put(
           article.domain = req.body.source;
           if (!req.body.tags[0] == "") {
             article.tags = req.body.tags;
-            handleUserNestedTags(req.body.tags, req.user.tags);
+            usedids = handleUserNestedTags(req.body.tags, req.user.tags);
+            article.tagids = usedids
             req.user.markModified("tags");
             req.user.save();
           }
