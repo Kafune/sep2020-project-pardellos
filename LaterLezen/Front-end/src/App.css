@@ -144,10 +144,11 @@
   margin: 5px 0
 }
 
-.article input[type="text"]
+.article input
 {
+    color: #000 !important;
     font-size:x-large !important;
-    font-weight:  bold;
+ 
 }
 
 .hidden {
