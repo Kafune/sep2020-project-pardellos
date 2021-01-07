@@ -9,7 +9,8 @@ import M from "materialize-css";
 export default function SearchArticle(props) {
   const [tags, setTags] = useState([]);
   const [isChecked, setIsChecked] = useState(false);
-  const [selectedTags, setSelectedTags] = useState([]);
+  const [selectedTags, setSelectedTags] = useState([])
+  const [tagIds, setTagIds] = useState([])
   const [articles, setArticles] = useState(props.articles);
   const [tagCounter, setTagCounter] = useState(0);
   const [showSearch, setShowSearch] = useState(0);
@@ -39,8 +40,8 @@ export default function SearchArticle(props) {
   }
 
   function handleSearchArticleByTag() {
-    console.log(selectedTags);
-    searchArticleByTags(selectedTags)
+    console.log(tagIds)
+    searchArticleByTags(tagIds)
       .then((response) => response.json())
       .then((response) => {
         console.log(response);
@@ -49,16 +50,19 @@ export default function SearchArticle(props) {
   }
 
   function handleClearTags() {
-    setIsChecked("");
-    setSelectedTags([]);
-    setArticles([]);
-    printTree(tags);
+    setIsChecked('');
+    setSelectedTags([])
+    setArticles([])
+    setTagIds([])
+    printTree(tags)
   }
 
   const handleCheckBox = (e) => {
-    setIsChecked({ ...isChecked, [e.target.id]: true });
-    selectedTags.push(e.target.name);
-    setTagCounter(tagCounter + 1);
+      setIsChecked({ ...isChecked, [e.target.id]: true });
+      selectedTags.push(e.target.name)
+      tagIds.push(e.target.id)
+      console.log(e.target.id);
+      setTagCounter(tagCounter + 1)
   };
 
   const escapeRegExp = (string) => {

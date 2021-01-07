@@ -151,13 +151,13 @@ router.post(
     let url = String(req.body.url);
     let rawTags = req.body.tags;
     let description;
-    //let processedTags = processTags(rawTags);
+    let tagids = req.body.tagids;
     var t0 = performance.now();
     extract(url)
       .then((article) => {
         description = article.description;
       })
-      .catch((err) => { });
+      .catch((err) => {});
     var t1 = performance.now();
     console.log("Call to articleparser took " + (t1 - t0) + " milliseconds.");
     var t2 = performance.now();
@@ -167,42 +167,31 @@ router.post(
         if (!req.body.title == "") newArticle.title = req.body.title;
         if (description != null) newArticle.excerpt = description;
         newArticle.tags = rawTags;
-        newArticle.save((err) => {
+        usedids = handleUserNestedTags(rawTags, req.user.tags);
+        newArticle.tagids = usedids
+        var t1 = performance.now();
+        console.log("Tag loop took " + (t1 - t0) + " milliseconds.");
+        req.user.articles.push(newArticle);
+        req.user.markModified("tags");
+        req.user.save((err) => {
           if (err)
             res.status(500).json({
               message: {
-                msgBody: "Error 3 has occured",
+                msgBody: "Error 4 has occured",
                 msgError: true,
               },
             });
           else {
-            User.exists(
-              {
-                _id: req.user._id,
-              },
-              (err, result) => {
-                // let templist = [];
-                // templist.push(processedTags);
-                // CHANGE TEMPLIST. FRONT-END SHOULD SEND ARRAY OF ARRAYS
-                handleUserNestedTags(rawTags, req.user.tags);
-                var t1 = performance.now();
-                console.log("Tag loop took " + (t1 - t0) + " milliseconds.");
-                req.user.articles.push(newArticle);
-                req.user.markModified("tags");
-                req.user.save((err) => {
-                  if (err)
-                    res.status(500).json({
-                      message: {
-                        msgBody: "Error 4 has occured",
-                        msgError: true,
-                      },
-                    });
-                  else {
-                    res.json(req.user);
-                  }
+            newArticle.save((err) => {
+              if (err)
+                res.status(500).json({
+                  message: {
+                    msgBody: "Error 3 has occured",
+                    msgError: true,
+                  },
                 });
-              }
-            );
+            });
+            res.json(req.user);
           }
         });
       })
@@ -303,35 +292,23 @@ router.delete("/article", (req, res) => {
 });
 
 router.put(
-  "/tag",
-  passport.authenticate("jwt", {
-    session: false,
-  }),
-  (req, res) => {
-    User.updateOne(
-      {
-        _id: req.user._id,
-      },
-      {}
-    );
-  }
-);
-
-router.put(
   "/tags",
   passport.authenticate("jwt", {
     session: false,
   }),
   (req, res) => {
-    let tags = req.body.tags;
+    let tags = req.body.tagids;
+    console.log(tags);
 
     User.findById({
       _id: req.user._id,
     })
       .populate({
         path: "articles",
-        match: {
-          "tags": tags
+        match :{
+          tagids: {
+            $all: tags,
+          },
         },
       })
       .exec((err, document) => {
@@ -342,8 +319,8 @@ router.put(
               msgError: true,
             },
           });
-        }
-        else {
+        } else {
+          console.log(document.articles);
           res.status(200).json({
             articles: document.articles,
             authenticated: true,
@@ -423,7 +400,7 @@ router.put("/testing/art/:title", (req, res) => {
 
 router.post("/articleExtension", (req, res) => {
   console.log(req.user);
-  req.body.tags = []
+  req.body.tags = [];
   const findUser = User.findOne({
     email: req.body.email,
   }).then((response) => {
@@ -525,7 +502,13 @@ router.get(
 // }
 
 function handleUserNestedTags(data, userTags) {
-  const node = (tagName, parent = null) => ({ tagName, parent, _id: new ObjectID, subTags: [] });
+  let usedids = [];
+  const node = (tagName, parent = null) => ({
+    tagName,
+    parent,
+    _id: new ObjectID(),
+    subTags: [],
+  });
   const addNode = (parent, child) => (parent.subTags.push(child), child);
   const findNamed = (name, parent) => {
     for (const child of parent.subTags) {
@@ -538,6 +521,7 @@ function handleUserNestedTags(data, userTags) {
       }
     }
   };
+  console.log(node._id);
   const TOP_NAME = "/",
     top = node(TOP_NAME);
   for (const children of data) {
@@ -545,9 +529,11 @@ function handleUserNestedTags(data, userTags) {
     for (const name of children) {
       const found = findNamed(name, parent);
       parent = found ? found : addNode(parent, node(name, parent.tagName));
+      console.log(parent._id.toString());
+      usedids.push(parent._id.toString())
     }
   }
-  return top;
+  return usedids
 }
 
 module.exports = router;

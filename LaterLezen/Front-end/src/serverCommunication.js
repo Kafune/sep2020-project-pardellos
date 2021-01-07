@@ -108,9 +108,9 @@ export async function checkAuthenticated() {
   return fetch(serverFetchBase + `/user/authenticated`, fetchOptions);
 }
 
-export async function searchArticleByTags(tags) {
+export async function searchArticleByTags(tagids) {
   const body = {
-    tags: tags,
+    tagids: tagids,
   };
 
   const fetchOptions = {

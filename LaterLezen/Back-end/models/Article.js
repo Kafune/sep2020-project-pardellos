@@ -29,7 +29,7 @@ const ArticleSchema = new mongoose.Schema({
     type: Number,
   },
   tags: [],
-  tags2: [String],
+  tagids: [],
   status: {
     type: String,
     default: "public",
