@@ -143,7 +143,7 @@ Door het lezen van dit hoofdstuk krijg je een beter beeld van hoe de structuur v
     
 
     ### Extension view
-    ![Component_extension.png](Component_extension.png)
+    ![extension_component_c4.png](extension_component_c4.png)
 
     De webextensie is het meest simpele component van dit project. Op het moment dat je de laterlezer extensie opent, komt er een login scherm tevoorschijn. Hierop is het de bedoeling dat de gebruiker inlogt, om de functionaliteit om een artikel op te slaan te gebruiken. Het login scherm laat ook foutmeldingen zien van een foute inlogpoging.
 
@@ -162,7 +162,7 @@ Door het lezen van dit hoofdstuk krijg je een beter beeld van hoe de structuur v
     De App bevat bijna alle componenten in de webapplicatie. De app laadt componenten in op basis van waar de gebruiker zich plaatsvindt in de website. Alle componenten die requests naar de API uitvoert, maakt gebruik van Servercommunication, een aparte bestand in de webapplicatie die niet afhankelijk is van App. Servercommunication bevat alle fetch requests die de componenten nodig hebben om met de API te communiceren. Een component haalt de data via de API als volgt op: Eerst roept de component een functie binnen Servercommunication aan om een fetch request te sturen. De request hangt uiteraard af vanuit welk component, en kan bestaan uit een GET, POST, PUT of een DELETE request. Na het aanroepen van deze functie, communiceert de webapplicatie met de API om de request af te handelen. Zodra de API de request heeft afgehandeld, stuurt de API een bericht terug naar de functie binnen Servercommunication waar de request vandaan komt. De component die de fetch functie aanroept, handelt het bericht van de API af. Wat er na het ontvangen van dat bericht gebeurt, hangt af van hoe dat in een component geimplementeerd is.
 
     ### LaterLezer app - user flow
-    ![c4-modellen-Web_App-user_flow.png](c4-modellen-Web_App-user_flow.png)
+    ![Web_App_component_c4.png](Web_App_component_c4.png)
 
     #### **Homepagina**
     De gebruiker komt voor het eerst op de homepagina van de website. De gebruiker kan ervoor kiezen om te registreren, waarin hij in de registratiepagina komt, of om in te loggen. De gebruiker komt dan op de pagina waarin hij kan inloggen. 
