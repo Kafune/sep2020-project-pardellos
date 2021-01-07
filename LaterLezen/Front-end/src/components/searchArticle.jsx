@@ -172,7 +172,7 @@ export default function SearchArticle(props) {
                       type="checkbox"
                       onClick={() => setSearchContent(!searchContent)}
                     />
-                    <span>Enable search by content?</span>
+                    <span>Include search by content</span>
                   </label>
                 </div>
                 <button
