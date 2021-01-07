@@ -32,3 +32,13 @@
 .theme-dark .btn {
     color: #000;
 }
+
+.theme-dark .article input[type="text"] 
+{
+    color: #fff;
+}
+
+.theme-dark textarea.materialize-textarea
+{
+    color: #fff;
+}

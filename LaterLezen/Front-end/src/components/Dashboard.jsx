@@ -4,7 +4,7 @@ import {
   getAllArticles,
   getArticleByUser,
 } from "../serverCommunication";
-import { Link } from "react-router-dom";
+import { Link, Redirect } from "react-router-dom";
 
 export default function Dashboard(props) {
   const [firstname, setFirstname] = useState(props.firstname);
@@ -60,13 +60,6 @@ export default function Dashboard(props) {
                       <Link to={`/article/${data._id}`}>
                         <a id="seeArticle" class="btn green">
                           Read article
-                        </a>
-                      </Link>
-                    </div>
-                    <div class="col">
-                      <Link to={`/edit/${data._id}`}>
-                        <a id="editArticle" class="btn blue">
-                          Edit article
                         </a>
                       </Link>
                     </div>

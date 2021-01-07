@@ -39,6 +39,16 @@ export default function SaveArticle(props) {
         });
     }
 
+    const handleAddFields = () => {
+        setTags([...tags, {tag: ''}])
+    }
+
+    const handleRemoveFields = (index) => {
+        const values = [...tags]
+        values.splice(index,1);
+        setTags(values)
+    }
+
     function handleSaveArticle(url, tags, title) {
         let noErrors = true
         if (new RegExp("([a-zA-Z0-9]+://)?([a-zA-Z0-9_]+:[a-zA-Z0-9_]+@)?([a-zA-Z0-9.-]+\\.[A-Za-z]{2,4})(:[0-9]+)?(/.*)?").test(url)) {

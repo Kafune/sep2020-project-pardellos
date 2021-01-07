@@ -124,18 +124,18 @@ router.get("/user/:id", async (req, res) => {
   res.send(allArticles);
 });
 
-router.put("/testing/tags", (req, res) =>{
+router.put("/testing/tags", (req, res) => {
   let tags = ["programmeren", "Python", "multithreading"]
-  let article = {title: "test1233"}
+  let article = { title: "test1233" }
   let art = new Article(article)
   art.tags2 = tags
   art.save()
   res.json(art)
 })
 
-router.get("/testing/art/:tag", (req, res) =>{
+router.get("/testing/art/:tag", (req, res) => {
   let tag = req.params.tag
-  Article.find({tags2: {$in : tag}}, (err, art)=>{
+  Article.find({ tags2: { $in: tag } }, (err, art) => {
     res.json(art)
   })
 })
@@ -144,57 +144,112 @@ router.get(
   "/authors/",
   passport.authenticate("jwt", {
     session: false,
-  }),async (req, res) => {
+  }), async (req, res) => {
 
-   User.findById({
-    _id: req.user._id
-  })
-  .populate('articles', 'author')
-    .exec((err, document) => {
-      if (err)
-        res.status(500).json({
-          message: {
-            msgBody: "Error has occured",
-            msgError: true,
-          },
-        });
-      else {
-        res.send(document.articles)
-      }
-    });
-});
+    User.findById({
+      _id: req.user._id
+    })
+      .populate('articles', 'author')
+      .exec((err, document) => {
+        if (err)
+          res.status(500).json({
+            message: {
+              msgBody: "Error has occured",
+              msgError: true,
+            },
+          });
+        else {
+          res.send(document.articles)
+        }
+      });
+  });
 
-router.get(
-  "/find/:author",
+// find/testtitle/testsource/author
+router.put(
+  "/search",
   passport.authenticate("jwt", {
     session: false,
-  }),async (req, res) => {
-  let author = req.params.author;
+  }), async (req, res) => {
+    // let title = req.body.title;
+    // let description = req.body.description
+    // let author = req.body.author;
+    // let source = req.body.source;
+    let query = req.body.query;
+    let searchContent = req.body.searchContent;
 
-   User.findById({
-    _id: req.user._id
-  })
+    let searchFields = {}
+
+    if (query) {
+      if (searchContent) {
+        searchFields = {
+          $or: [
+            { title: { '$regex': new RegExp(query, "i") } },
+            { excerpt: { '$regex': new RegExp(query, "i") } },
+            { author: { '$regex': new RegExp(query, "i") } },
+            { domain: { '$regex': new RegExp(query, "i") } },
+            { content: { '$regex': new RegExp(query, "i") } },
+          ]
+        }
+      } else {
+        searchFields = {
+          $or: [
+            { title: { '$regex': new RegExp(query, "i") } },
+            { excerpt: { '$regex': new RegExp(query, "i") } },
+            { author: { '$regex': new RegExp(query, "i") } },
+            { domain: { '$regex': new RegExp(query, "i") } }
+          ]
+        }
+      }
+    }
+
+    // console.log(searchFields)
+
+    User.findById({
+      _id: req.user._id
+    })
       .populate({
         path: 'articles',
-        match: {author: {
-          '$regex': new RegExp(author, "i")
-      }}
-  
+        match: searchFields
+      })
+      .exec((err, document) => {
+        // console.log(document)
+        if (err)
+          res.status(500).json({
+            message: {
+              msgBody: "Error has occured",
+              msgError: true,
+            },
+          });
+        else {
+          // console.log(document)
+
+          res.send(document.articles)
+        }
+      });
+  });
+
+router.get(
+  "/sources/",
+  passport.authenticate("jwt", {
+    session: false,
+  }), async (req, res) => {
+
+    User.findById({
+      _id: req.user._id
     })
-    .exec((err, document) => {
-      if (err)
-        res.status(500).json({
-          message: {
-            msgBody: "Error has occured",
-            msgError: true,
-          },
-        });
-      else {
-        res.send(document.articles)
-      }
-    });
-});
-
-
+      .populate('articles', 'domain')
+      .exec((err, document) => {
+        if (err)
+          res.status(500).json({
+            message: {
+              msgBody: "Error has occured",
+              msgError: true,
+            },
+          });
+        else {
+          res.send(document.articles)
+        }
+      });
+  });
 
 module.exports = router;

@@ -1,7 +1,7 @@
 /*global chrome*/
 import React, { useState, useEffect } from "react";
 import TagList from "./TagsList";
-import { saveArticle } from "../serverCommunication";
+import { saveArticle, logoutUser } from "../serverCommunication";
 import M from "materialize-css";
 
 export default function Article(props) {
@@ -14,6 +14,9 @@ export default function Article(props) {
   // const [selectedTags, setSelectedTags] = useState([]);
   // const [filteredTags, setFilteredTags] = useState([props.tags]);
 
+  useEffect(() => {
+    handleGetUrl();
+  });
   // useEffect(() => {
   //   setFilteredTags([...props.tags])
   // }, [props.tags]);
@@ -44,7 +47,6 @@ export default function Article(props) {
   }
 
   function handleUrlChange(e) {
-    e.preventDefault();
     setUrl(e.target.value);
   }
 
@@ -57,7 +59,6 @@ export default function Article(props) {
     e.preventDefault();
     setTitle(e.target.value);
   }
-
   // function handleTagSelect(value) {
   //   if (selectedTags.includes(value)) {
   //     setSelectedTags((oldArray) =>
