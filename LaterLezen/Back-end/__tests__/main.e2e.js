@@ -3,10 +3,8 @@ const fetch = require("node-fetch");
 const puppeteer = require("puppeteer");
 jest.setTimeout(250000);
 
-xdescribe("Laterlezer e2e tests", () => {
-  it("should register a user", () => {});
+describe("Laterlezer e2e tests", () => {
   let theBrowser, thePage;
-
 
   beforeAll(async () => {
     
@@ -14,7 +12,7 @@ xdescribe("Laterlezer e2e tests", () => {
 
     theBrowser = await puppeteer.launch({
       headless: false,
-      slowMo: 60,
+      slowMo: 5,
       defaultViewport: null,
       args: [`--window-size=1920,1080`],
     });
@@ -94,6 +92,10 @@ xdescribe("Laterlezer e2e tests", () => {
     let url =
       "https://www.nu.nl/politiek/6095197/horeca-krijgt-wellicht-extra-steun-maar-is-geen-bouwsteen-van-economie.html";
     let title = "horeca krijgt wellicht extra steun";
+    let title2 = 'Kamer laakt vaccinatiechaos, oppositie wil meer betrokkenheid van Rutte';
+    let title3 = 'Rutte: Theaters, bioscopen en musea mogen donderdag weer open';
+    let url2 = "https://www.nu.nl/politiek/6100271/kamer-laakt-vaccinatiechaos-oppositie-wil-meer-betrokkenheid-van-rutte.html"
+    let url3 = "https://www.nu.nl/cultuur-overig/6090311/rutte-theaters-bioscopen-en-musea-mogen-donderdag-weer-open.html?redirect=1"
 
     await thePage.waitForTimeout(1500);
     await thePage.click('a[id="hamburger"]');
@@ -106,6 +108,42 @@ xdescribe("Laterlezer e2e tests", () => {
 
     await thePage.click('button[id="saveArticle"]')
     await thePage.waitForTimeout(5000)
+
+    await thePage.$eval(
+      "input[id=url]",
+      (input, value) => (input.value = value),
+      ""
+    );
+
+    await thePage.type('input[id="url"]', url2)
+    await thePage.$eval(
+      "input[id=title]",
+      (input, value) => (input.value = value),
+      ""
+    );
+    await thePage.type('input[id="title"]', title2)
+
+    await thePage.click('button[id="saveArticle"]')
+    await thePage.waitForTimeout(5000)
+
+
+    await thePage.$eval(
+      "input[id=url]",
+      (input, value) => (input.value = value),
+      ""
+    );
+
+    await thePage.type('input[id="url"]', url3)
+    await thePage.$eval(
+      "input[id=title]",
+      (input, value) => (input.value = value),
+      ""
+    );
+    await thePage.type('input[id="title"]', title3)
+
+    await thePage.click('button[id="saveArticle"]')
+    await thePage.waitForTimeout(5000)
+
     await thePage.click('a[id="hamburger"]');
     await thePage.waitForTimeout(1500)
     await thePage.click('i[id="dashboard"]');
@@ -114,12 +152,56 @@ xdescribe("Laterlezer e2e tests", () => {
 
 
   test('user clicks an article to read' , async () => {
-    await thePage.waitForTimeout(1500);
+    let title = "Horeca wordt gered door het parlement";
+    let source = 'www.nu.nl'
+    let author = 'Jan Kooiman'
+    let description = '2020. Het jaar waarin corona alles veranderde. We hebben met elkaar veel bereikt, maar zijn er nog lang niet. We moeten samen nog veel meer voor elkaar krijgen, dus we blijven ons hard maken voor het herstel van de horeca'
+    
+    // user clicks on the read button
     for(let i = 0; i < 12; i++){
       await thePage.keyboard.press('ArrowDown');
     }
     await thePage.click('a[id="seeArticle"]')
     await thePage.waitForTimeout(2500)
+
+    await thePage.waitForTimeout(1500);
+
+    // user edits the article
+    await thePage.click('i[id="editArticle"]');
+    await thePage.waitForTimeout(1500);
+    await thePage.$eval(
+      "input[id=title-input]",
+      (input, value) => (input.value = value),
+      ""
+    );
+
+    await thePage.waitForTimeout(1500);
+    await thePage.type('input[id="title-input"]', '')
+    await thePage.waitForTimeout(5000);
+    await thePage.click('i[id="editArticle"]');
+    await thePage.waitForTimeout(1500);
+    await thePage.type('input[id="title-input"]', title)
+    await thePage.$eval(
+      "input[id=author-input]",
+      (input, value) => (input.value = value),
+      ""
+    );
+    await thePage.type('input[id="author-input"]', author)
+    await thePage.$eval(
+      "input[id=source-input]",
+      (input, value) => (input.value = value),
+      ""
+    );
+    await thePage.type('input[id="source-input"]', source)
+    await thePage.$eval(
+      "textarea[id=description-input]",
+      (input, value) => (input.value = value),
+      ""
+    );
+    await thePage.type('textarea[id="description-input"]', description)
+    await thePage.waitForTimeout(3500);
+    await thePage.click('i[id="editArticle"]');
+    await thePage.waitForTimeout(1500);
 
     for(let i = 0; i < 20; i++){
       await thePage.keyboard.press('ArrowDown');
@@ -165,52 +247,6 @@ xdescribe("Laterlezer e2e tests", () => {
     await thePage.click('i[id="dashboard"]');
   })
 
-
-  test('user clicks on edit article in the dashboard' , async () => {
-    let title = 'Horeca moet extra steun krijgen van de overheid ivm economische problemen'
-    let description = 'het kabinet heeft overlegd over het helpen van de horeca, dit is aangezien de horeca enorm in de problemen zit met schulden.'
-    let source = 'nu.nl'
-    let author = 'jan-peter balkenende'
-
-    await thePage.waitForTimeout(1500)
-    //simulate scroling
-    for(let i = 0; i < 12; i++){
-      await thePage.keyboard.press('ArrowDown');
-    }
-
-    await thePage.waitForTimeout(5000)
-    await thePage.click('a[id="editArticle"]');
-    await thePage.waitForTimeout(1000)
-
-    for(let i = 0; i < 8; i++){
-      await thePage.keyboard.press('ArrowDown');
-    }
-    await thePage.$eval("input[id=title]",(input, value) => (input.value = value), "");
-    await thePage.waitForTimeout(500)
-    await thePage.type('input[id="title"]', title)
-    await thePage.$eval("input[id=source]",(input, value) => (input.value = value), "");
-    await thePage.waitForTimeout(500)
-    await thePage.type('input[id="source"]', source)
-
-    await thePage.$eval("textarea[id=description]",(input, value) => (input.value = value), "");
-    await thePage.waitForTimeout(500)
-    await thePage.type('textarea[id="description"]', description)
-    await thePage.$eval("input[id=author]",(input, value) => (input.value = value), "");
-    await thePage.waitForTimeout(500)
-    await thePage.type('input[id="author"]', author)
-
-
-    await thePage.click('button[id="confirmChanges"]')
-    await thePage.waitForTimeout(2500)
-
-    for(let i = 0; i < 12; i++){
-      await thePage.keyboard.press('ArrowDown');
-    }
-    await thePage.waitForTimeout(5000)
-    
-
-  })
-
   test('User logs out of the LaterLezer app', async () => {
     await thePage.waitForTimeout(1500)
     await thePage.click('a[id="hamburger"]');
@@ -243,4 +279,47 @@ xdescribe("Laterlezer e2e tests", () => {
     await thePage.click('a[id="login"]')
     await thePage.waitForTimeout(4000)
   }) 
+
+  test('User searches for an article', async () => {
+    await thePage.click('a[id="hamburger"]');
+    await thePage.waitForTimeout(1500)
+    await thePage.click('i[id="search"]');
+    await thePage.waitForTimeout(1500)
+    await thePage.click('button[id="metaData"]');
+    await thePage.waitForTimeout(7500)
+    await thePage.type('input[id="searchArticle"]', 'rutte');
+    await thePage.waitForTimeout(1500)
+    await thePage.click('button[id="searchButton"]');
+    await thePage.waitForTimeout(3500)
+    await thePage.waitForTimeout(1000)
+    for(let i = 0; i < 60; i++){
+      await thePage.keyboard.press('ArrowDown');
+    }
+    await thePage.waitForTimeout(2500);
+    for(let i = 0; i < 60; i++){
+      await thePage.keyboard.press('ArrowUp');
+    }
+
+    await thePage.waitForTimeout(2000)
+    await thePage.$eval(
+      "input[id=searchArticle]",
+      (input, value) => (input.value = value),
+      ""
+    );
+
+    await thePage.type('input[id="searchArticle"]', 'coalitie');
+    await thePage.waitForTimeout(1500)
+    await thePage.click('input[id="contentSearch"]');
+    await thePage.waitForTimeout(1500)
+    await thePage.click('button[id="searchButton"]');
+    await thePage.waitForTimeout(3500)
+    for(let i = 0; i < 60; i++){
+      await thePage.keyboard.press('ArrowDown');
+    }
+    await thePage.waitForTimeout(5000);
+    for(let i = 0; i < 60; i++){
+      await thePage.keyboard.press('ArrowUp');
+    }
+
+  })
 });

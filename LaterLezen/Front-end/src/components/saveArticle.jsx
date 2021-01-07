@@ -99,13 +99,13 @@ export default function SaveArticle(props) {
         <div class="chips chips-placeholder chips-autocomplete tooltipped" data-position="bottom" data-tooltip="[Tag requirements] Allow chars: A-Z / 0-9 / _  / - / Max length: 15 chars" ></div><button className="waves-effect waves-light btn-small blue accent-2" onClick={() => { handleAddClick() }}>Add</button>
         <h3>Used Tags:</h3>
         {tags.map((element, i) => {
-            return <h4 key={i}>
+            return <h5 key={i}>
                 <li>{element + " "}
                     <button className="btn-floating btn-small waves-effect waves-light red" onClick={() => { handleRemoveClick(i) }}>
                         <i class="material-icons">delete</i>
                     </button>
                 </li>
-            </h4>
+            </h5>
         })}
         <button className="waves-effect waves-light btn-small blue accent-2" id="saveArticle" onClick={() => { handleSaveArticle(url, tags, title) }}>Save</button>
     </div >

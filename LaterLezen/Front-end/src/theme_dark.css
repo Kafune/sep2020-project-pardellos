@@ -42,3 +42,8 @@
 {
     color: #fff;
 }
+
+.theme-dark .article input
+{
+    color: #fff !important;
+}
