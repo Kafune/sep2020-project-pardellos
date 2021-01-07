@@ -125,18 +125,18 @@ export default function DisplayArticle(props) {
       <div className={"edit-button"}>
         {editFields ? (
           <button class="btn blue" onClick={saveChanges}>
-            <i class="small material-icons">save</i>
+            <i class="small material-icons" id="editArticle">save</i>
           </button>
         ) : (
           <button class="btn blue" onClick={showEditField}>
-            <i class="small material-icons">create</i>
+            <i class="small material-icons" id="editArticle">create</i>
           </button>
         )}
       </div>
       <div className={"cancel-button"}>
         {editFields ? (
           <button class="btn blue" onClick={cancelChanges}>
-            <i class="small material-icons">cancel</i>
+            <i class="small material-icons" id="cancelEditArticle">cancel</i>
           </button>
         ) : (
           ""

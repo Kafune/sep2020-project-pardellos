@@ -194,6 +194,7 @@ export default function SearchArticle(props) {
               onClick={() => {
                 handleSearchArticleByTag();
               }}
+              id="search"
             >
               Search
               </button>
@@ -215,6 +216,7 @@ export default function SearchArticle(props) {
           <h3>Search article</h3>
           <div class="s8 search input-field">
             <input
+              id="search"
               type="text"
               placeholder="Search"
               onChange={(e) => setQuery(e.target.value)}
@@ -224,6 +226,7 @@ export default function SearchArticle(props) {
           <label>
             <input
               type="checkbox"
+              id="contentSearch"
               onClick={() => setSearchContent(!searchContent)}
             />
             <span>Enable search by content?</span>
@@ -234,6 +237,8 @@ export default function SearchArticle(props) {
         <button
           className="waves-effect waves-light btn-small blue accent-2"
           onClick={handleSearch}
+          id="searchButton"
+
         >
           Search
           </button>
