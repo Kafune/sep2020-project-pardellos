@@ -3,7 +3,7 @@ const fetch = require("node-fetch");
 const puppeteer = require("puppeteer");
 jest.setTimeout(250000);
 
-describe("Laterlezer e2e tests", () => {
+xdescribe("Laterlezer e2e tests", () => {
   it("should register a user", () => {});
   let theBrowser, thePage;
 
@@ -14,7 +14,7 @@ describe("Laterlezer e2e tests", () => {
 
     theBrowser = await puppeteer.launch({
       headless: false,
-      slowMo: 25,
+      slowMo: 60,
       defaultViewport: null,
       args: [`--window-size=1920,1080`],
     });

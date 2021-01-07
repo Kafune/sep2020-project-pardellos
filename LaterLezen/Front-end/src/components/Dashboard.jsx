@@ -50,8 +50,8 @@ export default function Dashboard(props) {
                   <br />
                   <span>
                     Tags:{" "}
-                    {data.tags.map((data) => {
-                      return data + " ";
+                    {data.tags.map((element, i) => {
+                      return <li key={i}>{element + " "}</li>
                     })}
                   </span>
                   <p />

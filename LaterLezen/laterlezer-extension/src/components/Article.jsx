@@ -1,3 +1,4 @@
+/*global chrome*/
 import React, { useState, useEffect } from "react";
 import TagList from "./TagsList";
 import { saveArticle } from "../serverCommunication";
@@ -60,12 +61,22 @@ export default function Article(props) {
     props.handleLoginState(false)
   }
 
+  function handleGetUrl (e) {
+    e.preventDefault();
+    chrome.tabs.query({ active: true, lastFocusedWindow: true }, (tabs) => {
+      let url = tabs[0].url;
+      setUrl(url);
+      console.log(url)
+    });
+  }
+
   return (
     <div className="container">
       <h3 className="h1">LaterLezer</h3>
       <h4 className="h2">Add article:</h4>
       <div className="row input-form">
       <input type="text" placeholder="URL.." className="input" onChange={(e) => handleUrlChange(e)} value={url} />
+      <button onClick={(e) => handleGetUrl(e)}>get url from active tab</button>
         <input type="text" placeholder="Title.." className="input" onChange={(e) => handleTitleChange(e)} value={title} />
         <input type="text" placeholder="Search Tag(s).." className="input" onChange={(e) => handleFilterChange(e)} value={filter} />
         <div>

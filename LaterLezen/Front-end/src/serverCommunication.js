@@ -8,7 +8,7 @@ export async function saveArticle(url, tags, title) {
     tags: tags,
     title: title,
   };
-
+  console.log(tags)
   const fetchOptions = {
     method: "POST",
     headers: {
