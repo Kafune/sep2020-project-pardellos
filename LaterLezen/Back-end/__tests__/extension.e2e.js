@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 const User = require("../models/User");
 const puppeteer = require("puppeteer");
 
-describe("Laterlezer extension e2e tests", async () => {
+describe("Laterlezer extension e2e tests", () => {
     let theBrowser, thePage;
 
     jest.setTimeout(100000);
@@ -58,29 +58,27 @@ describe("Laterlezer extension e2e tests", async () => {
     });
 
     test("User logs in with empty password", async () => {
-        // const wrongEmail = "notextension@test.com";
-        // const wrongPassword = "1234qwerasdfzxcv";
-
-        // eventuele extra: Check of een gebruiker al ingelogd is of niet.
-        // weet niet of chromium een hele andere cookie/sessie heeft.
-        // const checkArticleButton = await thePage.waitForSelector(".add-article", {visible: true})
-        // console.log(checkArticleButton)
-
         await thePage.type('input[class="email"]', testEmail)
-        // await thePage.type('input[class="password"]', wrongPassword)
 
         await thePage.click('button[id="ext-login-button"]')
         await thePage.waitForTimeout(3000);
 
     });
 
-    test("User logs in with the correct credentials", async() => {
+    test("User logs in with the correct credentials", async () => {
         await thePage.type('input[class="password"]', testPassword)
-
         await thePage.click('button[id="ext-login-button"]')
+
+        //show message before moving on
         await thePage.waitForTimeout(3000);
     })
-    test("User tries to add an article with the wrong URL format", async() => {
-        
+    test("User tries to add an article with the wrong URL format", async () => {
+        const wrongURL = "dit is geen geldige url!";
+
+        await thePage.type('input[id="ext-url"]', wrongURL)
+        await thePage.click('button[id="ext-save-article"]')
+
+        //show message before moving on
+        await thePage.waitForTimeout(3000);
     })
 })
