@@ -14,7 +14,7 @@ export default function Article(props) {
   // const [selectedTags, setSelectedTags] = useState([]);
   // const [filteredTags, setFilteredTags] = useState([props.tags]);
 
-  useEffect(()=>{
+  useEffect(() => {
     handleGetUrl()
   })
   // useEffect(() => {
@@ -50,10 +50,10 @@ export default function Article(props) {
     setUrl(e.target.value);
   }
 
-  function handleFilterChange(e) {
-    e.preventDefault();
-    setFilter(e.target.value);
-  }
+  // function handleFilterChange(e) {
+  //   e.preventDefault();
+  //   setFilter(e.target.value);
+  // }
 
   function handleTitleChange(e) {
     e.preventDefault();
@@ -111,19 +111,20 @@ export default function Article(props) {
 
   function handleLogout() {
     logoutUser()
-    .then(() => {
-      props.handleEmailState("")
-      props.handleLoginState(false)
-    })
+      .then(() => {
+        props.handleEmailState("")
+        props.handleLoginState(false)
+      })
   }
 
-  function handleGetUrl () {
-    // e.preventDefault();
-    chrome.tabs.query({ active: true, lastFocusedWindow: true }, (tabs) => {
-      let url = tabs[0].url;
-      setUrl(url);
-      console.log(url);
-    });
+  function handleGetUrl() {
+    if (chrome.tabs !== undefined) {
+      chrome.tabs.query({ active: true, lastFocusedWindow: true }, (tabs) => {
+        let url = tabs[0].url;
+        setUrl(url);
+        console.log(url);
+      });
+    }
   }
 
   const handleRemoveClick = (index) => {
@@ -143,73 +144,73 @@ export default function Article(props) {
 
   return (
     <div className="article">
-    <div className="container">
-      <h3 className="h1">LaterLezer</h3>
-      <h4 className="h2">Add article:</h4>
-      <div className="row input-form">
-        <input
-          type="text"
-          placeholder="URL.."
-          className="input"
-          onChange={(e) => handleUrlChange(e)}
-          value={url}
-        />
-        <input
-          type="text"
-          placeholder="Title.."
-          className="input"
-          onChange={(e) => handleTitleChange(e)}
-          value={title}
-        />
-        <div
-          class="chips chips-placeholder chips-autocomplete tooltipped"
-          data-position="bottom"
-          data-tooltip="[Tag requirements] Allow chars: A-Z / 0-9 / _  / - / Max length: 15 chars"
-        ></div>
-        <button
-          className="waves-effect waves-light btn-small blue accent-2"
-          onClick={() => {
-            handleAddClick();
-          }}
-        >
-          Add
+      <div className="container">
+        <h3 className="h1">LaterLezer</h3>
+        <h4 className="h2">Add article:</h4>
+        <div className="row input-form">
+          <input
+            type="text"
+            placeholder="URL.."
+            className="input"
+            onChange={(e) => handleUrlChange(e)}
+            value={url}
+          />
+          <input
+            type="text"
+            placeholder="Title.."
+            className="input"
+            onChange={(e) => handleTitleChange(e)}
+            value={title}
+          />
+          <div
+            class="chips chips-placeholder chips-autocomplete tooltipped"
+            data-position="bottom"
+            data-tooltip="[Tag requirements] Allow chars: A-Z / 0-9 / _  / - / Max length: 15 chars"
+          ></div>
+          <button
+            className="add-article waves-effect waves-light btn-small blue accent-2"
+            onClick={() => {
+              handleAddClick();
+            }}
+          >
+            Add
         </button>
-        <h5>Used Tags:</h5>
-        {tags.map((element, i) => {
-          return (
-            <h6 key={i}>
-              <li>
-                {element + " "}
-                <button
-                  className="btn-floating btn-small waves-effect waves-light red"
-                  onClick={() => {
-                    handleRemoveClick(i);
-                  }}
-                >
-                  <i class="material-icons">delete</i>
-                </button>
-              </li>
-            </h6>
-          );
-        })}
-        <button
-          className="waves-effect waves-light btn"
-          onClick={() => {
-            handleSaveArticle(url, title, email, tags);
-          }}
-        >
-          Save
+          <h5>Used Tags:</h5>
+          {tags.map((element, i) => {
+            return (
+              <h6 key={i}>
+                <li>
+                  {element + " "}
+                  <button
+                    className="btn-floating btn-small waves-effect waves-light red"
+                    onClick={() => {
+                      handleRemoveClick(i);
+                    }}
+                  >
+                    <i class="material-icons">delete</i>
+                  </button>
+                </li>
+              </h6>
+            );
+          })}
+          <button
+            className="waves-effect waves-light btn"
+            onClick={() => {
+              handleSaveArticle(url, title, email, tags);
+            }}
+          >
+            Save
         </button>
-        <button
-          className="waves-effect waves-light btn"
-          onClick={() => {
-            handleLogout();
-          }}
-        >
-          Logout
+          <button
+            className="waves-effect waves-light btn"
+            onClick={() => {
+              handleLogout();
+            }}
+          >
+            Logout
         </button>
+        </div>
       </div>
-    </div>
     </div>
   );
 }
