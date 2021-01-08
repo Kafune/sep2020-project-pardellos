@@ -150,6 +150,7 @@ export default function Article(props) {
         <div className="row input-form">
           <input
             type="text"
+            id="ext-url"
             placeholder="URL.."
             className="input"
             onChange={(e) => handleUrlChange(e)}
@@ -157,6 +158,7 @@ export default function Article(props) {
           />
           <input
             type="text"
+            id="ext-title"
             placeholder="Title.."
             className="input"
             onChange={(e) => handleTitleChange(e)}
@@ -194,6 +196,7 @@ export default function Article(props) {
             );
           })}
           <button
+            id="ext-save-article"
             className="waves-effect waves-light btn"
             onClick={() => {
               handleSaveArticle(url, title, email, tags);
