@@ -8,7 +8,7 @@ const User = require("../models/User");
 const mongoose = require('mongoose');
 const fetch = require("node-fetch");
 
-xdescribe("User auth integration testing", () => {
+describe("User auth integration testing", () => {
 beforeAll(async () =>{
   await mongoose.connect(
     "mongodb+srv://Glenn:LaterLezen@laterlezen.tkmyn.mongodb.net/LaterLezen?retryWrites=true&w=majority",

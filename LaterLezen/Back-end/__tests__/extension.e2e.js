@@ -80,4 +80,7 @@ describe("Laterlezer extension e2e tests", async () => {
         await thePage.click('button[id="ext-login-button"]')
         await thePage.waitForTimeout(3000);
     })
+    test("User tries to add an article with the wrong URL format", async() => {
+        
+    })
 })
