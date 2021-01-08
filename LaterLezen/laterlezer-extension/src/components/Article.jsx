@@ -160,7 +160,7 @@ export default function Article(props) {
             type="text"
             id="ext-title"
             placeholder="Title.."
-            className="input"
+            className="ext-title input"
             onChange={(e) => handleTitleChange(e)}
             value={title}
           />

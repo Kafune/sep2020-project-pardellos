@@ -31,8 +31,8 @@ export default function Login(props) {
     <div className="container extension-bg">
       <h3 className="login-title">LaterLezer</h3>
       <div className="row">
-        <input type="email" class="email" placeholder="Email..." onChange={(e) => setEmail(e.target.value)} value={email}/>
-        <input type="password" class="password" placeholder="Password..." onChange={(e) => setPassword(e.target.value)} value={password} />
+        <input type="email" class="email" placeholder="Email..." onChange={(e) => setEmail(e.target.value)} value={email} required/>
+        <input type="password" class="password" placeholder="Password..." onChange={(e) => setPassword(e.target.value)} value={password} required/>
         <button value="Log in" id="ext-login-button" className="waves-effect waves-light btn" onClick={() => { handleLoginUser(email, password) }}>Log in</button>
       </div>
     </div>
