@@ -82,19 +82,14 @@ describe("Laterlezer extension e2e tests", () => {
         await thePage.waitForTimeout(3000);
     })
 
-    test("User fills in correct article", async() => {
+    test("User tries to add an article with the correct URL format", async() => {
         await thePage.$eval(
             "input[id=ext-url]",
             (input, value) => (input.value = value),
             ""
           );
-          await thePage.$eval(
-            "input[id=ext-title]",
-            (input, value) => (input.value = value),
-            ""
-          );
         await thePage.type('input[id="ext-url"]', "https://www.nu.nl/verkiezingen-vs/6092489/trump-accepteert-verkiezingsuitslag-en-is-woedend-op-capitool-bestormers.html")
-        await thePage.type('input[id="ext-title"]', "Trump accepteert verkiezingsuitslag en is woedend op Capitool-bestormers")
+        await thePage.type('input[id="ext-title"]', "Trump is woedend op Capitool-bestormers")
         await thePage.click('button[id="ext-save-article"]')
         await thePage.waitForTimeout(3000);
     })
