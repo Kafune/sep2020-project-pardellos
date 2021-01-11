@@ -3,6 +3,7 @@ import {
   getArticle,
   getAllArticles,
   getArticleByUser,
+  openWebSocket, getWebSocket
 } from "../serverCommunication";
 import { Link, Redirect } from "react-router-dom";
 
@@ -21,6 +22,14 @@ export default function Dashboard(props) {
     setLastname(props.lastname);
   }, [props.firstname][props.lastname]);
 
+  useEffect(() => {
+    let ws = openWebSocket();
+    ws.onopen = () => { console.log('connected') };
+    ws.onclose = () => { };
+    ws.onmessage = msg => (console.log(msg))
+    ws.onerror = () => { console.log('Error bij het openen van de websocket') };
+  }, []);
+
   function handleGetArticles() {
     getArticleByUser()
       .then((result) => result.json())
@@ -28,6 +37,7 @@ export default function Dashboard(props) {
         setArticles(result.articles);
       });
   }
+  
 
   return (
     <div className="readArticle">

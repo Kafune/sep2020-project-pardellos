@@ -5,7 +5,7 @@ import Article from "./Article";
 import 'materialize-css/dist/css/materialize.min.css';
 import M from "materialize-css";  
 
-import { checkAuthenticated } from "../serverCommunication";
+import { checkAuthenticated,openWebSocket,getWebSocket } from "../serverCommunication";
 
 export default class App extends React.Component {
   constructor(props) {
@@ -36,6 +36,7 @@ export default class App extends React.Component {
         M.toast({ html: "Unauthorized user, please login first" });
       });
   }
+
 
   setTags(value) {
     this.setState({

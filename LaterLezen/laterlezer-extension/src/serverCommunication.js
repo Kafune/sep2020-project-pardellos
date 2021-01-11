@@ -1,4 +1,8 @@
 const baseurl = `http://localhost:4000`
+const port = 4000;
+const serverHostname = `${window.location.hostname}:${port}`;
+let ws;
+let theSocket;
 
 export async function loginUser(email, password) {
 
@@ -61,4 +65,26 @@ export async function saveArticle(url, title, email, tags) {
   }
 
   return fetch(baseurl + `/user/article`, fetchOptions)
+}
+
+// Websocket initialization
+export function openWebSocket() {
+  if (ws){
+    ws.onerror = null;
+    ws.onopen  = null;
+    ws.onclose = null;
+    ws.close();
+  }
+  console.log("Opening socket for", `ws://${serverHostname}`);
+  ws = new WebSocket(`ws://${serverHostname}`);
+  return ws
+}
+
+export function getWebSocket() {
+  if( theSocket ) {
+    return theSocket;
+  }
+  else {
+    throw new Error("The websocket has not been opened yet.")
+  }
 }

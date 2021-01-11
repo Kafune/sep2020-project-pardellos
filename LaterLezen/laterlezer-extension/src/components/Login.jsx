@@ -1,11 +1,12 @@
 /*global chrome*/
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect,getWebSocket } from "react";
 import M from "materialize-css";
 import { loginUser } from "../serverCommunication";
 
 export default function Login(props) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+
 
   function handleLoginUser(email, password) {
     loginUser(email, password)

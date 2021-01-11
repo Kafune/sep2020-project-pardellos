@@ -1,6 +1,8 @@
 const port = 4000;
 const serverHostname = `${window.location.hostname}:${port}`;
 const serverFetchBase = `${window.location.protocol}//${serverHostname}`;
+let ws;
+let theSocket;
 
 export async function saveArticle(url, tags, title) {
   const body = {
@@ -250,4 +252,26 @@ export async function getSources() {
     mode: 'cors'
   }
   return fetch(serverFetchBase + `/articles/sources`, fetchOptions)
+}
+
+// Websocket initialization
+export function openWebSocket() {
+  if (ws){
+    ws.onerror = null;
+    ws.onopen  = null;
+    ws.onclose = null;
+    ws.close();
+  }
+  console.log("Opening socket for", `ws://${serverHostname}`);
+  ws = new WebSocket(`ws://${serverHostname}`);
+  return ws
+}
+
+export function getWebSocket() {
+  if( theSocket ) {
+    return theSocket;
+  }
+  else {
+    throw new Error("The websocket has not been opened yet.")
+  }
 }

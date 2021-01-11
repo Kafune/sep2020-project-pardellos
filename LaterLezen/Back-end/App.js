@@ -8,8 +8,11 @@ const bodyParser = require("body-parser");
 const connectDB = require("./config/db");
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
+const http = require("http");
 app.use(cookieParser());
 app.use(express.json());
+const ws = require("ws");
+const session = require("express-session");
 
 // Initialize CORS
 app.use(cors({ origin: true, credentials: true }));
@@ -33,9 +36,56 @@ app.use("/testing", require("./routes/testing"));
 app.use("/user", require("./routes/user"));
 app.use("/articles", require("./routes/articles"));
 
+// Websocket initialization
+
+const sessionParser = session({
+  saveUninitialized: false,
+  secret: "$eCuRiTy",
+  resave: false,
+});
+
+app.use(sessionParser);
+
+const httpServer = http.createServer(app);
+const websocketServer = new ws.Server({ noServer: true });
+httpServer.on("upgrade", (req, networkSocket, head) => {
+  sessionParser(req, {}, () => {
+    websocketServer.handleUpgrade(req, networkSocket, head, (newWebSocket) => {
+      websocketServer.emit("connection", newWebSocket, req);
+    });
+  });
+});
+
+//Websocket messages
+websocketServer.on("connection", (socket, req) => {
+  console.log("Client has connected");
+  socket.send("connected");
+  socket.on("message", (message) => {
+    console.log(message);
+    switch(message.request) {
+      case "extensionClientAdd":
+        if(message.userType === "extension"){
+          socket.userType = "extension";
+          socket.email = message.email;
+        }
+        break;
+      case "refresh":
+        websocketServer.clients.forEach((client) => {
+          console.log('er is een refresh bericht binnengekomen')
+          if(client.email === message.email && client.userType === 'webappuser'){
+            client.send('refresh article data')
+          }
+        })
+
+    }
+    // console.log(socket.request);
+    // req.session.save();
+  });
+});
+
 const PORT = process.env.PORT || 4000;
 
-app.listen(
+httpServer.listen(
   PORT,
   console.log(`Server running in ${process.env.NODE_ENV} mode on port ${PORT}`)
 );

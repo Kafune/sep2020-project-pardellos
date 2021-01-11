@@ -1,7 +1,7 @@
 /*global chrome*/
 import React, { useState, useEffect } from "react";
 import TagList from "./TagsList";
-import { saveArticle, logoutUser } from "../serverCommunication";
+import { saveArticle, logoutUser, openWebSocket, getWebSocket } from "../serverCommunication";
 import M from "materialize-css";
 
 export default function Article(props) {
@@ -14,9 +14,6 @@ export default function Article(props) {
   // const [selectedTags, setSelectedTags] = useState([]);
   // const [filteredTags, setFilteredTags] = useState([props.tags]);
 
-  useEffect(() => {
-    handleGetUrl()
-  })
   // useEffect(() => {
   //   setFilteredTags([...props.tags])
   // }, [props.tags]);
@@ -27,8 +24,38 @@ export default function Article(props) {
   // }, [filter]);
 
   useEffect(() => {
+    onOpenSocket()
+    handleGetUrl();
+  });
+
+  useEffect(() => {
     handleTagChips();
   }, [tags]);
+
+  function onOpenSocket() {
+    let ws = openWebSocket();
+    ws.onerror = function error() {
+      console.log("websocket error");
+    };
+    ws.onopen = function open() {
+      console.log("Websocket connection has been established");
+      let data = {
+        email: email,
+        userType: "extension",
+        request: "refresh"
+      };
+      ws.send(JSON.stringify(data));
+    };
+    ws.onclose = function close() {
+      console.log("Websocket connection has been closed.");
+    };
+    ws.onmessage = function message(msg) {
+      switch (msg.data) {
+        case "connected":
+          console.log("Hai")
+      }
+    };
+  }
 
   function handleTagChips() {
     setCurrentTags([]);
@@ -95,6 +122,11 @@ export default function Article(props) {
               console.log(response);
             })
             .then(() => M.toast({ html: "Article succesfully saved" }));
+            let ws = getWebSocket();
+            let message = {
+              request: 'refresh article data'
+            }
+            ws.send(JSON.stringify(message))
         }
       } else {
         M.toast({ html: "Please enter atleast one tag" });
@@ -108,13 +140,11 @@ export default function Article(props) {
     e.preventDefault();
   }
 
-
   function handleLogout() {
-    logoutUser()
-      .then(() => {
-        props.handleEmailState("")
-        props.handleLoginState(false)
-      })
+    logoutUser().then(() => {
+      props.handleEmailState("");
+      props.handleLoginState(false);
+    });
   }
 
   function handleGetUrl() {
@@ -176,7 +206,7 @@ export default function Article(props) {
             }}
           >
             Add
-        </button>
+          </button>
           <h5>Used Tags:</h5>
           {tags.map((element, i) => {
             return (
@@ -203,7 +233,7 @@ export default function Article(props) {
             }}
           >
             Save
-        </button>
+          </button>
           <button
             className="waves-effect waves-light btn"
             onClick={() => {
@@ -211,7 +241,7 @@ export default function Article(props) {
             }}
           >
             Logout
-        </button>
+          </button>
         </div>
       </div>
     </div>
