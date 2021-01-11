@@ -96,13 +96,13 @@ export default function SaveArticle(props) {
         <h2 class="center">Save Web Article</h2>
         <input type="text" id="url" placeholder="URL..." onChange={(e) => setUrl(e.target.value)} value={url} />
         <input type="text" id="title" placeholder="Title..." onChange={(e) => setTitle(e.target.value)} value={title} />
-        <div class="chips chips-placeholder chips-autocomplete tooltipped" data-position="bottom" data-tooltip="[Tag requirements] Allow chars: A-Z / 0-9 / _  / - / Max length: 15 chars" ></div><button className="waves-effect waves-light btn-small blue accent-2" onClick={() => { handleAddClick() }}>Add</button>
+        <div class="chips chips-placeholder chips-autocomplete tooltipped" id="chipsDiv" data-position="bottom" data-tooltip="[Tag requirements] Allow chars: A-Z / 0-9 / _  / - / Max length: 15 chars" ></div><button className="waves-effect waves-light btn-small blue accent-2" id="addTag" onClick={() => { handleAddClick() }}>Add</button>
         <h3>Used Tags:</h3>
         {tags.map((element, i) => {
             return <h5 key={i}>
                 <li>{element + " "}
                     <button className="btn-floating btn-small waves-effect waves-light red" onClick={() => { handleRemoveClick(i) }}>
-                        <i class="material-icons">delete</i>
+                        <i class="material-icons" id="deleteTag">delete</i>
                     </button>
                 </li>
             </h5>

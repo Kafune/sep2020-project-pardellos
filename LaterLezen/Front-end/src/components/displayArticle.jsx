@@ -261,13 +261,15 @@ export default function DisplayArticle(props) {
           <div className={editFields ? "col-md-10" : "hidden"}>
             <h5>
               Tags:
-              <div
+              <div 
+                id="chipsDiv"
                 class=" chips chips-placeholder chips-autocomplete tooltipped"
                 data-position="bottom"
                 data-tooltip="[Tag requirements] Allow chars: A-Z / 0-9 / _  / - / Max length: 15 chars"
               ></div>
               <button
                 className="inline waves-effect waves-light btn-small blue accent-2"
+                id="addTag"
                 onClick={() => {
                   handleAddClick();
                 }}
