@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { saveArticle } from '../serverCommunication'
+import { useHistory } from "react-router-dom";
 
 import M from 'materialize-css'
 
@@ -18,8 +19,12 @@ export default function SaveArticle(props) {
     const [title, setTitle] = useState('');
     const [tags, setTags] = useState([]);
     const [currentTags, setCurrentTags] = useState([]);
+    const history = useHistory();
 
     useEffect(() => {
+        if(!props.appState.logged_in) {
+            history.push('/login')
+          }
         handleTagChips()
     }, [tags])
 

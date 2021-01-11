@@ -4,15 +4,21 @@ import {
   getAllArticles,
   getArticleByUser,
 } from "../serverCommunication";
-import { Link, Redirect } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 
 export default function Dashboard(props) {
   const [firstname, setFirstname] = useState(props.firstname);
   const [lastname, setLastname] = useState(props.lastname);
   const [articles, setArticles] = useState(props.articles);
+  const history = useHistory();
+
   const [id, setId] = useState();
 
   useEffect(() => {
+    if(!props.appState.logged_in) {
+      console.log(props.appState.logged_in)
+      history.push('/login')
+    }
     handleGetArticles();
   }, []);
 
@@ -41,7 +47,7 @@ export default function Dashboard(props) {
               <div class="card blue-grey darken-1 dashboard-article">
                 <div class="card-image">
                   <img src={data.lead_image_url} />
-                  <span class="card-title">{data.title}</span>
+                  <div class="col"><span class="card-title">{data.title}</span></div>
                 </div>
                 <div class="card-content">
                   <p>{data.excerpt}</p>

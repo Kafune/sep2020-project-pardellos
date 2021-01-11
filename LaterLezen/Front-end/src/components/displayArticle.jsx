@@ -181,10 +181,10 @@ export default function DisplayArticle(props) {
             <i class="small material-icons" id="editArticle">save</i>
           </button>
         ) : (
-          <button class="btn blue" onClick={showEditField}>
-            <i class="small material-icons" id="editArticle">create</i>
-          </button>
-        )}
+            <button class="btn blue" onClick={showEditField}>
+              <i class="small material-icons" id="editArticle">create</i>
+            </button>
+          )}
       </div>
       <div className={"cancel-button"}>
         {editFields ? (
@@ -192,8 +192,8 @@ export default function DisplayArticle(props) {
             <i class="small material-icons" id="cancelEditArticle">cancel</i>
           </button>
         ) : (
-          ""
-        )}
+            ""
+          )}
       </div>
 
       <div className="article">
@@ -215,8 +215,8 @@ export default function DisplayArticle(props) {
               </h5>
             </React.Fragment>
           ) : (
-            <h2 className={"hover-show"}>{title}</h2>
-          )}
+              <h2 className={"hover-show"}>{title}</h2>
+            )}
 
           <h5 className={"hover-show"}>
             Published by:
@@ -230,8 +230,8 @@ export default function DisplayArticle(props) {
                 ></input>
               </div>
             ) : (
-              <b>{" " + author + " "}</b>
-            )}
+                <b>{" " + author + " "}</b>
+              )}
           </h5>
           <h5 className={"hover-show"}>
             Source:
@@ -245,8 +245,8 @@ export default function DisplayArticle(props) {
                 ></input>
               </div>
             ) : (
-              <b>{" " + source + " "}</b>
-            )}
+                <b>{" " + source + " "}</b>
+              )}
           </h5>
           <div className={editFields ? "" : "hidden"}>
             <h5>Description:</h5>
