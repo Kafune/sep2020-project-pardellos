@@ -2,7 +2,6 @@ const baseurl = `http://localhost:4000`
 const port = 4000;
 const serverHostname = `${window.location.hostname}:${port}`;
 let ws;
-let theSocket;
 
 export async function loginUser(email, password) {
 
@@ -21,6 +20,31 @@ export async function loginUser(email, password) {
     body: JSON.stringify(body)
   }
   return fetch(baseurl + `/user/login`, fetchOptions)
+}
+
+export function onOpenSocket(email) {
+  let ws = openWebSocket();
+  ws.onerror = function error() {
+    console.log("websocket error");
+  };
+  ws.onopen = function open() {
+    console.log("Websocket connection has been established");
+    let data = {
+      email: email,
+      userType: "extension",
+      request: "extensionClientAdd",
+    };
+    ws.send(JSON.stringify(data));
+  };
+  ws.onclose = function close() {
+    console.log("Websocket connection has been closed.");
+  };
+  ws.onmessage = function message(msg) {
+    switch (msg.data) {
+      case "connected":
+        console.log("Hai");
+    }
+  };
 }
 
 export async function checkAuthenticated() {
@@ -81,8 +105,8 @@ export function openWebSocket() {
 }
 
 export function getWebSocket() {
-  if( theSocket ) {
-    return theSocket;
+  if( ws ) {
+    return ws;
   }
   else {
     throw new Error("The websocket has not been opened yet.")

@@ -61,25 +61,27 @@ websocketServer.on("connection", (socket, req) => {
   console.log("Client has connected");
   socket.send("connected");
   socket.on("message", (message) => {
-    console.log(message);
-    switch(message.request) {
+    let req = JSON.parse(message);
+    switch (req.request) {
       case "extensionClientAdd":
-        if(message.userType === "extension"){
-          socket.userType = "extension";
-          socket.email = message.email;
-        }
-        break;
-      case "refresh":
         websocketServer.clients.forEach((client) => {
-          console.log('er is een refresh bericht binnengekomen')
-          if(client.email === message.email && client.userType === 'webappuser'){
-            client.send('refresh article data')
+          if (client.email === req.email && client.userType === req.userType && req.request === 'extensionClientAdd') {
+            console.log('user already exists, not added to websocketserver')
+          } else {
+            socket.email = message.email;
+            socket.userType = "extension";
+            console.log("user with " + req.email + " has been added");
           }
-        })
-
+        });
+        break;
+      case "refresh article data":
+        console.log('er is een refresh bericht binnengekomen')
+        websocketServer.clients.forEach((client) => {
+          if (client.email === req.email && client.userType === "webappuser") {
+            client.send("refresh article data");
+          }
+        });
     }
-    // console.log(socket.request);
-    // req.session.save();
   });
 });
 

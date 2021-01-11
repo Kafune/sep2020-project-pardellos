@@ -11,20 +11,9 @@ export default function Article(props) {
   const [filter, setFilter] = useState("");
   const [tags, setTags] = useState([]);
   const [currentTags, setCurrentTags] = useState([]);
-  // const [selectedTags, setSelectedTags] = useState([]);
-  // const [filteredTags, setFilteredTags] = useState([props.tags]);
-
-  // useEffect(() => {
-  //   setFilteredTags([...props.tags])
-  // }, [props.tags]);
-
-  // useEffect(() => {
-  //   let filtered = props.tags.filter((name) => name.includes(filter));
-  //   setFilteredTags(filtered);
-  // }, [filter]);
+  const [isLoggedIn, setIsLoggedIn] = useState(props.isLoggedIn)
 
   useEffect(() => {
-    onOpenSocket()
     handleGetUrl();
   });
 
@@ -32,30 +21,6 @@ export default function Article(props) {
     handleTagChips();
   }, [tags]);
 
-  function onOpenSocket() {
-    let ws = openWebSocket();
-    ws.onerror = function error() {
-      console.log("websocket error");
-    };
-    ws.onopen = function open() {
-      console.log("Websocket connection has been established");
-      let data = {
-        email: email,
-        userType: "extension",
-        request: "refresh"
-      };
-      ws.send(JSON.stringify(data));
-    };
-    ws.onclose = function close() {
-      console.log("Websocket connection has been closed.");
-    };
-    ws.onmessage = function message(msg) {
-      switch (msg.data) {
-        case "connected":
-          console.log("Hai")
-      }
-    };
-  }
 
   function handleTagChips() {
     setCurrentTags([]);
@@ -77,25 +42,11 @@ export default function Article(props) {
     setUrl(e.target.value);
   }
 
-  // function handleFilterChange(e) {
-  //   e.preventDefault();
-  //   setFilter(e.target.value);
-  // }
-
   function handleTitleChange(e) {
     e.preventDefault();
     setTitle(e.target.value);
   }
 
-  // function handleTagSelect(value) {
-  //   if (selectedTags.includes(value)) {
-  //     setSelectedTags((oldArray) =>
-  //       oldArray.filter((currentValues) => currentValues !== value)
-  //     );
-  //   } else {
-  //     setSelectedTags((oldArray) => [...oldArray, value]);
-  //   }
-  // }
   function handleSaveArticle(url, title, email, tags) {
     let noErrors = true;
     if (
@@ -118,15 +69,14 @@ export default function Article(props) {
             .then((response) => {
               response.json();
             })
-            .then((response) => {
-              console.log(response);
-            })
-            .then(() => M.toast({ html: "Article succesfully saved" }));
+            .then(() => M.toast({ html: "Article succesfully saved" }))
+            .then(() => {
             let ws = getWebSocket();
             let message = {
               request: 'refresh article data'
             }
-            ws.send(JSON.stringify(message))
+              ws.send(JSON.stringify(message))
+            })
         }
       } else {
         M.toast({ html: "Please enter atleast one tag" });
