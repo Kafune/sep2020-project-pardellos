@@ -324,7 +324,6 @@ router.put(
             },
           });
         } else {
-          console.log(document.articles);
           res.status(200).json({
             articles: document.articles,
             authenticated: true,
@@ -403,7 +402,6 @@ router.put("/testing/art/:title", (req, res) => {
 });
 
 router.post("/articleExtension", (req, res) => {
-  console.log(req.user);
   req.body.tags = [];
   const findUser = User.findOne({
     email: req.body.email,

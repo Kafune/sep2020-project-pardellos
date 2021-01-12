@@ -17,7 +17,6 @@ export default function Login(props) {
 
     function handleLoginUser(email, password) {
         loginUser(email, password)
-            .then((response) => response.json())
             .then((response) => {
                 if (response.isAuthenticated === true) {
                     console.log(response)

@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from "react";
 import {
-  getArticle,
-  getAllArticles,
   getArticleByUser,
 } from "../serverCommunication";
 import { Link, useHistory } from "react-router-dom";

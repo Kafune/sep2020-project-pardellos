@@ -7,7 +7,6 @@ import Login from "./Login";
 import Register from "./Register";
 import Logout from "./Logout";
 import DisplayArticle from "./displayArticle";
-import EditArticle from "./editArticle";
 import "../../src/App.css";
 import M from "materialize-css";
 import background from "../img/pfp_background.jpg";
@@ -32,7 +31,6 @@ export default class App extends React.Component {
   componentDidMount() {
     M.AutoInit();
     checkAuthenticated()
-      .then((response) => response.json())
       .then((response) => {
         if (response.isAuthenticated === true) {
           this.handleLoginState(true);
@@ -234,9 +232,6 @@ export default class App extends React.Component {
             <Route path="/article/:id">
               <DisplayArticle
                 articleID={this.state.article_id} />
-            </Route>
-            <Route path="/edit/:id">
-              <EditArticle/>
             </Route>
           </Switch>
         </div>
