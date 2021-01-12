@@ -203,7 +203,7 @@ export default class App extends React.Component {
               />
             </Route>
             <Route path="/save/web">
-              <SaveArticle />
+              <SaveArticle tags={this.state.tags}/>
             </Route>
             <Route path="/search">
               <SearchArticle

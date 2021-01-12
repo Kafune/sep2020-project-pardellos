@@ -506,12 +506,8 @@ router.get(
 
 function handleUserNestedTags(data, userTags) {
   let usedids = [];
-  const node = (tagName, parent = null) => ({
-    tagName,
-    parent,
-    _id: new ObjectID(),
-    subTags: [],
-  });
+  
+  const node = (tagName, parent = null, index) => ({ tagName, parent, index, _id: new ObjectID, subTags: [] });
   const addNode = (parent, child) => (parent.subTags.push(child), child);
   const findNamed = (name, parent) => {
     for (const child of parent.subTags) {
@@ -529,12 +525,15 @@ function handleUserNestedTags(data, userTags) {
     top = node(TOP_NAME);
   for (const children of data) {
     let parent = userTags;
+    let index =0
     for (const name of children) {
+      index= index+1
       const found = findNamed(name, parent);
-      parent = found ? found : addNode(parent, node(name, parent.tagName));
+      parent = found ? found : addNode(parent, node(name, parent.tagName, index));
       console.log(parent._id.toString());
       usedids.push(parent._id.toString())
     }
+    
   }
   return usedids
 }

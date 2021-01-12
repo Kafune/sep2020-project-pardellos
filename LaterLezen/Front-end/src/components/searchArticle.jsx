@@ -94,9 +94,7 @@ export default function SearchArticle(props) {
     <div>
       <h2 class="center">Search Article</h2>
       <div className="row">
-        <button className="btn btn blue" onClick={() => handleSearchState(1)}>
-          Search by tags
-        </button>
+        <button className="btn btn blue" id="searchByTags" onClick={() => handleSearchState(1)}>Search by tags</button>
         <div className="col">
           <button className="btn btn blue" id="metaData" onClick={() => handleSearchState(2)}>
             Search by metadata
@@ -135,6 +133,7 @@ export default function SearchArticle(props) {
                   <div class="col">
                     <button
                       className="waves-effect waves-light btn-small blue accent-2"
+                      id="searchTag"
                       onClick={() => {
                         handleSearchArticleByTag();
                       }}
@@ -144,6 +143,7 @@ export default function SearchArticle(props) {
                   </div>
                   <button
                     className="waves-effect waves-light btn-small blue accent-2"
+                    id="clearTag"
                     onClick={() => {
                       handleClearTags();
                     }}
