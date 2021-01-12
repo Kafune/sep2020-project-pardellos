@@ -34,8 +34,8 @@ describe("Laterlezer e2e tests", () => {
 
 
     test("User logs into his account", async () => {
-        let email = "a@a.com";
-        let password = "aaaaaaaa"
+        let email = "b@b.nl";
+        let password = "12345678"
 
         await thePage.waitForTimeout(1500)
         await thePage.waitForTimeout("input[name=register]");
