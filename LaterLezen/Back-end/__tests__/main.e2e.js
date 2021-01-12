@@ -14,7 +14,7 @@ xdescribe("Laterlezer e2e tests", () => {
 
     theBrowser = await puppeteer.launch({
       headless: false,
-      slowMo: 60,
+      slowMo: 30,
       defaultViewport: null,
       args: [`--window-size=1920,1080`],
     });
@@ -90,7 +90,7 @@ xdescribe("Laterlezer e2e tests", () => {
     await thePage.click('input[name="register"]');
   });
 
-  test("User clicks the hamburger menu and selects the option to safe an article", async () => {
+  test("User clicks the hamburger menu and selects the option to save an article", async () => {
     let url =
       "https://www.nu.nl/politiek/6095197/horeca-krijgt-wellicht-extra-steun-maar-is-geen-bouwsteen-van-economie.html";
     let title = "horeca krijgt wellicht extra steun";

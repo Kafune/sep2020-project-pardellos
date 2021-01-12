@@ -66,7 +66,7 @@ export default function Login(props) {
                 </form>
                 <div className="col">
                     <h5>No account?</h5>
-                    <Link to="/register"><a className="waves-effect waves-light btn-small blue">
+                    <Link to="/register"><a className="waves-effect waves-light btn-small blue" id='login'>
                         Register here!
                     </a>
                     </Link>
