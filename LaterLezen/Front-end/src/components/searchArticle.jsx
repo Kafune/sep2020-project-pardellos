@@ -3,7 +3,7 @@ import {
   searchArticleByTags,
   findArticle,
 } from "../serverCommunication";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import M from "materialize-css";
 
 export default function SearchArticle(props) {
@@ -17,11 +17,14 @@ export default function SearchArticle(props) {
   const [tagState, setTagState] = useState(tags);
   const [query, setQuery] = useState("");
   const [searchContent, setSearchContent] = useState(false);
+  const history = useHistory();
 
   useEffect(() => {
+    if (!props.appState.logged_in) {
+      history.push('/login')
+    }
     setTags(props.tags);
     setTagState(props.tags);
-    console.log(props.tags);
   }, [props.tags]);
 
   function printTree(treeNode, indent = "") {
@@ -40,11 +43,8 @@ export default function SearchArticle(props) {
   }
 
   function handleSearchArticleByTag() {
-    console.log(tagIds)
     searchArticleByTags(tagIds)
-      .then((response) => response.json())
       .then((response) => {
-        console.log(response);
         setArticles(response.articles);
       });
   }
@@ -58,11 +58,10 @@ export default function SearchArticle(props) {
   }
 
   const handleCheckBox = (e) => {
-      setIsChecked({ ...isChecked, [e.target.id]: true });
-      selectedTags.push(e.target.name)
-      tagIds.push(e.target.id)
-      console.log(e.target.id);
-      setTagCounter(tagCounter + 1)
+    setIsChecked({ ...isChecked, [e.target.id]: true });
+    selectedTags.push(e.target.name)
+    tagIds.push(e.target.id)
+    setTagCounter(tagCounter + 1)
   };
 
   const escapeRegExp = (string) => {
@@ -72,11 +71,8 @@ export default function SearchArticle(props) {
   const handleSearch = () => {
     const sanitizedSearch = escapeRegExp(query);
     findArticle(sanitizedSearch, searchContent)
-      .then((response) => response.json())
-      // .then(response => console.log(response))
       .then(result => {
         if (result.length <= 0) {
-          console.log("hier")
           M.toast({ html: "No article found!" })
         } else {
           setArticles(result)

@@ -118,7 +118,6 @@ router.delete("/article", async (req, res) => {
    */
 router.get("/user/:id", async (req, res) => {
   let userid = req.params.id
-  console.log(userid);
 
   let allArticles = await Article.find({ _id: userid });
   res.send(allArticles);
@@ -170,40 +169,26 @@ router.put(
   passport.authenticate("jwt", {
     session: false,
   }), async (req, res) => {
-    // let title = req.body.title;
-    // let description = req.body.description
-    // let author = req.body.author;
-    // let source = req.body.source;
     let query = req.body.query;
     let searchContent = req.body.searchContent;
 
     let searchFields = {}
 
     if (query) {
+      searchFields = {
+        $or: [
+          { title: { '$regex': new RegExp(query, "i") } },
+          { excerpt: { '$regex': new RegExp(query, "i") } },
+          { author: { '$regex': new RegExp(query, "i") } },
+          { domain: { '$regex': new RegExp(query, "i") } }
+        ]
+      }
+
       if (searchContent) {
-        searchFields = {
-          $or: [
-            { title: { '$regex': new RegExp(query, "i") } },
-            { excerpt: { '$regex': new RegExp(query, "i") } },
-            { author: { '$regex': new RegExp(query, "i") } },
-            { domain: { '$regex': new RegExp(query, "i") } },
-            { content: { '$regex': new RegExp(query, "i") } },
-          ]
-        }
-      } else {
-        searchFields = {
-          $or: [
-            { title: { '$regex': new RegExp(query, "i") } },
-            { excerpt: { '$regex': new RegExp(query, "i") } },
-            { author: { '$regex': new RegExp(query, "i") } },
-            { domain: { '$regex': new RegExp(query, "i") } }
-          ]
-        }
+        searchFields.$or.push({ content: { '$regex': new RegExp(query, "i") } })
       }
     }
-
-    // console.log(searchFields)
-
+    
     User.findById({
       _id: req.user._id
     })
@@ -212,7 +197,6 @@ router.put(
         match: searchFields
       })
       .exec((err, document) => {
-        // console.log(document)
         if (err)
           res.status(500).json({
             message: {
@@ -221,8 +205,6 @@ router.put(
             },
           });
         else {
-          // console.log(document)
-
           res.send(document.articles)
         }
       });

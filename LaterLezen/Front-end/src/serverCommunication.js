@@ -18,7 +18,9 @@ export async function saveArticle(url, tags, title) {
     body: JSON.stringify(body),
   };
 
-  return fetch(serverFetchBase + `/user/article`, fetchOptions);
+  return fetch(serverFetchBase + `/user/article`, fetchOptions)
+  .then(response => response.json())
+
 }
 
 export async function getAllArticles() {
@@ -61,7 +63,8 @@ export async function loginUser(email, password) {
     mode: "cors",
     body: JSON.stringify(body),
   };
-  return fetch(serverFetchBase + `/user/login`, fetchOptions);
+  return fetch(serverFetchBase + `/user/login`, fetchOptions)
+  .then((response) => response.json())
 }
 
 export async function logoutUser() {
@@ -92,7 +95,7 @@ export async function registerUser(email, password, firstname, lastname) {
     mode: "cors",
     body: JSON.stringify(body),
   };
-  return fetch(serverFetchBase + `/user/register`, fetchOptions);
+  return fetch(serverFetchBase + `/user/register`, fetchOptions)
 }
 
 export async function checkAuthenticated() {
@@ -104,7 +107,8 @@ export async function checkAuthenticated() {
     credentials: "include",
     mode: "cors",
   };
-  return fetch(serverFetchBase + `/user/authenticated`, fetchOptions);
+  return fetch(serverFetchBase + `/user/authenticated`, fetchOptions)
+  .then((response) => response.json())
 }
 
 export async function searchArticleByTags(tagids) {
@@ -121,7 +125,9 @@ export async function searchArticleByTags(tagids) {
     mode: "cors",
     body: JSON.stringify(body),
   };
-  return fetch(serverFetchBase + `/user/tags`, fetchOptions);
+  return fetch(serverFetchBase + `/user/tags`, fetchOptions)
+  .then((response) => response.json())
+
 }
 
 export async function searchArticleByID(id) {
@@ -238,11 +244,12 @@ export async function findArticle(query, searchContent) {
     headers: {
       "Content-Type": "application/json",
     },
-    credentials: "include",
-    mode: "cors",
-    body: JSON.stringify(body),
-  };
-  return fetch(serverFetchBase + `/articles/search`, fetchOptions);
+    credentials: 'include',
+    mode: 'cors',
+    body: JSON.stringify(body)
+  }
+  return fetch(serverFetchBase + `/articles/search`, fetchOptions)
+  .then((response) => response.json())
 }
 
 export async function getSources() {

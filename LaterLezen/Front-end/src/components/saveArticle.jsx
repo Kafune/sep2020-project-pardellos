@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { saveArticle } from '../serverCommunication'
+import { useHistory } from "react-router-dom";
 
 import M from 'materialize-css'
 
@@ -11,8 +12,12 @@ export default function SaveArticle(props) {
     const [usedTags, setUsedTags] = useState(props.tags);
 
     let tempArray = []
+    const history = useHistory();
 
     useEffect(() => {
+        if(!props.appState.logged_in) {
+            history.push('/login')
+          }
         handleTagChips()
     }, [tags])
 
@@ -76,9 +81,7 @@ export default function SaveArticle(props) {
                 })
                 if (noErrors === true) {
                     saveArticle(url, tags, title)
-                        .then((response) => { response.json() })
-                        .then((response) => { console.log(response) })
-                        .then(() => M.toast({ html: 'Article succesfully saved' }))
+                    .then(() => M.toast({ html: 'Article succesfully saved' }))
                 }
             }
             else {

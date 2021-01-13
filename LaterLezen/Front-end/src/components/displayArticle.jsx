@@ -183,8 +183,8 @@ export default function DisplayArticle() {
             </i>
           </button>
         ) : (
-          ""
-        )}
+            ""
+          )}
       </div>
 
       <div className="article">
@@ -218,8 +218,8 @@ export default function DisplayArticle() {
                 ></input>
               </div>
             ) : (
-              <b>{" " + author + " "}</b>
-            )}
+                <b>{" " + author + " "}</b>
+              )}
           </h5>
           <h5 className={"hover-show"}>
             Source:
@@ -233,8 +233,8 @@ export default function DisplayArticle() {
                 ></input>
               </div>
             ) : (
-              <b>{" " + source + " "}</b>
-            )}
+                <b>{" " + source + " "}</b>
+              )}
           </h5>
           <div className={editFields ? "" : "hidden"}>
             <h5>Description:</h5>

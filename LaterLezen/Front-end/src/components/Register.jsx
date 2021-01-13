@@ -2,8 +2,6 @@ import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom'
 import { registerUser, loginUser } from '../serverCommunication'
 
-import banner from './../img/wallpaper.jpg';
-
 import M from "materialize-css";
 
 
@@ -29,13 +27,12 @@ export default function Register(props) {
         if (password === confirmPassword) {
             if (password.length > minPasswordLength) {
                 registerUser(email, password, firstName, lastName)
-                    .then((response) => {
+                    .then(response => {
                         if (response.status == 200) {
                             response.json()
                                 .then(() => {
                                     M.toast({ html: 'Account successfully created' })
                                     loginUser(email, password)
-                                        .then((response) => response.json())
                                         .then((response) => {
                                             if (response.isAuthenticated === true) {
                                                 props.handleEmailState(email);
