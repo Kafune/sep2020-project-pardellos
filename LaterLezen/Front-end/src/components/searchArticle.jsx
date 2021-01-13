@@ -3,7 +3,7 @@ import {
   searchArticleByTags,
   findArticle,
 } from "../serverCommunication";
-import { Link, useHistory } from "react-router-dom";
+import { Link } from "react-router-dom";
 import M from "materialize-css";
 
 export default function SearchArticle(props) {
@@ -17,12 +17,8 @@ export default function SearchArticle(props) {
   const [tagState, setTagState] = useState(tags);
   const [query, setQuery] = useState("");
   const [searchContent, setSearchContent] = useState(false);
-  const history = useHistory();
 
   useEffect(() => {
-    if (!props.appState.logged_in) {
-      history.push('/login')
-    }
     setTags(props.tags);
     setTagState(props.tags);
   }, [props.tags]);

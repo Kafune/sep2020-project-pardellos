@@ -1,5 +1,5 @@
 import React from "react";
-import { Link, Switch, Route} from "react-router-dom";
+import { Link, Switch, Route } from "react-router-dom";
 import Dashboard from "./Dashboard";
 import SaveArticle from "./saveArticle";
 import SearchArticle from "./searchArticle";
@@ -187,23 +187,36 @@ export default class App extends React.Component {
         <div class="container">
           <Switch>
             <Route path="/dashboard">
-              <Dashboard
-                appState={this.state}
-                email={this.state.email}
-                firstname={this.state.firstname}
-                lastname={this.state.lastname}
-                articles={this.state.articles}
-              />
+              {this.state.logged_in ? (
+                <Dashboard
+                  appState={this.state}
+                  email={this.state.email}
+                  firstname={this.state.firstname}
+                  lastname={this.state.lastname}
+                  articles={this.state.articles}
+                />
+              ) : (
+                  ''
+                )}
             </Route>
             <Route path="/save/web">
-              <SaveArticle tags={this.state.tags} appState={this.state}/>
+              {this.state.logged_in ? (
+                <SaveArticle tags={this.state.tags} appState={this.state} />
+              ) : (
+                  ''
+                )}
             </Route>
             <Route path="/search">
-              <SearchArticle
-                appState={this.state}
-                tags={this.state.tags}
-                articles={this.state.articles}
-              />
+              {this.state.logged_in ? (
+                <SearchArticle
+                  appState={this.state}
+                  tags={this.state.tags}
+                  articles={this.state.articles}
+                />
+              ) : (
+                  ''
+                )}
+
             </Route>
             <Route path="/login">
               <Login
@@ -228,8 +241,12 @@ export default class App extends React.Component {
               <Logout handleLoginState={setLoginStatus} />
             </Route>
             <Route path="/article/:id">
-              <DisplayArticle
-                articleID={this.state.article_id} />
+              {this.state.logged_in ? (
+                <DisplayArticle
+                  articleID={this.state.article_id} />
+              ) : (
+                  ''
+                )}
             </Route>
           </Switch>
         </div>

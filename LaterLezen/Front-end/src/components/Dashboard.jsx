@@ -2,21 +2,17 @@ import React, { useState, useEffect } from "react";
 import {
   getArticleByUser,
 } from "../serverCommunication";
-import { Link, useHistory } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 export default function Dashboard(props) {
   const [firstname, setFirstname] = useState(props.firstname);
   const [lastname, setLastname] = useState(props.lastname);
   const [articles, setArticles] = useState(props.articles);
-  const history = useHistory();
 
   const [id, setId] = useState();
 
   useEffect(() => {
-    if(!props.appState.logged_in) {
-      console.log(props.appState.logged_in)
-      history.push('/login')
-    }
+
     handleGetArticles();
   }, []);
 
