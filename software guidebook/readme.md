@@ -225,17 +225,7 @@ Bij het component: "Register" zijn er een aantal velden die gecontroleerd worden
 
 In de webapplicatie worden nested tags op meerdere plekken gebruikt. Nested Tags worden namelijk getoond bij aangemaakte artikelen en bij het zoeken op tags. Maar ook bij het aanmaken van tags wordt er gebruik gemaakt van functionaliteit van nested tags.
 
-### Back-end
 
-#### Websockets
-
-
-
-#### Registreren
-
-
-
-#### Inloggen
 
 ### Extensie
 
