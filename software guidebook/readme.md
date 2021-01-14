@@ -195,13 +195,13 @@ Door het lezen van dit hoofdstuk krijg je een beter beeld van hoe de structuur v
    #### **Zoeken op verschillende meta data**
    Als de gebruiker ervoor kiest om een artikel te zoeken op basis van: auteursnaam,titel,descriptie of bron, dan haalt het search article component alle artikelen op die voldoen aan de ingegeven zoekterm. Er is ook een optie om te zoeken op basis van content door te klikken op de checkbox: "Enable search by content". Als dit aangevinkt wordt is het mogelijk om te zoeken op teksten uit het artikel. De API ondersteunt ook de mogelijkheid om op een gedeelte van de auteursnaam,titel,descriptie, bron te zoeken. Na het invullen van de gewenste zoekterm, zoekt de API op artikelen die voldoen aan de gegeven zoekterm. De search article component roept de functie in Servercommunication aan, die vervolgens een fetch request naar de API doet om de juiste artikelen op te halen. Na het verzoek van de search article component, krijgt dit component de relevante artikelen terug van de API. De resultaten worden overzichtelijk getoond in een lijstweergave met kaarten.
 
-# Code
-## Extensie
-### Werking extensie
+## Code
+### Extensie
+#### Werking extensie
 De extensie draait op poort: 3001, voor het geval er twee end to end tests tegelijkertijd gedraaid moeten worden. De extensie werkt met React. De extensie kan gestart worden met: “npm start” maar kan ook opgebouwd worden als Chrome extensie door middel van: “npm run build”.
 Bij het maken van de extensie was het o.a. nodig om een: manifest.json bestand aan te maken. Hierin wordt o.a. beschreven wat de naam en beschrijving is van de extensie. Verder wordt hierin gedefinieerd welke pagina geopend wordt als de extensie aangeklikt wordt.
 
-### Persistent login
+#### Persistent login
 In het manifest wordt er ook gebruik gemaakt van “permissions”. Hierdoor was het mogelijk dat de gebruiker ingelogd blijft in de extensie, zelfs nadat de extensie wordt afgesloten. We hebben hiervoor de volgende code regel voor toegepast: "http://*/*"
 Hiermee kunnen aanvragen aangeroepen worden die pas ontdekt worden als de extensie al draait. Verder wordt er net zoals in de webapplicatie gebruik gemaakt van sessions en cookies om de gebruiker te identificeren. 
 
