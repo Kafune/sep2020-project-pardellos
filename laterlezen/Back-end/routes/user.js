@@ -167,9 +167,10 @@ router.post(
         let newArticle = new Article(response);
         if (!req.body.title == "") newArticle.title = req.body.title;
         if (description != null) newArticle.excerpt = description;
+        if (response.lead_image_url == "" || response.lead_image_url == null || response.lead_image_url == undefined) newArticle.lead_image_url = "./placeholder_1210x681.png"
         newArticle.tags = rawTags;
         usedids = handleUserNestedTags(rawTags, req.user.tags);
-        newArticle.tagids = usedids
+        newArticle.tagids = usedids;
         var t1 = performance.now();
         console.log("Tag loop took " + (t1 - t0) + " milliseconds.");
         req.user.articles.push(newArticle);
@@ -236,7 +237,7 @@ router.put(
     session: false,
   }),
   (req, res) => {
-    let usedids
+    let usedids;
     Article.findOne(
       {
         _id: req.body.article_id,
@@ -257,7 +258,7 @@ router.put(
           if (!req.body.tags[0] == "") {
             article.tags = req.body.tags;
             usedids = handleUserNestedTags(req.body.tags, req.user.tags);
-            article.tagids = usedids
+            article.tagids = usedids;
             req.user.markModified("tags");
             req.user.save();
           }
@@ -308,7 +309,7 @@ router.put(
     })
       .populate({
         path: "articles",
-        match :{
+        match: {
           tagids: {
             $all: tags,
           },
@@ -323,7 +324,6 @@ router.put(
             },
           });
         } else {
-          console.log(document.articles);
           res.status(200).json({
             articles: document.articles,
             authenticated: true,
@@ -402,7 +402,6 @@ router.put("/testing/art/:title", (req, res) => {
 });
 
 router.post("/articleExtension", (req, res) => {
-  console.log(req.user);
   req.body.tags = [];
   const findUser = User.findOne({
     email: req.body.email,
@@ -461,15 +460,23 @@ router.put(
         {
           preferences: req.body.theme,
         }
-      ).catch(() => {
-        res.status(500).json({
-          message: {
-            msgBody: "Error has occured",
-            msgError: true,
-          },
+      )
+        .then(
+          res.status(200).json({
+            message: {
+              msgBody: "succes",
+              msgError: false,
+            },
+          })
+        )
+        .catch(() => {
+          res.status(500).json({
+            message: {
+              msgBody: "Error has occured",
+              msgError: true,
+            },
+          });
         });
-      });
-      res.send(req.body.theme);
     } else {
       res.status(500).json({
         message: {
@@ -531,11 +538,11 @@ function handleUserNestedTags(data, userTags) {
       const found = findNamed(name, parent);
       parent = found ? found : addNode(parent, node(name, parent.tagName, index));
       console.log(parent._id.toString());
-      usedids.push(parent._id.toString())
+      usedids.push(parent._id.toString());
     }
     
   }
-  return usedids
+  return usedids;
 }
 
 module.exports = router;
