@@ -86,12 +86,11 @@ export default function DisplayArticle() {
       })
       .catch(() => {
         M.toast({
-          html:
-            "Something went wrong with the server",
+          html: "Something went wrong with the server",
         });
       });
   };
- 
+
   const getPreferences = () => {
     requestPreferences().then((result) => checkTheme(result));
   };
@@ -139,7 +138,9 @@ export default function DisplayArticle() {
         history.push("/search");
         M.toast({ html: "Cannot find article" });
       } else {
-        if(editFields != false) {setEditFields(false)}
+        if (editFields != false) {
+          setEditFields(false);
+        }
         setArticle(response);
         setTitle(response.title);
         setDescription(response.excerpt);
@@ -153,7 +154,7 @@ export default function DisplayArticle() {
   };
 
   return (
-    <>
+    <div>
       <Preferences
         handleThemeState={checkTheme}
         backgroundColor={background}
@@ -183,8 +184,8 @@ export default function DisplayArticle() {
             </i>
           </button>
         ) : (
-            ""
-          )}
+          ""
+        )}
       </div>
 
       <div className="article">
@@ -218,8 +219,8 @@ export default function DisplayArticle() {
                 ></input>
               </div>
             ) : (
-                <b>{" " + author + " "}</b>
-              )}
+              <b>{" " + author + " "}</b>
+            )}
           </h5>
           <h5 className={"hover-show"}>
             Source:
@@ -233,8 +234,8 @@ export default function DisplayArticle() {
                 ></input>
               </div>
             ) : (
-                <b>{" " + source + " "}</b>
-              )}
+              <b>{" " + source + " "}</b>
+            )}
           </h5>
           <div className={editFields ? "" : "hidden"}>
             <h5>Description:</h5>
@@ -299,6 +300,6 @@ export default function DisplayArticle() {
           </button>
         </a>
       </div>
-    </>
+    </div>
   );
 }

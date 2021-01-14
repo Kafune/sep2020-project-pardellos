@@ -8,7 +8,7 @@ export default function SaveArticle(props) {
   const [title, setTitle] = useState("");
   const [tags, setTags] = useState([]);
   const [currentTags, setCurrentTags] = useState([]);
-  const [usedTags, setUsedTags] = useState(props.tags);
+  const [usedTags, setUsedTags] = useState([]);
   const [tagState, setTagState] = useState();
 
   let tempArray = [];
@@ -18,6 +18,7 @@ export default function SaveArticle(props) {
   }, [tags]);
 
   useEffect(() => {
+    setUsedTags(props.tags);
     getUsedTags(props.tags);
   }, [props.tags]);
 
@@ -27,7 +28,6 @@ export default function SaveArticle(props) {
   }
 
   function printTree(treeNode, indent = " ") {
-    // console.log(indent + treeNode.tagName);
     if (treeNode.subTags && treeNode.subTags.length > 0) {
       treeNode.subTags.forEach((subtag) => {
         let tag = {
@@ -84,17 +84,9 @@ export default function SaveArticle(props) {
           });
         });
         if (noErrors === true) {
-          saveArticle(url, tags, title)
-            .then((response) => {
-              response.json();
-            })
-            .then((response) => {
-              console.log(response);
-            })
-            .then(() => {
-              M.toast({ html: "Article succesfully saved" });
-              
-            });
+          saveArticle(url, tags, title).then(() => {
+            M.toast({ html: "Article succesfully saved" });
+          });
         }
       } else {
         M.toast({ html: "Please enter atleast one tag" });
@@ -130,24 +122,19 @@ export default function SaveArticle(props) {
   };
 
   function handleAddPastTag(element, i) {
-    console.log(element);
     var tagArray = [];
     var allTags = [];
-    // console.log(allTags)
     allTags.forEach((data) => {
       if (data.parent === element.tagName) {
-        console.log(element.tagName);
-        console.log(data.parent);
-        console.log("---");
         if (data.parent !== "/") {
           handleAddPastTag(data.parent, i);
         }
       }
     });
-    // tagArray.push(element.tagName)
+    tagArray.push(element.tagName);
 
-    // setTags([...tags, tagArray])
-    // handleRemovePastTag(i)
+    setTags([...tags, tagArray]);
+    handleRemovePastTag(i);
   }
 
   return (
@@ -202,19 +189,25 @@ export default function SaveArticle(props) {
         );
       })}
       <h3>Past Tags:</h3>
-      {/* {usedTags.map((element, i) => {
-            let tagName = element.tagName
-            for (let index = 0; index < element.index; index++) {
-                tagName = "‎‎‎‏‏‎    " + tagName
-            }
-            // console.log(tagName)
-            return <h4 key={i}>
-                {tagName + " "}
-                <button className="btn-floating btn-small waves-effect waves-light green" onClick={() => { handleAddPastTag(element, i) }}>
-                    <i class="material-icons">add</i>
-                </button>
-            </h4>
-        })} */}
+      {usedTags.map((element, i) => {
+        let tagName = element.tagName;
+        for (let index = 0; index < element.index; index++) {
+          tagName = "‎‎‎‏‏‎    " + tagName;
+        }
+        return (
+          <h4 key={i}>
+            {tagName + " "}
+            <button
+              className="btn-floating btn-small waves-effect waves-light green"
+              onClick={() => {
+                handleAddPastTag(element, i);
+              }}
+            >
+              <i class="material-icons">add</i>
+            </button>
+          </h4>
+        );
+      })}
       <button
         className="waves-effect waves-light btn-small blue accent-2"
         id="saveArticle"

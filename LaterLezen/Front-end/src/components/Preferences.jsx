@@ -13,7 +13,7 @@ export default function Preferences(props) {
 
   useEffect(() => {
     setActiveTheme(props.backgroundColor);
-  });
+  }, []);
 
   function changeTheme(value) {
     props.handleThemeState(value);

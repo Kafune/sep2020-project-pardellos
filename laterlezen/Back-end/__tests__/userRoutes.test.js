@@ -3,26 +3,25 @@
  * */
 
 "use strict";
-
 const User = require("../models/User");
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 const fetch = require("node-fetch");
 
-xdescribe("User auth integration testing", () => {
-beforeAll(async () =>{
-  await mongoose.connect(
-    "mongodb+srv://Glenn:LaterLezen@laterlezen.tkmyn.mongodb.net/LaterLezen?retryWrites=true&w=majority",
-    {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-      useFindAndModify: false,
-    }
-  );
-})
+describe("User auth integration testing", () => {
+  beforeAll(async () => {
+    await mongoose.connect(
+      "mongodb+srv://Glenn:LaterLezen@laterlezen.tkmyn.mongodb.net/LaterLezen?retryWrites=true&w=majority",
+      {
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+        useFindAndModify: false,
+      }
+    );
+  });
 
   afterAll(async () => {
-    await User.deleteOne({email: "test1@gmail.com"});
-    mongoose.disconnect()
+    await User.deleteOne({ email: "test1@gmail.com" });
+    mongoose.disconnect();
   });
 
   test("Register without password", async () => {

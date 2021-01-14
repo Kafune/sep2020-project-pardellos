@@ -21,9 +21,7 @@ export default function SearchArticle(props) {
 
   useEffect(() => {
     checkAuthenticated()
-      .then((response) => response.json())
       .then((response) => {
-        console.log(response);
         if (response.isAuthenticated === true) {
           setTags(response.user.tags)
           setTagState(response.user.tags);

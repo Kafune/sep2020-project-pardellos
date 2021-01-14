@@ -11,7 +11,7 @@ describe("Laterlezer e2e tests", () => {
 
     theBrowser = await puppeteer.launch({
       headless: false,
-      slowMo: 30,
+      slowMo: 3,
       defaultViewport: null,
       args: [`--window-size=1920,1080`],
     });
@@ -39,8 +39,6 @@ describe("Laterlezer e2e tests", () => {
     await thePage.type("input[name=lastname]", lastname);
     await thePage.type("input[name=password]", password);
     await thePage.type("input[name=confirmpassword]", password2);
-
-    // click on the register button
     await thePage.click('input[name="register"]');
   });
 
@@ -48,7 +46,6 @@ describe("Laterlezer e2e tests", () => {
     const password = "ditiseenwachtwoord";
 
     await thePage.waitForTimeout(1500);
-    // fill all the input fields with text
     await thePage.$eval(
       "input[name=password]",
       (input, value) => (input.value = value),
@@ -61,27 +58,19 @@ describe("Laterlezer e2e tests", () => {
     );
     await thePage.type("input[name=password]", password);
     await thePage.type("input[name=confirmpassword]", password);
-
-    // click on the register button
     await thePage.click('input[name="register"]');
   });
 
   test("User registers a new account that does not exist yet", async () => {
     let email = "joebiden@usa.com";
-
     await thePage.waitForTimeout(1500);
-
-    //fill all test field
     await thePage.waitForTimeout("input[name=register]");
-
     await thePage.$eval(
       "input[name=email]",
       (input, value) => (input.value = value),
       ""
     );
-
     await thePage.type("input[name=email]", email);
-
     await thePage.click('input[name="register"]');
   });
 
@@ -97,7 +86,6 @@ describe("Laterlezer e2e tests", () => {
       "https://www.nu.nl/politiek/6100271/kamer-laakt-vaccinatiechaos-oppositie-wil-meer-betrokkenheid-van-rutte.html";
     let url3 =
       "https://www.nu.nl/cultuur-overig/6090311/rutte-theaters-bioscopen-en-musea-mogen-donderdag-weer-open.html?redirect=1";
-
     await thePage.waitForTimeout(1500);
     await thePage.click('a[id="hamburger"]');
     await thePage.waitForTimeout(1000);
@@ -116,13 +104,11 @@ describe("Laterlezer e2e tests", () => {
     await thePage.click('button[id="addTag"]');
     await thePage.click('button[id="saveArticle"]');
     await thePage.waitForTimeout(5000);
-
     await thePage.$eval(
       "input[id=url]",
       (input, value) => (input.value = value),
       ""
     );
-
     await thePage.type('input[id="url"]', url2);
     await thePage.$eval(
       "input[id=title]",
@@ -141,13 +127,11 @@ describe("Laterlezer e2e tests", () => {
     await thePage.click('button[id="addTag"]');
     await thePage.click('button[id="saveArticle"]');
     await thePage.waitForTimeout(5000);
-
     await thePage.$eval(
       "input[id=url]",
       (input, value) => (input.value = value),
       ""
     );
-
     await thePage.type('input[id="url"]', url3);
     await thePage.$eval(
       "input[id=title]",
@@ -164,12 +148,10 @@ describe("Laterlezer e2e tests", () => {
     await thePage.keyboard.press("Enter");
     await thePage.type('#chipsDiv [class="input"]', "musea");
     await thePage.keyboard.press("Enter");
-
     await thePage.waitForTimeout(3000);
     await thePage.click('button[id="addTag"]');
     await thePage.click('button[id="saveArticle"]');
     await thePage.waitForTimeout(5000);
-
     await thePage.click('a[id="hamburger"]');
     await thePage.waitForTimeout(1500);
     await thePage.click('i[id="dashboard"]');
@@ -182,17 +164,12 @@ describe("Laterlezer e2e tests", () => {
     let author = "Jan Kooiman";
     let description =
       "2020. Het jaar waarin corona alles veranderde. We hebben met elkaar veel bereikt, maar zijn er nog lang niet. We moeten samen nog veel meer voor elkaar krijgen, dus we blijven ons hard maken voor het herstel van de horeca";
-
-    // user clicks on the read button
     for (let i = 0; i < 12; i++) {
       await thePage.keyboard.press("ArrowDown");
     }
     await thePage.click('a[id="seeArticle"]');
     await thePage.waitForTimeout(2500);
-
     await thePage.waitForTimeout(1500);
-
-    // user edits the article
     await thePage.click('i[id="editArticle"]');
     await thePage.waitForTimeout(1500);
     await thePage.$eval(
@@ -200,7 +177,6 @@ describe("Laterlezer e2e tests", () => {
       (input, value) => (input.value = value),
       ""
     );
-
     await thePage.waitForTimeout(1500);
     await thePage.type('input[id="title-input"]', "");
     await thePage.waitForTimeout(5000);
@@ -225,30 +201,24 @@ describe("Laterlezer e2e tests", () => {
       ""
     );
     await thePage.type('textarea[id="description-input"]', description);
-    await thePage.click('#chipsDiv [class="input"]')
-    await thePage.type('#chipsDiv [class="input"]', 'Amsterdam')
+    await thePage.click('#chipsDiv [class="input"]');
+    await thePage.type('#chipsDiv [class="input"]', "Amsterdam");
     await thePage.keyboard.press("Enter");
-
-    await thePage.click('#chipsDiv [class="input"]')
-    await thePage.type('#chipsDiv [class="input"]', 'klanten')
+    await thePage.click('#chipsDiv [class="input"]');
+    await thePage.type('#chipsDiv [class="input"]', "klanten");
     await thePage.keyboard.press("Enter");
-
-    await thePage.click('#chipsDiv [class="input"]')
-    await thePage.type('#chipsDiv [class="input"]', 'hebberig')
+    await thePage.click('#chipsDiv [class="input"]');
+    await thePage.type('#chipsDiv [class="input"]', "hebberig");
     await thePage.keyboard.press("Enter");
-    
     await thePage.waitForTimeout(3500);
-    await thePage.click('button[id="addTag"]')
+    await thePage.click('button[id="addTag"]');
     await thePage.waitForTimeout(1500);
     await thePage.click('i[id="editArticle"]');
-    
     await thePage.waitForTimeout(1500);
-
     for (let i = 0; i < 20; i++) {
       await thePage.keyboard.press("ArrowDown");
     }
     await thePage.waitForTimeout(3000);
-
     await thePage.click('button[id="preferenceButton"]');
     await thePage.waitForTimeout(1500);
     await thePage.click('div[id="typewriter"]');
@@ -271,7 +241,6 @@ describe("Laterlezer e2e tests", () => {
     await thePage.focus('div[id="root"]');
     await thePage.click('div[id="root"]');
     await thePage.click('div[id="root"]');
-
     await thePage.waitForTimeout(1000);
     for (let i = 0; i < 60; i++) {
       await thePage.keyboard.press("ArrowDown");
@@ -299,12 +268,10 @@ describe("Laterlezer e2e tests", () => {
   test("User logs in the webpage with wrong password", async () => {
     let email = "joebiden@usa.com";
     let password = "ditiseenwachtwoord1";
-
     await thePage.type('input[id="email"]', email);
     await thePage.type('input[id="password"]', password);
     await thePage.waitForTimeout(1500);
     await thePage.click('a[id="login"]');
-
     await thePage.waitForTimeout(4000);
   });
 
@@ -348,14 +315,12 @@ describe("Laterlezer e2e tests", () => {
     for (let i = 0; i < 60; i++) {
       await thePage.keyboard.press("ArrowUp");
     }
-
     await thePage.waitForTimeout(2000);
     await thePage.$eval(
       "input[id=searchArticle]",
       (input, value) => (input.value = value),
       ""
     );
-
     await thePage.type('input[id="searchArticle"]', "coalitie");
     await thePage.waitForTimeout(1500);
     await thePage.click('input[id="contentSearch"]');

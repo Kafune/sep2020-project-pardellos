@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 const Article = require("../models/Article");
 const User = require("../models/User");
 
-xdescribe("Article Model Tests", () => {
+describe("Article Model Tests", () => {
   beforeAll(async () => {
     await mongoose.connect(
       "mongodb+srv://Glenn:LaterLezen@laterlezen.tkmyn.mongodb.net/LaterLezen?retryWrites=true&w=majority",
@@ -15,7 +15,7 @@ xdescribe("Article Model Tests", () => {
     await Article.create({ title: "Test1" });
     await Article.create({ title: "Test2" });
     await Article.create({ title: "Test3" });
-    
+
     //integratie test
     const testUser = {
       email: "ditiseentest@test.nl",
@@ -43,7 +43,6 @@ xdescribe("Article Model Tests", () => {
     newArticle.save();
 
     newUser.articles.push(newArticle);
-
   });
 
   afterAll(async () => {
@@ -52,7 +51,7 @@ xdescribe("Article Model Tests", () => {
     await Article.deleteOne({ title: "Test3" });
     await Article.deleteOne({ title: "Storm" });
     await User.deleteMany({ email: "ditiseentest@test.nl" });
-    await Article.deleteMany({ title: "Dit is een titel" })
+    await Article.deleteMany({ title: "Dit is een titel" });
     await mongoose.disconnect();
   });
 
@@ -94,10 +93,8 @@ xdescribe("Article Model Tests", () => {
     if (!userInputDescription == "") newArticle.excerpt = userInputDescription;
     if (!userInputSource == "") newArticle.source = userInputSource;
 
-    //Should pass, cause it should keep the old description
     expect(newArticle.excerpt).toBe("Dit is een beschrijving");
   });
-
 
   test("Search article of a user based on multiple metadata", async () => {
     let searchFields = {};
