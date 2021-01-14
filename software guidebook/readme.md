@@ -100,7 +100,7 @@ Door het lezen van dit hoofdstuk krijg je een beter beeld van hoe de structuur v
 
     
 
-    ![Container.png](Container.png)
+    ![c4-modellen-Container.png](c4-modellen-Container.png)
 
     
 
@@ -158,12 +158,12 @@ Door het lezen van dit hoofdstuk krijg je een beter beeld van hoe de structuur v
     ![database.png](database.png)
 
     ### LaterLezer web app component
-    ![c4-modellen-Web_App-component-v2.png](c4-modellen-Web_App-component-v2.png)
+    ![c4-modellen-Web_App-component.png](c4-modellen-Web_App-component.png)
 
     De App bevat bijna alle componenten in de webapplicatie. De app laadt componenten in op basis van waar de gebruiker zich plaatsvindt in de website. Alle componenten die requests naar de API uitvoert, maakt gebruik van Servercommunication, een aparte bestand in de webapplicatie die niet afhankelijk is van App. Servercommunication bevat alle fetch requests die de componenten nodig hebben om met de API te communiceren. Een component haalt de data via de API als volgt op: Eerst roept de component een functie binnen Servercommunication aan om een fetch request te sturen. De request hangt uiteraard af vanuit welk component, en kan bestaan uit een GET, POST, PUT of een DELETE request. Na het aanroepen van deze functie, communiceert de webapplicatie met de API om de request af te handelen. Zodra de API de request heeft afgehandeld, stuurt de API een bericht terug naar de functie binnen Servercommunication waar de request vandaan komt. De component die de fetch functie aanroept, handelt het bericht van de API af. Wat er na het ontvangen van dat bericht gebeurt, hangt af van hoe dat in een component geimplementeerd is.
 
     ### LaterLezer app - user flow
-    ![Web_App_component_c4.png](Web_App_component_c4.png)
+    ![c4-modellen-Web_App-user_flow.png](c4-modellen-Web_App-user_flow.png)
 
     #### **Homepagina**
     De gebruiker komt voor het eerst op de homepagina van de website. De gebruiker kan ervoor kiezen om te registreren, waarin hij in de registratiepagina komt, of om in te loggen. De gebruiker komt dan op de pagina waarin hij kan inloggen. 
@@ -195,6 +195,12 @@ Door het lezen van dit hoofdstuk krijg je een beter beeld van hoe de structuur v
    #### **Zoeken op verschillende meta data**
    Als de gebruiker ervoor kiest om een artikel te zoeken op basis van: auteursnaam,titel,descriptie of bron, dan haalt het search article component alle artikelen op die voldoen aan de ingegeven zoekterm. Er is ook een optie om te zoeken op basis van content door te klikken op de checkbox: "Enable search by content". Als dit aangevinkt wordt is het mogelijk om te zoeken op teksten uit het artikel. De API ondersteunt ook de mogelijkheid om op een gedeelte van de auteursnaam,titel,descriptie, bron te zoeken. Na het invullen van de gewenste zoekterm, zoekt de API op artikelen die voldoen aan de gegeven zoekterm. De search article component roept de functie in Servercommunication aan, die vervolgens een fetch request naar de API doet om de juiste artikelen op te halen. Na het verzoek van de search article component, krijgt dit component de relevante artikelen terug van de API. De resultaten worden overzichtelijk getoond in een lijstweergave met kaarten.
 
+  ### LaterLezer app - Deployment
+  ![c4-modellen-Deployment.png](c4-modellen-Deployment.png)
+
+  De webapplicatie en de API worden op dit moment op de servers gedraaid van de huidige ontwikkelaars van Laterlezer. Door de webapplicatie aan te zetten krijgt de gebruiker toegang op de website van Laterlezer. De webapplicatie hoeft niet aan te staan om gebruik te maken van de Laterlezer extensie. De gebruiker kan via de website requests naar de API te sturen via de website, bijvoorbeeld door in te loggen, een nieuw account te registreren, artikelen op te halen, artikelen op te zoeken etc. De extensie kan alleen een API call doen om in te loggen, of om een artikel op te slaan. Afhankelijk van de type request stuurt de API een mongoose query naar de database toe. De database zit niet in de lokale omgeving van de ontwikkelaars. Het is een cloud database van mongoDB die in Noord Virginia in de Verenigde Staten plaatsvindt. De database voert de query uit, en stuurt de resultaat daarvan weer terug naar de API. De API stuurt vervolgens de resultaat of een bericht naar de App of naar de extensie toe. Wat de App en de extensie met dat bericht doet, is terug te vinden in de hoofdstukken [](LaterLezer web app component)
+
+
 # Code
 ## Extensie
 ### Werking extensie
@@ -203,7 +209,7 @@ Bij het maken van de extensie was het o.a. nodig om een: manifest.json bestand a
 
 ### Persistent login
 In het manifest wordt er ook gebruik gemaakt van “permissions”. Hierdoor was het mogelijk dat de gebruiker ingelogd blijft in de extensie, zelfs nadat de extensie wordt afgesloten. We hebben hiervoor de volgende code regel voor toegepast: "http://*/*"
-Hiermee kunnen aanvragen aangeroepen worden die pas ontdekt worden als de extensie al draait. Verder wordt er net zoals in de webapplicatie gebruik gemaakt van sessions en cookies om de gebruiker te identificeren. 
+Hiermee kunnen requests aangeroepen worden die pas ontdekt worden als de extensie al draait. Verder wordt er net zoals in de webapplicatie gebruik gemaakt van sessions en cookies om de gebruiker te identificeren. 
 
 
 ## Infrastructuur-architectuur
