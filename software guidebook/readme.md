@@ -79,7 +79,7 @@ Een beperkingen hoeft niet altijd meteen negatief te zijn, kijk hierbij naar de 
 
 
 ## Principes
-Wij hebben op dit moment niet over principes nagedacht tijdens het ontwerpen en het bouwen van de Laterlezer app.
+Tijdens het bouwen van de LaterLezer app hebben we zoveel mogelijk gebruik gemaakt van het principe: "Don't Repeat Yourself" (DRY). We hebben in het project dubbele functionaliteit zoveel mogelijk proberen te voorkomen en gereduceerd door duidelijke functies op te stellen. Bij functionaliteit dat herhaaldelijke code bevat hebben we zoveel mogelijk proberen te reduceren door o.a. functies te schrijven die kortere notaties mogelijk maken. 
 
 ## Software-architectuur
 Door het lezen van dit hoofdstuk krijg je een beter beeld van hoe de structuur van de software eruit ziet. Deze schetsen zijn gebaseerd op het C4 model.
@@ -183,26 +183,74 @@ Door het lezen van dit hoofdstuk krijg je een beter beeld van hoe de structuur v
     Naast het instellen van de thema kan de gebruiker ook naar de pagina van de originele artikel navigeren waar de gebruiker de artikel vandaan heeft gehaald. Er is op dat moment naast de vorige knop in de browser of het handmatig invoeren van de website URL geen manier om terug te gaan naar de display artikel component.
 
    #### **Artikel meta data bewerken**
-    Bij het component: Display article kan de gebruiker de meta data van een artikel bewerken. Op deze manier kan een gebruiker een artikel lezen en meta data velden aanpassen. Onderaan de pagina staat een button met een pen icoontje. Op het moment dat er op die button geklikt wordt, staat het artikel in bewerk modus. Het artikel kan in deze modus nog steeds gelezen worden, maar de meta data bovenaan de pagina worden input velden. In het geval dat de bewerk modus actief is, verschijnen er twee buttons onderaan de pagina, namelijk: Opslaan en Annuleren. In de bewerk modus kunnen de volgende velden aangepast worden: Titel, Auteur, Bron en Descriptie. Aanpassingen kunnen ongedaan gemaakt worden in het geval deze nog niet opgeslagen zijn. Aanpassingen kunnen ook opgeslagen worden door op de button onderaan de pagina te klikken. De volgende velden kunnen leeg gelaten worden bij het bewerken: Auteur, Bron en Descriptie. De titel van een artikel kan niet leeg gelaten worden, en zal een foutmelding geven aan de gebruiker in het geval dit toch gebeurt. 
+   Bij het component: Display article kan de gebruiker de meta data van een artikel bewerken. Op deze manier kan een gebruiker een artikel lezen en meta data velden aanpassen. Onderaan de pagina staat een button met een pen icoontje. Op het moment dat er op die button geklikt wordt, staat het artikel in "bewerk modus". Het artikel kan in deze modus nog steeds gelezen worden, maar de meta data bovenaan de pagina zijn dan input velden geworden. In het geval dat de bewerk modus actief is, verschijnen er twee buttons onderaan de pagina, namelijk: Opslaan en Annuleren. In de bewerk modus kunnen de volgende velden aangepast worden: Titel, Auteur, Bron en Descriptie. Verder kan er in de bewerk modus de huidige tags aangepast worden. Er kunnen extra tags toegevoegd worden aan het artikel en tags verwijderd worden. Aanpassingen kunnen ongedaan gemaakt worden in het geval deze nog niet opgeslagen zijn. Aanpassingen kunnen ook opgeslagen worden door op de button onderaan de pagina te klikken. De volgende velden kunnen leeg gelaten worden bij het bewerken: Auteur, Bron, Descriptie en Tags. De titel van een artikel kan niet leeg gelaten worden, en zal een foutmelding geven aan de gebruiker in het geval dit toch gebeurt. 
 
     #### **Overzicht artikel zoeken**
-    De gebruiker kan na het lezen van de artikel ervoor kiezen om terug naar de dashboard te gaan, een nieuw artikel op te slaan, of het zoeken van opgeslagen artikelen. Als de gebruiker zijn artikelen wilt zoeken, navigeert de gebruiker naar het Search article component. In het Search article component heeft de gebruiker de optie om opgeslagen artikelen op tags te zoeken. Daarnaast heeft de gebruiker de optie om op verschillende meta data te zoeken namelijk: titel, auteur,descriptie,bron en content. 
-    
+   De gebruiker kan na het lezen van de artikel ervoor kiezen om terug naar de dashboard te gaan, een nieuw artikel op te slaan, of het zoeken van opgeslagen artikelen. Als de gebruiker zijn artikelen wilt zoeken, navigeert de gebruiker naar het Search article component. In het Search article component heeft de gebruiker de optie om opgeslagen artikelen op tags te zoeken. Daarnaast heeft de gebruiker de optie om op verschillende meta data te zoeken namelijk: titel, auteur,descriptie,bron en content. 
+   
     #### **Zoeken op tags**
-    Wanneer de gebruiker artikelen wilt filteren op basis van tags, kan hij naar de Search Article component gaan. Hierbij worden alle gebruikte tags van de user op een hiërarchische structuur opgehaald en weergeven. De gebruiker kan eerst een hoofd-tag selecteren, daarna worden de sub-tags van deze aangeklikte hoofd-tag weergeven. Hieruit kan de gebruiker weer een keuze maken. Wanneer de gebruiker zijn gewenste tags heeft geselecteerd kan diegene op de 'Search' knop klikken en wordt er een functie aangeroepen naar de Servercommunication die de geselecteerde tags mee krijgt en omzet in een String Array. Met de meegegeven tags wordt er een fetch request gemaakt en geeft de API alle artikelen terug die aan de geselecteerde tags voldoen. Deze artikelen worden dan overzichtelijk in een lijst weergeven op de pagina. Wanneer de gebruiker niet tevreden is met de geselecteerde tags kan er op de 'Clear tags' knop worden geklikt, deze verwijderd alle geselecteerde tags uit de states.
+   Wanneer de gebruiker artikelen wilt filteren op basis van tags, kan hij naar de Search Article component gaan. Hierbij worden alle gebruikte tags van de user op een hiërarchische structuur opgehaald en weergeven. De gebruiker kan eerst een hoofd-tag selecteren, daarna worden de sub-tags van deze aangeklikte hoofd-tag weergeven. Hieruit kan de gebruiker weer een keuze maken. Wanneer de gebruiker zijn gewenste tags heeft geselecteerd kan diegene op de 'Search' knop klikken en wordt er een functie aangeroepen naar de Servercommunication die de geselecteerde tags mee krijgt en omzet in een String Array. Met de meegegeven tags wordt er een fetch request gemaakt en geeft de API alle artikelen terug die aan de geselecteerde tags voldoen. Deze artikelen worden dan overzichtelijk in een lijst weergeven op de pagina. Wanneer de gebruiker niet tevreden is met de geselecteerde tags kan er op de 'Clear tags' knop worden geklikt, deze verwijderd alle geselecteerde tags uit de states.
 
-    
+   
    #### **Zoeken op verschillende meta data**
    Als de gebruiker ervoor kiest om een artikel te zoeken op basis van: auteursnaam,titel,descriptie of bron, dan haalt het search article component alle artikelen op die voldoen aan de ingegeven zoekterm. Er is ook een optie om te zoeken op basis van content door te klikken op de checkbox: "Enable search by content". Als dit aangevinkt wordt is het mogelijk om te zoeken op teksten uit het artikel. De API ondersteunt ook de mogelijkheid om op een gedeelte van de auteursnaam,titel,descriptie, bron te zoeken. Na het invullen van de gewenste zoekterm, zoekt de API op artikelen die voldoen aan de gegeven zoekterm. De search article component roept de functie in Servercommunication aan, die vervolgens een fetch request naar de API doet om de juiste artikelen op te halen. Na het verzoek van de search article component, krijgt dit component de relevante artikelen terug van de API. De resultaten worden overzichtelijk getoond in een lijstweergave met kaarten.
 
 ## Code
+### Webapplicatie
+
+#### Navigatie binnen de applicatie
+
+Al onze functionaliteit hebben wij opgedeeld in meerdere functionele componenten. 
+We maken in de applicatie gebruik van `React Router` en `Link` om de navigeren tussen de verschillende componenten.
+
+Verder maken we bij een aantal componenten gebruik van `useHistory`. Een voorbeeld hiervan is bij het component: "Register". Hierbij wordt er gebruik gemaakt van `useHistory`  om te verwijzen naar het "Dasboard" component als er succesvol een account is aangemaakt. 
+
+#### Opslaan van data
+
+Wij maken niet gebruik van Redux. Daarom geven wij de state door aan elk component de huidige state door. 
+Data dat tijdelijk opgeslagen moet worden, wordt opgeslagen door middel van `React Hooks` en `useState`. Een voorbeeld hiervan is op de displayArticle pagina. Hierbij wordt d.m.v. `useState`  opgeslagen of het artikel in de aanpas modus staat of niet.
+Alle data dat opgeslagen moet worden naar de server verloopt via het bestand: 'serverCommunication.js'. Hierin staan alle functies die gebruikt kunnen worden in andere componenten om specifieke data op te slaan.
+
+#### Renderen van HTML
+
+Alle componenten behalve "App.jsx" in de webapplicatie zijn 'functional components'. Bij veel componenten wordt er gebruik gemaakt van `useEffect`. Hiermee kan informatie gerenderd worden op het moment dat de pagina geopend wordt. Een voorbeeld hiervan is op het Dashboard. Als een gebruiker ingelogd is, wordt er d.m.v. `useEffect` alle opgeslagen artikelen van een gebruiker ingeladen, nadat het verzoek naar de server is afgerond.
+
+Verder wordt er bij een aantal componenten gebruik gemaakt van 'Conditional Rendering'. Dit wordt o.a. gebruikt bij het component: 'App'. Door het gebruik van 'Conditional Rendering' wordt er voor gezorgd dat componenten waar ingelogd voor moet zijn niet getoond worden als de gebruiker nog niet ingelogd is. Dit wordt ook gebruikt bij de 'displayArticle' pagina. Daarbij wordt 'Conditional Rendering' gebruikt om het artikel dat gelezen wordt om te zetten naar een bewerk pagina. Bepaalde data wordt daarbij omgezet naar input velden.
+
+#### Registratie
+
+Bij het component: "Register" zijn er een aantal velden die gecontroleerd worden of deze valide zijn. Bij het wachtwoord wordt er gecontroleerd of het minimaal zeven karakters bevat. Dit wordt gedaan door een if-statement. Verder wordt er gecontroleerd of er een geldig mailadres is ingevoerd aan de hand van het verzoek dat binnen komt van de server.
+
+#### Nested Tags
+
+In de webapplicatie worden nested tags op meerdere plekken gebruikt. Nested Tags worden namelijk getoond bij aangemaakte artikelen en bij het zoeken op tags. Maar ook bij het aanmaken van tags wordt er gebruik gemaakt van functionaliteit van nested tags.
+
+### Back-end
+
+#### Websockets
+
+
+
+#### Registreren
+
+
+
+#### Inloggen
+
 ### Extensie
+
 #### Werking extensie
-De extensie draait op poort: 3001, voor het geval er twee end to end tests tegelijkertijd gedraaid moeten worden. De extensie werkt met React. De extensie kan gestart worden met: “npm start” maar kan ook opgebouwd worden als Chrome extensie door middel van: “npm run build”.
+
+De extensie draait op poort: 3001, voor het geval er twee end to end tests tegelijkertijd gedraaid moeten worden. De extensie werkt met React. De extensie kan gestart worden met: `npm start` maar kan ook opgebouwd worden als Chrome extensie door middel van: `npm run build`.
 Bij het maken van de extensie was het o.a. nodig om een: manifest.json bestand aan te maken. Hierin wordt o.a. beschreven wat de naam en beschrijving is van de extensie. Verder wordt hierin gedefinieerd welke pagina geopend wordt als de extensie aangeklikt wordt.
 
+#### Server communicatie
+
+Alle communicatie met de server wordt regeld door het bestand: 'serverCommunication.js'. Hierin staan functies die aangeroepen kunnen worden door andere componenten. Er is voor gezorgd dat routes met vergelijkbare functies in de webapplicatie hergebruikt worden in de extensie.
+
 #### Persistent login
-In het manifest wordt er ook gebruik gemaakt van “permissions”. Hierdoor was het mogelijk dat de gebruiker ingelogd blijft in de extensie, zelfs nadat de extensie wordt afgesloten. We hebben hiervoor de volgende code regel voor toegepast: "http://*/*"
+
+In het manifest wordt er ook gebruik gemaakt van “permissions”. Hierdoor was het mogelijk dat de gebruiker ingelogd blijft in de extensie, zelfs nadat de extensie wordt afgesloten of weg geklikt. We hebben hiervoor de volgende code regel toegepast: `http://*/*` 
 Hiermee kunnen aanvragen aangeroepen worden die pas ontdekt worden als de extensie al draait. Verder wordt er net zoals in de webapplicatie gebruik gemaakt van sessions en cookies om de gebruiker te identificeren. 
 
 
@@ -214,58 +262,25 @@ Elk gebruiker kan met elk apparaat verbinding met de Laterlezer API maken zolang
 ![infrastructure-diagram.png](infrastructure-diagram.png)
 
 ## Deployment
-Om LaterLezen te kunnen draain in een testomgeving zijn er een aantal dingen nodig. Zo moet er een database draaien op Atlas Mongo. Hier kan je een gratis test database online laten draaien. Verder moet de frontend op port 3000 gedraaid worden en de backend op port 4000. De extensie moet gebuild worden en vervolgens in de development extensies van chrome geladen worden.
+Om LaterLezen te kunnen draaien in een testomgeving zijn er een aantal dingen nodig. Zo moet er een database draaien op Atlas Mongo. Hier kan je een gratis test database online laten draaien. Verder moet de frontend op port 3000 gedraaid worden en de backend op port 4000. De extensie moet gebuild worden en vervolgens in de development extensies van chrome geladen worden.
 
-Voor de backend zijn de volgende dependencies nodig voor het succesvol draaien en testen van de applicatie:
+#### Back-end dependencies
 
-- @postlight/mercury-parser: ^2.2.0
-- article-parser: ^4.2.5
-- bcrypt: ^5.0.0
-- connect-mongo: ^3.2.0
-- cookie-parser: ^1.4.5
-- cors: ^2.8.5
-- dotenv: ^8.2.0
-- express: ^4.17.1
-- express-session: ^1.17.1
-- jsdom: ^16.4.0
-- jsonwebtoken: ^8.5.1
-- moment: ^2.29.1
-- mongoose: ^5.10.13
-- morgan: ^1.10.0
-- node-fetch: ^2.6.1
-- passport: ^0.4.1
-- passport-jwt: ^4.0.0
-- passport-local: ^1.0.0
-- puppeteer: ^5.5.0
-- puppeteer-autoscroll-down: ^0.1.6
+Voor de back-end zijn er een aantal dependencies nodig om de applicatie succesvol te kunnen draaien en testen uit te voeren.
 
-Voor de frontend zijn de volgende dependencies nodig voor het succesvol draaien en testen van de applicatie:
+[Verwijzing back-end dependencies](https://github.com/HANICA-DWA/sep2020-project-pardellos/blob/main/LaterLezen/Back-end/package.json)
 
-- @testing-library/jest-dom: ^5.11.5
-- @testing-library/react: ^11.1.2
-- @testing-library/user-event: ^12.2.2
-- article-parser: ^4.2.5
-- axios: ^0.21.0
-- fs: 0.0.1-security
-- html-react-parser: ^0.14.2
-- materialize-css: ^1.0.0
-- react: ^17.0.1
-- react-dom: ^17.0.1
-- react-materialize: ^3.9.3
-- react-router-dom: ^5.2.0
-- react-scripts: ^4.0.0
-- web-vitals: ^0.2.4
+#### Front-end dependencies
 
-Voor de extensie zijn de volgende dependencies nodig voor het succesvol draaien van de applicatie:
+Voor de front-end zijn er een aantal dependencies nodig om de applicatie succesvol te kunnen draaien en testen uit te voeren.
 
-- @testing-library/jest-dom: ^5.11.6-
-- @testing-library/react: ^11.2.1-
-- @testing-library/user-event: ^12.2.2-
-- materialize-css: ^1.0.0-rc.2-
-- react: ^17.0.1-
-- react-dom: ^17.0.1-
-- react-scripts: 4.0.0-
-- web-vitals: ^0.2.4
+[Verwijzing front-end dependencies](https://github.com/HANICA-DWA/sep2020-project-pardellos/blob/main/LaterLezen/Front-end/package.json)
+
+#### Extensie dependencies
+
+Voor de extensie zijn er een aantal dependencies nodig om de applicatie succesvol te kunnen draaien en testen uit te voeren.
+
+[Extensie dependencies](https://github.com/HANICA-DWA/sep2020-project-pardellos/blob/main/LaterLezen/laterlezer-extension/package.json)
 
 
 ## Werking en ondersteuning
