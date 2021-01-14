@@ -114,6 +114,112 @@ function createTree(ubertest) {
   }
 }
 
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+ 
+
+// make parentNode the parent of treeNode, and process treeNode's children recusively
+
+function insertParentLinksInTree( treeNode, parentNode = null ) {
+
+ 
+
+  if( treeNode.parent !== undefined ) {  // null is NOT strictly equal to undefined
+
+    // this treeNode already has a property called 'parent'. Assume the tree had already been processed by this function
+
+    return;
+
+  }
+
+ 
+
+  treeNode.parent = parentNode;
+
+ 
+
+  if(treeNode.subTags && treeNode.subTags.length > 0) {  // treeNode has children
+
+    for( childNode of treeNode.subTags ) {
+
+      insertParentLinksInTree( childNode, treeNode );     // make treeNode the parent of childNode, and process childNode's children recusively
+
+    }
+
+  }
+
+}
+
+ 
+
+// create a list of all Nodes that are ancestors of the treeNode.
+
+function getAncestors( tree, treeNode ) {
+
+  //insertParentLinksInTree(tree)  // if tree already has parent-links, this doesn't do anything
+
+  const theParent = treeNode.parent;
+
+  if( theParent ) {
+
+    const parentsAncestors = getAncestors(tree, theParent );
+
+    // const treeNodesAncestors = parentsAncestors.concat( [theParent] )  // return closest ancestor last
+
+    const treeNodesAncestors = [theParent].concat( parentsAncestors )  // return closest ancestor first
+
+    return treeNodesAncestors
+
+  } else {
+
+    return []
+
+  }
+
+}
+
+ 
+
+ 
+
+let startNode = findInTree( theTree, node => node.tagName == "Framework" )
+
+let ancestors = getAncestors( theTree, startNode )
+
+console.log("Names of all ancestors of tag «${startNode.tagName}»:", ancestors.map( node => node.tagName ))
+
+ 
+
+startNode = findInTree( theTree, node => node.tagName == "React" )
+
+ancestors = getAncestors( theTree, startNode )
+
+console.log("Names of all ancestors of tag «${startNode.tagName}»:", ancestors.map( node => node.tagName ))
+
+ 
+
+startNode = findInTree( theTree, node => node.tagName == "Pfizer" )
+
+ancestors = getAncestors( theTree, startNode )
+
+console.log("Names of all ancestors of tag «${startNode.tagName}»:", ancestors.map( node => node.tagName ))
+
+ 
+
+startNode = findInTree( theTree, node => node.tagName == "Corona" )
+
+ancestors = getAncestors( theTree, startNode )
+
+console.log("Names of all ancestors of tag «${startNode.tagName}»:", ancestors.map( node => node.tagName ))
+
+ 
+
+startNode = findInTree( theTree, node => node.tagName == "/" )
+
+ancestors = getAncestors( theTree, startNode )
+
+console.log("Names of all ancestors of tag «${startNode.tagName}»:", ancestors.map( node => node.tagName ))
+
 console.dir((theTree), {
   depth: 1000
 })
