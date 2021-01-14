@@ -11,7 +11,7 @@ Aangezien het lezen van de code van de LaterLezer niet het hele verhaal verteld 
   * [Beperkingen](#beperkingen)
   * [Principes](#principes)
   * [Software-architectuur](#software-architectuur)
-    + [API component view](#api-component-view)
+    + [API component view](#API-component-view)
       - [Artikel meta data bewerken](#artikel-meta-data-bewerken)
       - [Zoeken op verschillende meta data](#zoeken-op-verschillende-meta-data)
   * [Code](#code)
@@ -157,12 +157,12 @@ Door het lezen van dit hoofdstuk krijg je een beter beeld van hoe de structuur v
     ### Database view
     ![database.png](database.png)
 
-    ### LaterLezer web app component
+    ### Web app component
     ![c4-modellen-Web_App-component.png](c4-modellen-Web_App-component.png)
 
     De App bevat bijna alle componenten in de webapplicatie. De app laadt componenten in op basis van waar de gebruiker zich plaatsvindt in de website. Alle componenten die requests naar de API uitvoert, maakt gebruik van Servercommunication, een aparte bestand in de webapplicatie die niet afhankelijk is van App. Servercommunication bevat alle fetch requests die de componenten nodig hebben om met de API te communiceren. Een component haalt de data via de API als volgt op: Eerst roept de component een functie binnen Servercommunication aan om een fetch request te sturen. De request hangt uiteraard af vanuit welk component, en kan bestaan uit een GET, POST, PUT of een DELETE request. Na het aanroepen van deze functie, communiceert de webapplicatie met de API om de request af te handelen. Zodra de API de request heeft afgehandeld, stuurt de API een bericht terug naar de functie binnen Servercommunication waar de request vandaan komt. De component die de fetch functie aanroept, handelt het bericht van de API af. Wat er na het ontvangen van dat bericht gebeurt, hangt af van hoe dat in een component geimplementeerd is.
 
-    ### LaterLezer app - user flow
+    ### Web app - user flow
     ![c4-modellen-Web_App-user_flow.png](c4-modellen-Web_App-user_flow.png)
 
     #### **Homepagina**
@@ -198,7 +198,7 @@ Door het lezen van dit hoofdstuk krijg je een beter beeld van hoe de structuur v
   ### LaterLezer app - Deployment
   ![c4-modellen-Deployment.png](c4-modellen-Deployment.png)
 
-  De webapplicatie en de API worden op dit moment op de servers gedraaid van de huidige ontwikkelaars van Laterlezer. Door de webapplicatie aan te zetten krijgt de gebruiker toegang op de website van Laterlezer. De webapplicatie hoeft niet aan te staan om gebruik te maken van de Laterlezer extensie. De gebruiker kan via de website requests naar de API te sturen via de website, bijvoorbeeld door in te loggen, een nieuw account te registreren, artikelen op te halen, artikelen op te zoeken etc. De extensie kan alleen een API call doen om in te loggen, of om een artikel op te slaan. Afhankelijk van de type request stuurt de API een mongoose query naar de database toe. De database zit niet in de lokale omgeving van de ontwikkelaars. Het is een cloud database van mongoDB die in Noord Virginia in de Verenigde Staten plaatsvindt. De database voert de query uit, en stuurt de resultaat daarvan weer terug naar de API. De API stuurt vervolgens de resultaat of een bericht naar de App of naar de extensie toe. Wat de App en de extensie met dat bericht doet, is terug te vinden in de hoofdstukken [](LaterLezer web app component)
+  De webapplicatie en de API worden op dit moment op de servers gedraaid van de huidige ontwikkelaars van Laterlezer. Door de webapplicatie aan te zetten krijgt de gebruiker toegang op de website van Laterlezer. De webapplicatie hoeft niet aan te staan om gebruik te maken van de Laterlezer extensie. De gebruiker kan via de website requests naar de API te sturen via de website, bijvoorbeeld door in te loggen, een nieuw account te registreren, artikelen op te halen, artikelen op te zoeken etc. De extensie kan alleen een API call doen om in te loggen, of om een artikel op te slaan. Afhankelijk van de type request stuurt de API een mongoose query naar de database toe. De database zit niet in de lokale omgeving van de ontwikkelaars. Het is een cloud database van mongoDB die in Noord Virginia in de Verenigde Staten plaatsvindt. De database voert de query uit, en stuurt de resultaat daarvan weer terug naar de API. De API stuurt vervolgens de resultaat of een bericht naar de App of naar de extensie toe. Wat de App en de extensie met dat bericht doet, is terug te vinden in de hoofdstukken [Web app component](#Web-app-component) en [Extension view](#Extension-view)
 
 
 # Code
