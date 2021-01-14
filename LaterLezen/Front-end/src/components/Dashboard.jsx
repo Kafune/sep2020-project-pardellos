@@ -1,18 +1,18 @@
 import React, { useState, useEffect } from "react";
 import {
+  getArticle,
+  getAllArticles,
   getArticleByUser,
 } from "../serverCommunication";
-import { Link } from "react-router-dom";
+import { Link, Redirect } from "react-router-dom";
 
 export default function Dashboard(props) {
   const [firstname, setFirstname] = useState(props.firstname);
   const [lastname, setLastname] = useState(props.lastname);
   const [articles, setArticles] = useState(props.articles);
-
   const [id, setId] = useState();
 
   useEffect(() => {
-
     handleGetArticles();
   }, []);
 
@@ -41,7 +41,7 @@ export default function Dashboard(props) {
               <div class="card blue-grey darken-1 dashboard-article">
                 <div class="card-image">
                   <img src={data.lead_image_url} />
-                  <div class="col"><span class="card-title">{data.title}</span></div>
+                  <span class="card-title">{data.title}</span>
                 </div>
                 <div class="card-content">
                   <p>{data.excerpt}</p>

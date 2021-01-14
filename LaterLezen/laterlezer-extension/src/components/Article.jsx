@@ -5,15 +5,14 @@ import { saveArticle, logoutUser } from "../serverCommunication";
 import M from "materialize-css";
 
 export default function Article(props) {
+  const [email, setEmail] = useState(props.email);
   const [url, setUrl] = useState("");
   const [title, setTitle] = useState("");
+  const [filter, setFilter] = useState("");
   const [tags, setTags] = useState([]);
   const [currentTags, setCurrentTags] = useState([]);
-  const [disableURLInput, setDisableURLInput] = useState(false);
   // const [selectedTags, setSelectedTags] = useState([]);
   // const [filteredTags, setFilteredTags] = useState([props.tags]);
-
-
 
   useEffect(() => {
     handleGetUrl()
@@ -125,7 +124,6 @@ export default function Article(props) {
         setUrl(url);
         console.log(url);
       });
-      setDisableURLInput(true);
     }
   }
 
@@ -151,14 +149,12 @@ export default function Article(props) {
         <h4 className="h2">Add article:</h4>
         <div className="row input-form">
           <input
-            disabled={disableURLInput}
             type="text"
             id="ext-url"
             placeholder="URL.."
             className="input"
             onChange={(e) => handleUrlChange(e)}
             value={url}
-            required
           />
           <input
             type="text"
@@ -203,13 +199,12 @@ export default function Article(props) {
             id="ext-save-article"
             className="waves-effect waves-light btn"
             onClick={() => {
-              handleSaveArticle(url, title, props.email, tags);
+              handleSaveArticle(url, title, email, tags);
             }}
           >
             Save
         </button>
           <button
-            id="ext-logout"
             className="waves-effect waves-light btn"
             onClick={() => {
               handleLogout();

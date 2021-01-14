@@ -8,6 +8,7 @@ export async function saveArticle(url, tags, title) {
     tags: tags,
     title: title,
   };
+  console.log(tags)
   const fetchOptions = {
     method: "POST",
     headers: {
@@ -18,9 +19,7 @@ export async function saveArticle(url, tags, title) {
     body: JSON.stringify(body),
   };
 
-  return fetch(serverFetchBase + `/user/article`, fetchOptions)
-  .then(response => response.json())
-
+  return fetch(serverFetchBase + `/user/article`, fetchOptions);
 }
 
 export async function getAllArticles() {
@@ -63,8 +62,7 @@ export async function loginUser(email, password) {
     mode: "cors",
     body: JSON.stringify(body),
   };
-  return fetch(serverFetchBase + `/user/login`, fetchOptions)
-  .then((response) => response.json())
+  return fetch(serverFetchBase + `/user/login`, fetchOptions);
 }
 
 export async function logoutUser() {
@@ -95,7 +93,7 @@ export async function registerUser(email, password, firstname, lastname) {
     mode: "cors",
     body: JSON.stringify(body),
   };
-  return fetch(serverFetchBase + `/user/register`, fetchOptions)
+  return fetch(serverFetchBase + `/user/register`, fetchOptions);
 }
 
 export async function checkAuthenticated() {
@@ -107,8 +105,7 @@ export async function checkAuthenticated() {
     credentials: "include",
     mode: "cors",
   };
-  return fetch(serverFetchBase + `/user/authenticated`, fetchOptions)
-  .then((response) => response.json())
+  return fetch(serverFetchBase + `/user/authenticated`, fetchOptions);
 }
 
 export async function searchArticleByTags(tagids) {
@@ -125,9 +122,7 @@ export async function searchArticleByTags(tagids) {
     mode: "cors",
     body: JSON.stringify(body),
   };
-  return fetch(serverFetchBase + `/user/tags`, fetchOptions)
-  .then((response) => response.json())
-
+  return fetch(serverFetchBase + `/user/tags`, fetchOptions);
 }
 
 export async function searchArticleByID(id) {
@@ -139,10 +134,7 @@ export async function searchArticleByID(id) {
     credentials: "include",
     mode: "cors",
   };
-  return fetch(
-    serverFetchBase + `/articles/article/${id}`,
-    fetchOptions
-  ).then((response) => response.json());
+  return fetch(serverFetchBase + `/articles/article/${id}`, fetchOptions);
 }
 
 export async function deleteArticleByID(id) {
@@ -178,7 +170,7 @@ export async function savePreference(theme) {
   return fetch(serverFetchBase + `/user/preference/`, fetchOptions);
 }
 
-export async function requestPreferences() {
+export async function getPreference() {
   const fetchOptions = {
     method: "GET",
     headers: {
@@ -187,10 +179,7 @@ export async function requestPreferences() {
     credentials: "include",
     mode: "cors",
   };
-  return fetch(
-    serverFetchBase + `/user/preference/`,
-    fetchOptions
-  ).then((response) => response.json());
+  return fetch(serverFetchBase + `/user/preference/`, fetchOptions);
 }
 
 export async function confirmArticleChanges(
@@ -223,43 +212,42 @@ export async function confirmArticleChanges(
 
 export async function getAuthors() {
   const fetchOptions = {
-    method: "GET",
+    method: 'GET',
     headers: {
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json'
     },
-    credentials: "include",
-    mode: "cors",
-  };
-  return fetch(serverFetchBase + `/articles/authors`, fetchOptions);
+    credentials: 'include',
+    mode: 'cors'
+  }
+  return fetch(serverFetchBase + `/articles/authors`, fetchOptions)
 }
 
 export async function findArticle(query, searchContent) {
   const body = {
     query: query,
-    searchContent: searchContent,
-  };
+    searchContent: searchContent
+  }
 
   const fetchOptions = {
-    method: "PUT",
+    method: 'PUT',
     headers: {
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json'
     },
     credentials: 'include',
     mode: 'cors',
     body: JSON.stringify(body)
   }
   return fetch(serverFetchBase + `/articles/search`, fetchOptions)
-  .then((response) => response.json())
 }
 
 export async function getSources() {
   const fetchOptions = {
-    method: "GET",
+    method: 'GET',
     headers: {
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json'
     },
-    credentials: "include",
-    mode: "cors",
-  };
-  return fetch(serverFetchBase + `/articles/sources`, fetchOptions);
+    credentials: 'include',
+    mode: 'cors'
+  }
+  return fetch(serverFetchBase + `/articles/sources`, fetchOptions)
 }

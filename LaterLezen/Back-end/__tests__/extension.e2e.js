@@ -93,9 +93,4 @@ xdescribe("Laterlezer extension e2e tests", () => {
         await thePage.click('button[id="ext-save-article"]')
         await thePage.waitForTimeout(3000);
     })
-
-    test("User logs out", async () => {
-        await thePage.click('button[id="ext-logout"]')
-        await thePage.waitForTimeout(3000);
-    })
 })

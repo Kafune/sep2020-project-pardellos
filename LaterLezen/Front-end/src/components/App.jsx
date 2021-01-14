@@ -7,6 +7,7 @@ import Login from "./Login";
 import Register from "./Register";
 import Logout from "./Logout";
 import DisplayArticle from "./displayArticle";
+import EditArticle from "./editArticle";
 import "../../src/App.css";
 import M from "materialize-css";
 import background from "../img/pfp_background.jpg";
@@ -21,7 +22,7 @@ export default class App extends React.Component {
       firstname: "",
       lastname: "",
       email: "",
-      logged_in: '',
+      logged_in: false,
       articles: [],
       tags: [],
       theme: "default",
@@ -31,6 +32,7 @@ export default class App extends React.Component {
   componentDidMount() {
     M.AutoInit();
     checkAuthenticated()
+      .then((response) => response.json())
       .then((response) => {
         if (response.isAuthenticated === true) {
           this.handleLoginState(true);
@@ -75,14 +77,12 @@ export default class App extends React.Component {
     }));
   }
 
-
   render() {
     const setLoginStatus = (c) => this.handleLoginState(c);
     const setEmailState = (c) => this.handleEmailState(c);
     const setFirstnameState = (c) => this.handleFirstnameState(c);
     const setLastnameState = (c) => this.handleLastnameState(c);
     const setTagsState = (c) => this.handleTagsState(c);
-
 
     return (
       <div className="App">
@@ -100,15 +100,15 @@ export default class App extends React.Component {
                 <i class="material-icons">menu</i>
               </a>
             ) : (
-                <ul class="right hide-on-med-and-down">
-                  <li>
-                    <Link to="/login">Login</Link>
-                  </li>
-                  <li>
-                    <Link to="register">Register</Link>
-                  </li>
-                </ul>
-              )}
+              <ul class="right hide-on-med-and-down">
+                <li>
+                  <Link to="/login">Login</Link>
+                </li>
+                <li>
+                  <Link to="register">Register</Link>
+                </li>
+              </ul>
+            )}
           </div>
         </nav>
 
@@ -172,6 +172,14 @@ export default class App extends React.Component {
             </li>
           </Link> */}
           <div class="inner-content">
+            <li>
+              <a>
+                <i class="material-icons" id="settings">
+                  settings
+                </i>
+                Settings
+              </a>
+            </li>
             <Link to="/logout">
               <li>
                 <a>
@@ -187,40 +195,24 @@ export default class App extends React.Component {
         <div class="container">
           <Switch>
             <Route path="/dashboard">
-              {this.state.logged_in ? (
-                <Dashboard
-                  appState={this.state}
-                  email={this.state.email}
-                  firstname={this.state.firstname}
-                  lastname={this.state.lastname}
-                  articles={this.state.articles}
-                />
-              ) : (
-                  ''
-                )}
+              <Dashboard
+                email={this.state.email}
+                firstname={this.state.firstname}
+                lastname={this.state.lastname}
+                articles={this.state.articles}
+              />
             </Route>
             <Route path="/save/web">
-              {this.state.logged_in ? (
-                <SaveArticle tags={this.state.tags} appState={this.state} />
-              ) : (
-                  ''
-                )}
+              <SaveArticle tags={this.state.tags}/>
             </Route>
             <Route path="/search">
-              {this.state.logged_in ? (
-                <SearchArticle
-                  appState={this.state}
-                  tags={this.state.tags}
-                  articles={this.state.articles}
-                />
-              ) : (
-                  ''
-                )}
-
+              <SearchArticle
+                tags={this.state.tags}
+                articles={this.state.articles}
+              />
             </Route>
             <Route path="/login">
               <Login
-                appState={this.state}
                 handleLoginState={setLoginStatus}
                 handleEmailState={setEmailState}
                 handleFirstnameState={setFirstnameState}
@@ -241,12 +233,10 @@ export default class App extends React.Component {
               <Logout handleLoginState={setLoginStatus} />
             </Route>
             <Route path="/article/:id">
-              {this.state.logged_in ? (
-                <DisplayArticle
-                  articleID={this.state.article_id} />
-              ) : (
-                  ''
-                )}
+              <DisplayArticle articleID={this.state.article_id} />
+            </Route>
+            <Route path="/edit/:id">
+              <EditArticle />
             </Route>
           </Switch>
         </div>

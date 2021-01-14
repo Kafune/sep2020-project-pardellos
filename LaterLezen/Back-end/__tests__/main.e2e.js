@@ -3,7 +3,7 @@ const fetch = require("node-fetch");
 const puppeteer = require("puppeteer");
 jest.setTimeout(250000);
 
-describe("Laterlezer e2e tests", () => {
+xdescribe("Laterlezer e2e tests", () => {
   let theBrowser, thePage;
 
   beforeAll(async () => {

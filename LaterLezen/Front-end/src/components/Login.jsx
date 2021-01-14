@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useHistory, Link } from 'react-router-dom'
 import { loginUser } from '../serverCommunication'
 
@@ -9,14 +9,9 @@ export default function Login(props) {
     const [password, setPassword] = useState('')
     const history = useHistory();
 
-    useEffect(() => {
-        if (props.appState.logged_in) {
-            history.push('/dashboard')
-        }
-    })
-
     function handleLoginUser(email, password) {
         loginUser(email, password)
+            .then((response) => response.json())
             .then((response) => {
                 if (response.isAuthenticated === true) {
                     console.log(response)
@@ -34,6 +29,7 @@ export default function Login(props) {
     }
 
     return (
+
         <div className="container">
             <div className="row">
                 <form>
@@ -57,9 +53,14 @@ export default function Login(props) {
                     </div>
                     <div class="row">
                         <div className="col">
-                            <a className="waves-effect waves-light btn-small blue" id="login" onClick={() => { handleLoginUser(email, password) }}>
+                            <a className="waves-effect waves-light btn-small blue" id = "login" onClick={() => { handleLoginUser(email, password) }}>
                                 Log in
                         </a>
+                        </div>
+                        <div className="col">
+                            <a className="waves-effect waves-light btn-small blue">
+                                <i class="fab fa-google left"></i>Log in with Google
+                    </a>
                         </div>
                     </div>
                 </form>

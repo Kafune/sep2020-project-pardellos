@@ -51,8 +51,11 @@ export default function SearchArticle(props) {
   }
 
   function handleSearchArticleByTag() {
+    console.log(tagIds);
     searchArticleByTags(tagIds)
+      .then((response) => response.json())
       .then((response) => {
+        console.log(response);
         setArticles(response.articles);
       });
   }
@@ -67,9 +70,10 @@ export default function SearchArticle(props) {
 
   const handleCheckBox = (e) => {
     setIsChecked({ ...isChecked, [e.target.id]: true });
-    selectedTags.push(e.target.name)
-    tagIds.push(e.target.id)
-    setTagCounter(tagCounter + 1)
+    selectedTags.push(e.target.name);
+    tagIds.push(e.target.id);
+    console.log(e.target.id);
+    setTagCounter(tagCounter + 1);
   };
 
   const escapeRegExp = (string) => {
@@ -79,9 +83,12 @@ export default function SearchArticle(props) {
   const handleSearch = () => {
     const sanitizedSearch = escapeRegExp(query);
     findArticle(sanitizedSearch, searchContent)
-      .then(result => {
+      .then((response) => response.json())
+      // .then(response => console.log(response))
+      .then((result) => {
         if (result.length <= 0) {
-          M.toast({ html: "No article found!" })
+          console.log("hier");
+          M.toast({ html: "No article found!" });
         } else {
           setArticles(result);
         }
