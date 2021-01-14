@@ -157,12 +157,12 @@ Door het lezen van dit hoofdstuk krijg je een beter beeld van hoe de structuur v
     ### Database view
     ![database.png](database.png)
 
-    ### LaterLezer web app component
+    ### Web app component
     ![c4-modellen-Web_App-component.png](c4-modellen-Web_App-component.png)
 
     De App bevat bijna alle componenten in de webapplicatie. De app laadt componenten in op basis van waar de gebruiker zich plaatsvindt in de website. Alle componenten die requests naar de API uitvoert, maakt gebruik van Servercommunication, een aparte bestand in de webapplicatie die niet afhankelijk is van App. Servercommunication bevat alle fetch requests die de componenten nodig hebben om met de API te communiceren. Een component haalt de data via de API als volgt op: Eerst roept de component een functie binnen Servercommunication aan om een fetch request te sturen. De request hangt uiteraard af vanuit welk component, en kan bestaan uit een GET, POST, PUT of een DELETE request. Na het aanroepen van deze functie, communiceert de webapplicatie met de API om de request af te handelen. Zodra de API de request heeft afgehandeld, stuurt de API een bericht terug naar de functie binnen Servercommunication waar de request vandaan komt. De component die de fetch functie aanroept, handelt het bericht van de API af. Wat er na het ontvangen van dat bericht gebeurt, hangt af van hoe dat in een component geimplementeerd is.
 
-    ### LaterLezer app - user flow
+    ### Web app - user flow
     ![c4-modellen-Web_App-user_flow.png](c4-modellen-Web_App-user_flow.png)
 
     #### **Homepagina**
