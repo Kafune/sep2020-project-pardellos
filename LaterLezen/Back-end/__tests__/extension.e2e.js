@@ -52,8 +52,8 @@ describe("Laterlezer extension e2e tests", () => {
     await User.deleteOne({ email: testEmail });
     await mongoose.disconnect();
 
-    await theBrowser.close();
-    await theBrowser2.close();
+    await extensionBrowser.close();
+    await webBrowser.close();
   });
 
   test("User logs in webapplication", async () => {
