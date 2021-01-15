@@ -11,7 +11,6 @@ const cookieExtractor = (req) => {
   return token;
 };
 
-// authorization for protected resources
 passport.use(
   new JwtStrategy(
     {
@@ -28,18 +27,20 @@ passport.use(
   )
 );
 
-// authentication local strategy using username and password
 passport.use(
-  new LocalStrategy({
-    usernameField: 'email',
-  }, (email, password, done) => {
-    User.findOne({ email }, (err, user) => {
-      // Something wrong with DB
-      if (err) return done(err);
-      // No user found
-      if (!user) return done(null, false);
-      // User found, check password
-      user.comparePassword(password, done);
-    });
-  })
+  new LocalStrategy(
+    {
+      usernameField: "email",
+    },
+    (email, password, done) => {
+      User.findOne({ email }, (err, user) => {
+        // Something wrong with DB
+        if (err) return done(err);
+        // No user found
+        if (!user) return done(null, false);
+        // User found, check password
+        user.comparePassword(password, done);
+      });
+    }
+  )
 );

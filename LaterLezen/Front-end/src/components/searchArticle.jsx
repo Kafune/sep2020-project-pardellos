@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import {
   searchArticleByTags,
   findArticle,
+  checkAuthenticated,
 } from "../serverCommunication";
 import { Link } from "react-router-dom";
 import M from "materialize-css";
@@ -9,20 +10,28 @@ import M from "materialize-css";
 export default function SearchArticle(props) {
   const [tags, setTags] = useState([]);
   const [isChecked, setIsChecked] = useState(false);
-  const [selectedTags, setSelectedTags] = useState([])
-  const [tagIds, setTagIds] = useState([])
+  const [selectedTags, setSelectedTags] = useState([]);
+  const [tagIds, setTagIds] = useState([]);
   const [articles, setArticles] = useState(props.articles);
   const [tagCounter, setTagCounter] = useState(0);
   const [showSearch, setShowSearch] = useState(0);
-  const [tagState, setTagState] = useState(tags);
+  const [tagState, setTagState] = useState();
   const [query, setQuery] = useState("");
   const [searchContent, setSearchContent] = useState(false);
 
   useEffect(() => {
-    setTags(props.tags);
-    setTagState(props.tags);
-    console.log(props.tags);
-  }, [props.tags]);
+    checkAuthenticated()
+      .then((response) => {
+        if (response.isAuthenticated === true) {
+          setTags(response.user.tags)
+          setTagState(response.user.tags);
+        }
+      })
+      .catch((e) => {
+        M.toast({ html: "Unauthorized user, please login first" });
+      });
+  }, []);
+
 
   function printTree(treeNode, indent = "") {
     let tempArray = [];
@@ -40,29 +49,25 @@ export default function SearchArticle(props) {
   }
 
   function handleSearchArticleByTag() {
-    console.log(tagIds)
     searchArticleByTags(tagIds)
-      .then((response) => response.json())
       .then((response) => {
-        console.log(response);
         setArticles(response.articles);
       });
   }
 
   function handleClearTags() {
-    setIsChecked('');
-    setSelectedTags([])
-    setArticles([])
-    setTagIds([])
-    printTree(tags)
+    setIsChecked("");
+    setSelectedTags([]);
+    setArticles([]);
+    setTagIds([]);
+    printTree(tags);
   }
 
   const handleCheckBox = (e) => {
-      setIsChecked({ ...isChecked, [e.target.id]: true });
-      selectedTags.push(e.target.name)
-      tagIds.push(e.target.id)
-      console.log(e.target.id);
-      setTagCounter(tagCounter + 1)
+    setIsChecked({ ...isChecked, [e.target.id]: true });
+    selectedTags.push(e.target.name)
+    tagIds.push(e.target.id)
+    setTagCounter(tagCounter + 1)
   };
 
   const escapeRegExp = (string) => {
@@ -72,14 +77,11 @@ export default function SearchArticle(props) {
   const handleSearch = () => {
     const sanitizedSearch = escapeRegExp(query);
     findArticle(sanitizedSearch, searchContent)
-      .then((response) => response.json())
-      // .then(response => console.log(response))
       .then(result => {
         if (result.length <= 0) {
-          console.log("hier")
           M.toast({ html: "No article found!" })
         } else {
-          setArticles(result)
+          setArticles(result);
         }
       });
   };
@@ -94,11 +96,19 @@ export default function SearchArticle(props) {
     <div>
       <h2 class="center">Search Article</h2>
       <div className="row">
-        <button className="btn btn blue" onClick={() => handleSearchState(1)}>
+        <button
+          className="btn btn blue"
+          id="searchByTags"
+          onClick={() => handleSearchState(1)}
+        >
           Search by tags
         </button>
         <div className="col">
-          <button className="btn btn blue" id="metaData" onClick={() => handleSearchState(2)}>
+          <button
+            className="btn btn blue"
+            id="metaData"
+            onClick={() => handleSearchState(2)}
+          >
             Search by metadata
           </button>
         </div>
@@ -135,6 +145,7 @@ export default function SearchArticle(props) {
                   <div class="col">
                     <button
                       className="waves-effect waves-light btn-small blue accent-2"
+                      id="searchTag"
                       onClick={() => {
                         handleSearchArticleByTag();
                       }}
@@ -144,6 +155,7 @@ export default function SearchArticle(props) {
                   </div>
                   <button
                     className="waves-effect waves-light btn-small blue accent-2"
+                    id="clearTag"
                     onClick={() => {
                       handleClearTags();
                     }}
