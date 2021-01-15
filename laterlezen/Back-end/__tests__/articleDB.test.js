@@ -15,34 +15,6 @@ describe("Article Model Tests", () => {
     await Article.create({ title: "Test1" });
     await Article.create({ title: "Test2" });
     await Article.create({ title: "Test3" });
-
-    //integratie test
-    const testUser = {
-      email: "ditiseentest@test.nl",
-      firstname: "Hoi",
-      lastname: "Hallo",
-      password: "testje1111",
-    };
-
-    let newUser = new User(testUser);
-    newUser.save();
-
-    const testArticle = {
-      tags: [],
-      url:
-        "https://nos.nl/artikel/2358829-d66-en-vvd-willen-opheldering-over-blokkering-lid-euthanasiecommissie.html",
-      title: "Dit is een titel",
-      excerpt: "Dit is een beschrijving",
-      image: "https://cdn.nos.nl/image/2020/11/05/689236/xxl.jpg",
-      content: "Lorum ipson",
-      author: "peter",
-      source: "nos.nl",
-    };
-
-    let newArticle = new Article(testArticle);
-    newArticle.save();
-
-    newUser.articles.push(newArticle);
   });
 
   afterAll(async () => {
@@ -50,8 +22,9 @@ describe("Article Model Tests", () => {
     await Article.deleteOne({ title: "Test2" });
     await Article.deleteOne({ title: "Test3" });
     await Article.deleteOne({ title: "Storm" });
-    await User.deleteMany({ email: "ditiseentest@test.nl" });
-    await Article.deleteMany({ title: "Dit is een titel" });
+    await Article.deleteOne({ title: "Dit is een titel" });
+    await Article.deleteOne({ title: "Gebruik van OV gehalveerd" });
+    await User.deleteOne({ email: "ditiseentest@test.nl" });
     await mongoose.disconnect();
   });
 
@@ -93,9 +66,38 @@ describe("Article Model Tests", () => {
     if (!userInputDescription == "") newArticle.excerpt = userInputDescription;
     if (!userInputSource == "") newArticle.source = userInputSource;
 
+    //Should pass, cause it should keep the old description
     expect(newArticle.excerpt).toBe("Dit is een beschrijving");
   });
 
+  beforeEach(async () => {
+    const testUser = {
+      email: "ditiseentest@test.nl",
+      firstname: "Hoi",
+      lastname: "Hallo",
+      password: "testje1111",
+    };
+
+    let newUser = new User(testUser);
+    newUser.save();
+
+    const testArticle = {
+      tags: [],
+      url:
+        "https://nos.nl/artikel/2358829-d66-en-vvd-willen-opheldering-over-blokkering-lid-euthanasiecommissie.html",
+      title: "Dit is een titel",
+      excerpt: "Dit is een beschrijving",
+      image: "https://cdn.nos.nl/image/2020/11/05/689236/xxl.jpg",
+      content: "Lorum ipson",
+      author: "peter",
+      source: "nos.nl",
+    };
+
+    let newArticle = new Article(testArticle);
+    newArticle.save();
+
+    newUser.articles.push(newArticle);
+  });
   test("Search article of a user based on multiple metadata", async () => {
     let searchFields = {};
     let query = "Dit is een titel";

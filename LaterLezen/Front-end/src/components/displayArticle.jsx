@@ -1,20 +1,21 @@
 import React, { useState, useEffect } from "react";
 import {
   searchArticleByID,
-  requestPreferences,
+  deleteArticleByID,
+  getPreference,
   savePreference,
   confirmArticleChanges,
 } from "../serverCommunication";
 import Parser from "html-react-parser/dist/html-react-parser";
-import { useHistory } from "react-router-dom";
+import { useHistory, Link } from "react-router-dom";
 import Preferences from "./Preferences";
 import M from "materialize-css";
 
-export default function DisplayArticle() {
+export default function DisplayArticle(props) {
   const [article, setArticle] = useState([]);
   const history = useHistory();
   const [background, setBackground] = useState("white");
-  const [editFields, setEditFields] = useState(false);
+  const [editFields, setEditFields] = useState();
   const [title, setTitle] = useState("");
   const [source, setSource] = useState("");
   const [description, setDescription] = useState("");
@@ -24,15 +25,15 @@ export default function DisplayArticle() {
 
   useEffect(() => {
     getArticleContent();
-    let preferenceMenuSelector = document.querySelector(".preference-menu");
-    let preferenceMenuOptions = {
+    let dropdown1 = document.querySelector(".dropdown-trigger");
+    let dropdownOptions = {
       closeOnClick: false,
       constrainWidth: false,
       onCloseStart: () => {
-        getPreferences();
+        handleCancelButton();
       },
     };
-    M.Dropdown.init(preferenceMenuSelector, preferenceMenuOptions);
+    M.Dropdown.init(dropdown1, dropdownOptions);
     getPreferences();
     return () => (document.body.className = "");
   }, []);
@@ -43,27 +44,29 @@ export default function DisplayArticle() {
 
   function handleTagChips() {
     setCurrentTags([]);
-    let chipSelector = document.querySelectorAll(".chips");
-    M.Chips.init(chipSelector, {
+
+    var elems = document.querySelectorAll(".chips");
+    var instances = M.Chips.init(elems, {
       onChipAdd: () => {
-        setCurrentTags(chipSelector[0].M_Chips.chipsData);
+        setCurrentTags(elems[0].M_Chips.chipsData);
       },
       onChipDelete: () => {
-        setCurrentTags(chipSelector[0].M_Chips.chipsData);
+        setCurrentTags(elems[0].M_Chips.chipsData);
       },
       placeholder: "Enter Tag...",
       secondaryPlaceholder: "+ Sub Tag",
     });
   }
 
-  const handleRemoveTagClick = (index) => {
+  const handleRemoveClick = (index) => {
     const List = [...tags];
     List.splice(index, 1);
     setTags(List);
   };
 
-  function handleAddTagClick() {
+  function handleAddClick() {
     var tagArray = [];
+
     currentTags.forEach((element) => {
       tagArray.push(element.tag);
     });
@@ -75,27 +78,23 @@ export default function DisplayArticle() {
     document.body.className = "theme-" + newTheme;
   };
 
-  const handleSaveButtonPreferences = () => {
-    savePreference(background)
-      .then((response) => {
-        if (response.status === 200) {
-          M.toast({ html: "Theme is saved!" });
-        } else {
-          M.toast({ html: "Theme could not be saved!" });
-        }
-      })
-      .catch(() => {
-        M.toast({
-          html: "Something went wrong with the server",
-        });
-      });
+  const handleSaveButton = () => {
+    savePreference(background).then(M.toast({ html: "Theme is saved!" }));
   };
-
+  const handleCancelButton = () => {
+    getPreferences();
+  };
   const getPreferences = () => {
-    requestPreferences().then((result) => checkTheme(result));
+    getPreference()
+      .then((response) => response.json())
+      .then((result) => checkTheme(result));
   };
 
-  const saveArticleChanges = () => {
+  const showEditField = () => {
+    setEditFields(true);
+  };
+
+  const saveChanges = () => {
     let title_input = document.querySelector("#title-input");
     if (title_input.value.length <= 0) {
       M.toast({ html: "Required fields can not be empty!" });
@@ -130,58 +129,67 @@ export default function DisplayArticle() {
       }
     }
   };
+
+  const cancelChanges = () => {
+    getArticleContent();
+    setEditFields(false);
+  };
+
   const getArticleContent = () => {
     let url = window.location.href;
     let id = url.substring(url.lastIndexOf("/") + 1);
-    searchArticleByID(id).then((response) => {
-      if (response.error === true) {
-        history.push("/search");
-        M.toast({ html: "Cannot find article" });
-      } else {
-        if (editFields != false) {
-          setEditFields(false);
+    searchArticleByID(id)
+      .then((response) => response.json())
+      .then((response) => {
+        if (response.error === true) {
+          history.push("/search");
+          M.toast({ html: "Cannot find article" });
+        } else {
+          setArticle(response);
+          setTitle(response.title);
+          setDescription(response.excerpt);
+          setSource(response.domain);
+          setAuthor(response.author);
+          setTags(response.tags);
+          let textArea = document.querySelector(".materialize-textarea");
+          M.textareaAutoResize(textArea);
         }
-        setArticle(response);
-        setTitle(response.title);
-        setDescription(response.excerpt);
-        setSource(response.domain);
-        setAuthor(response.author);
-        setTags(response.tags);
-        let textArea = document.querySelector(".materialize-textarea");
-        M.textareaAutoResize(textArea);
-      }
-    });
+      });
   };
 
+  // function handleDeleteArticle(id) {
+  //   deleteArticleByID(id).then((response) => {
+  //     if (response.msgError === true) {
+  //       M.toast({ html: "Failed to delete article" });
+  //     } else {
+  //       history.push("/dashboard");
+  //       M.toast({ html: "Successfully deleted article" });
+  //     }
+  //   });
+  // }
   return (
-    <div>
+    <>
       <Preferences
         handleThemeState={checkTheme}
         backgroundColor={background}
-        handleCancelButton={getPreferences}
-        handleSaveButton={handleSaveButtonPreferences}
+        handleCancelButton={handleCancelButton}
+        handleSaveButton={handleSaveButton}
       />
       <div className={"edit-button"}>
         {editFields ? (
-          <button class="btn blue" onClick={saveArticleChanges}>
-            <i class="small material-icons" id="editArticle">
-              save
-            </i>
+          <button class="btn blue" onClick={saveChanges}>
+            <i class="small material-icons" id="editArticle">save</i>
           </button>
         ) : (
-          <button class="btn blue" onClick={() => setEditFields(true)}>
-            <i class="small material-icons" id="editArticle">
-              create
-            </i>
+          <button class="btn blue" onClick={showEditField}>
+            <i class="small material-icons" id="editArticle">create</i>
           </button>
         )}
       </div>
       <div className={"cancel-button"}>
         {editFields ? (
-          <button class="btn blue" onClick={getArticleContent}>
-            <i class="small material-icons" id="cancelEditArticle">
-              cancel
-            </i>
+          <button class="btn blue" onClick={cancelChanges}>
+            <i class="small material-icons" id="cancelEditArticle">cancel</i>
           </button>
         ) : (
           ""
@@ -191,22 +199,25 @@ export default function DisplayArticle() {
       <div className="article">
         <div className={editFields ? "" : "center"}>
           {editFields ? (
-            <h5>
-              Title:
-              <div className="input-field">
-                <input
-                  required
-                  className="validate"
-                  id="title-input"
-                  type="text"
-                  value={title}
-                  onChange={(e) => setTitle(e.target.value)}
-                ></input>
-              </div>
-            </h5>
+            <React.Fragment>
+              <h5>
+                Title:
+                <div className="input-field">
+                  <input
+                    required
+                    className="validate"
+                    id="title-input"
+                    type="text"
+                    value={title}
+                    onChange={(e) => setTitle(e.target.value)}
+                  ></input>
+                </div>
+              </h5>
+            </React.Fragment>
           ) : (
             <h2 className={"hover-show"}>{title}</h2>
           )}
+
           <h5 className={"hover-show"}>
             Published by:
             {editFields ? (
@@ -251,16 +262,14 @@ export default function DisplayArticle() {
             <h5>
               Tags:
               <div
-                id="chipsDiv"
-                className="chips chips-placeholder chips-autocomplete tooltipped"
+                class=" chips chips-placeholder chips-autocomplete tooltipped"
                 data-position="bottom"
                 data-tooltip="[Tag requirements] Allow chars: A-Z / 0-9 / _  / - / Max length: 15 chars"
               ></div>
               <button
                 className="inline waves-effect waves-light btn-small blue accent-2"
-                id="addTag"
                 onClick={() => {
-                  handleAddTagClick();
+                  handleAddClick();
                 }}
               >
                 Add
@@ -275,7 +284,7 @@ export default function DisplayArticle() {
                     <button
                       className="btn-floating btn-small waves-effect waves-light red"
                       onClick={() => {
-                        handleRemoveTagClick(i);
+                        handleRemoveClick(i);
                       }}
                     >
                       <i class="material-icons">delete</i>
@@ -285,11 +294,7 @@ export default function DisplayArticle() {
               );
             })}
           </div>
-          <img
-            alt={title}
-            className="responsive-img"
-            src={article.lead_image_url}
-          />
+          <img className="responsive-img" src={article.lead_image_url} />
         </div>
         <div className="text-flow">
           <h5>{Parser(" " + article.content)}</h5>
@@ -300,6 +305,6 @@ export default function DisplayArticle() {
           </button>
         </a>
       </div>
-    </div>
+    </>
   );
 }

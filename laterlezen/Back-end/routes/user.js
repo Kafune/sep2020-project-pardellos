@@ -25,6 +25,9 @@ const signToken = (userID) => {
 
 router.post("/register", (req, res) => {
   const { email, password, firstname, lastname } = req.body;
+
+  // Back-end account checks. Can be adjusted at any time
+  // For now, only checks if email format is valid with regex, and the password length.
   let emailFormat = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
   let minPasswordLength = 7;
 
@@ -38,7 +41,7 @@ router.post("/register", (req, res) => {
           if (err)
             res.status(500).json({
               message: {
-                msgBody: "Error has occured",
+                msgBody: "Error 1 has occured",
                 msgError: true,
               },
             });
@@ -65,7 +68,7 @@ router.post("/register", (req, res) => {
               if (err)
                 res.status(500).json({
                   message: {
-                    msgBody: "Error has occured",
+                    msgBody: "Error 2 has occured",
                     msgError: true,
                   },
                 });
@@ -149,32 +152,33 @@ router.post(
     let rawTags = req.body.tags;
     let usedids;
     let description;
+    let tagids = req.body.tagids;
+    var t0 = performance.now();
     extract(url)
       .then((article) => {
         description = article.description;
       })
       .catch((err) => {});
+    var t1 = performance.now();
+    console.log("Call to articleparser took " + (t1 - t0) + " milliseconds.");
+    var t2 = performance.now();
     Mercury.parse(url)
       .then((response) => {
         let newArticle = new Article(response);
         if (!req.body.title == "") newArticle.title = req.body.title;
         if (description != null) newArticle.excerpt = description;
-        if (
-          response.lead_image_url == "" ||
-          response.lead_image_url == null ||
-          response.lead_image_url == undefined
-        )
-          newArticle.lead_image_url = "./placeholder_1210x681.png";
         newArticle.tags = rawTags;
         usedids = handleUserNestedTags(rawTags, req.user.tags);
-        newArticle.tagids = usedids;
+        newArticle.tagids = usedids
+        var t1 = performance.now();
+        console.log("Tag loop took " + (t1 - t0) + " milliseconds.");
         req.user.articles.push(newArticle);
         req.user.markModified("tags");
         req.user.save((err) => {
           if (err)
             res.status(500).json({
               message: {
-                msgBody: "Error has occured",
+                msgBody: "Error 4 has occured",
                 msgError: true,
               },
             });
@@ -183,7 +187,7 @@ router.post(
               if (err)
                 res.status(500).json({
                   message: {
-                    msgBody: "Error has occured",
+                    msgBody: "Error 3 has occured",
                     msgError: true,
                   },
                 });
@@ -192,15 +196,9 @@ router.post(
           }
         });
       })
-      .catch((err) => {
-        if (err)
-          res.status(500).json({
-            message: {
-              msgBody: "Error has occured",
-              msgError: true,
-            },
-          });
-      });
+      .catch((err) => console.log("Error: ", err));
+    var t3 = performance.now();
+    console.log("Call to mercury took " + (t3 - t2) + " milliseconds.");
   }
 );
 
@@ -238,7 +236,7 @@ router.put(
     session: false,
   }),
   (req, res) => {
-    let usedids;
+    let usedids
     Article.findOne(
       {
         _id: req.body.article_id,
@@ -259,7 +257,7 @@ router.put(
           if (!req.body.tags[0] == "") {
             article.tags = req.body.tags;
             usedids = handleUserNestedTags(req.body.tags, req.user.tags);
-            article.tagids = usedids;
+            article.tagids = usedids
             req.user.markModified("tags");
             req.user.save();
           }
@@ -268,6 +266,70 @@ router.put(
         }
       }
     );
+  }
+);
+
+router.delete("/article", (req, res) => {
+  Article.deleteOne(
+    {
+      _id: req.body.article_id,
+    },
+    (err, article) => {
+      if (err)
+        res.status(500).json({
+          message: {
+            msgBody: "Error has occured",
+            msgError: true,
+          },
+        });
+      else {
+        res.status(200).json({
+          message: {
+            msgBody: "succes",
+            msgError: false,
+          },
+        });
+      }
+    }
+  );
+});
+
+router.put(
+  "/tags",
+  passport.authenticate("jwt", {
+    session: false,
+  }),
+  (req, res) => {
+    let tags = req.body.tagids;
+    console.log(tags);
+
+    User.findById({
+      _id: req.user._id,
+    })
+      .populate({
+        path: "articles",
+        match :{
+          tagids: {
+            $all: tags,
+          },
+        },
+      })
+      .exec((err, document) => {
+        if (err) {
+          res.status(500).json({
+            message: {
+              msgBody: "Error has occured",
+              msgError: true,
+            },
+          });
+        } else {
+          console.log(document.articles);
+          res.status(200).json({
+            articles: document.articles,
+            authenticated: true,
+          });
+        }
+      });
   }
 );
 
@@ -289,6 +351,95 @@ router.get(
     });
   }
 );
+router.put("/testing/tags", (req, res) => {
+  let tags = [
+    "programmeren",
+    "Javascript",
+    "React",
+    "mapping",
+    "objectmapping",
+  ];
+  let article = {
+    title: "test3",
+  };
+  let art = new Article(article);
+  art.tags2 = tags;
+  art.save();
+  res.json(art);
+});
+
+router.get("/testing/art/:tag", (req, res) => {
+  let tag = req.params.tag;
+  Article.find(
+    {
+      tags2: {
+        $in: tag,
+      },
+    },
+    (err, art) => {
+      res.json(art);
+    }
+  );
+});
+
+router.put("/testing/art/:title", (req, res) => {
+  let taglist = req.body.taglist;
+  let title = req.params.title;
+
+  Article.updateOne(
+    {
+      title: title,
+    },
+    {
+      $set: {
+        tags2: taglist,
+      },
+    },
+    (err, art) => {
+      res.json(art);
+    }
+  );
+});
+
+router.post("/articleExtension", (req, res) => {
+  console.log(req.user);
+  req.body.tags = [];
+  const findUser = User.findOne({
+    email: req.body.email,
+  }).then((response) => {
+    if (response) {
+      const { extract } = require("article-parser");
+      let url = String(req.body.url);
+      const article = new Article(req.body);
+      extract(url).then((article) => {
+        let newArticle = new Article(article);
+        newArticle.tags = req.body.tags;
+        newArticle.title = req.body.title;
+        newArticle.save((err) => {
+          if (err) {
+            res.status(500).json({
+              message: {
+                msgBody: "Error 2 has occured",
+                msgError: true,
+              },
+            });
+          } else {
+            response.articles.push(newArticle);
+            response.save();
+            res.send(newArticle);
+          }
+        });
+      });
+    } else {
+      res.status(500).json({
+        message: {
+          msgBody: "Error 1 has occured",
+          msgError: true,
+        },
+      });
+    }
+  });
+});
 
 router.put(
   "/preference",
@@ -310,23 +461,15 @@ router.put(
         {
           preferences: req.body.theme,
         }
-      )
-        .then(
-          res.status(200).json({
-            message: {
-              msgBody: "succes",
-              msgError: false,
-            },
-          })
-        )
-        .catch(() => {
-          res.status(500).json({
-            message: {
-              msgBody: "Error has occured",
-              msgError: true,
-            },
-          });
+      ).catch(() => {
+        res.status(500).json({
+          message: {
+            msgBody: "Error has occured",
+            msgError: true,
+          },
         });
+      });
+      res.send(req.body.theme);
     } else {
       res.status(500).json({
         message: {
@@ -351,13 +494,21 @@ router.get(
   }
 );
 
+// function processTags(rawTags) {
+//   let processedTags = [];
+//   processedTags = rawTags.map(function (value) {
+//     return value.toLowerCase();
+//   });
+//   const uniqueTags = new Set(processedTags);
+//   processedTags = [...uniqueTags];
+//   return processedTags;
+// }
+
 function handleUserNestedTags(data, userTags) {
   let usedids = [];
-
-  const node = (tagName, parent = null, index) => ({
+  const node = (tagName, parent = null) => ({
     tagName,
     parent,
-    index,
     _id: new ObjectID(),
     subTags: [],
   });
@@ -373,21 +524,19 @@ function handleUserNestedTags(data, userTags) {
       }
     }
   };
+  console.log(node._id);
   const TOP_NAME = "/",
     top = node(TOP_NAME);
   for (const children of data) {
     let parent = userTags;
-    let index = 0;
     for (const name of children) {
-      index = index + 1;
       const found = findNamed(name, parent);
-      parent = found
-        ? found
-        : addNode(parent, node(name, parent.tagName, index));
-      usedids.push(parent._id.toString());
+      parent = found ? found : addNode(parent, node(name, parent.tagName));
+      console.log(parent._id.toString());
+      usedids.push(parent._id.toString())
     }
   }
-  return usedids;
+  return usedids
 }
 
 module.exports = router;
