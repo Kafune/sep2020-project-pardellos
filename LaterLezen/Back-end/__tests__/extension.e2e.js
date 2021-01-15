@@ -3,94 +3,113 @@ const User = require("../models/User");
 const puppeteer = require("puppeteer");
 
 describe("Laterlezer extension e2e tests", () => {
-    let theBrowser, thePage;
+  let extensionBrowser,webBrowser, extensionPage, webPage;
 
-    jest.setTimeout(100000);
+  jest.setTimeout(100000);
+  const testEmail = "extensietest@test.com";
+  const testFirstName = "extensie";
+  const testLastName = "tester";
+  const testPassword = "extensievetest";
 
-    //create account
+  beforeAll(async () => {
+    await mongoose.connect(
+      "mongodb+srv://Glenn:LaterLezen@laterlezen.tkmyn.mongodb.net/LaterLezen?retryWrites=true&w=majority",
+      {
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+        useFindAndModify: false,
+      }
+    );
 
-    //test credentials
-    const testEmail = "extensietest@test.com";
-    const testFirstName = "extensie";
-    const testLastName = "tester";
-    const testPassword = "extensievetest";
-
-    beforeAll(async () => {
-        //create account before testing extension
-        await mongoose.connect(
-            "mongodb+srv://Glenn:LaterLezen@laterlezen.tkmyn.mongodb.net/LaterLezen?retryWrites=true&w=majority",
-            {
-                useNewUrlParser: true,
-                useUnifiedTopology: true,
-                useFindAndModify: false,
-            }
-        )
-
-        await User.create({
-            email: testEmail,
-            firstname: testFirstName,
-            lastname: testLastName,
-            password: testPassword,
-        });
-
-
-
-        //puppeteer
-        // await fetch("http://localhost:4000/testing/set");
-        theBrowser = await puppeteer.launch({
-            headless: false,
-            slowMo: 50,
-            defaultViewport: null,
-            devtools: true,
-            args: [`--window-size=1920,1080`],
-        });
-        thePage = await theBrowser.newPage();
-        await thePage.goto("http://localhost:3001/");
-    })
-
-    afterAll(async () => {
-        // await fetch("http://localhost:4000/testing/reset");
-        await User.deleteOne({ email: testEmail });
-        await mongoose.disconnect();
-
-        await theBrowser.close();
-
+    await User.create({
+      email: testEmail,
+      firstname: testFirstName,
+      lastname: testLastName,
+      password: testPassword,
     });
-
-    test("User logs in with empty password", async () => {
-        await thePage.type('input[class="email"]', testEmail)
-
-        await thePage.click('button[id="ext-login-button"]')
-        await thePage.waitForTimeout(3000);
-
+    extensionBrowser = await puppeteer.launch({
+      headless: false,
+      slowMo: 5,
+      defaultViewport: null,
+      devtools: false,
+      args: ["--window-size=700,800", "--window-position=0,0"]  
     });
+    extensionPage = await extensionBrowser.newPage();
+    await extensionPage.goto("http://localhost:3001/");
 
-    test("User logs in with the correct credentials", async () => {
-        await thePage.type('input[class="password"]', testPassword)
-        await thePage.click('button[id="ext-login-button"]')
+    webBrowser = await puppeteer.launch({
+      headless: false,
+      slowMo: 5,
+      defaultViewport: null,
+      devtools: false,
+      args: ["--window-size=700,800", "--window-position=730,0"]   
+    });
+    webPage = await webBrowser.newPage();
+    await webPage.goto("http://localhost:3000/login");
+  });
 
-        //show message before moving on
-        await thePage.waitForTimeout(3000);
-    })
-    test("User tries to add an article with the wrong URL format", async () => {
-        const wrongURL = "dit is geen geldige url!";
+  afterAll(async () => {
+    await User.deleteOne({ email: testEmail });
+    await mongoose.disconnect();
 
-        await thePage.type('input[id="ext-url"]', wrongURL)
-        await thePage.click('button[id="ext-save-article"]')
+    await theBrowser.close();
+    await theBrowser2.close();
+  });
 
-        //show message before moving on
-        await thePage.waitForTimeout(3000);
-    })
+  test("User logs in webapplication", async () => {
 
-    test("User tries to add an article with the correct URL format", async() => {
-        await thePage.$eval(
-            "input[id=ext-url]",
-            (input, value) => (input.value = value),
-            ""
-          );
-        await thePage.type('input[id="ext-url"]', "https://www.nu.nl/verkiezingen-vs/6092489/trump-accepteert-verkiezingsuitslag-en-is-woedend-op-capitool-bestormers.html")
-        await thePage.type('input[id="ext-title"]', "Trump is woedend op Capitool-bestormers")
-        await thePage.click('button[id="ext-save-article"]')
-        await thePage.waitForTimeout(3000);
-    })
-})
+    await webPage.waitForTimeout(1500);
+    await webPage.type("input[id=email]", testEmail);
+    await webPage.type("input[id=password]", testPassword);
+    await webPage.click('a[id="login"]');
+  });  
+
+  test("User logs in with empty password", async () => {
+    await extensionPage.type('input[class="email"]', testEmail);
+
+    await extensionPage.click('button[id="ext-login-button"]');
+    await extensionPage.waitForTimeout(3000);
+  });
+
+  test("User logs in with the correct credentials", async () => {
+    await extensionPage.type('input[class="password"]', testPassword);
+    await extensionPage.click('button[id="ext-login-button"]');
+    await extensionPage.waitForTimeout(3000);
+  });
+  test("User tries to add an article with the wrong URL format", async () => {
+    const wrongURL = "dit is geen geldige url!";
+
+    await extensionPage.type('input[id="ext-url"]', wrongURL);
+    await extensionPage.click('button[id="ext-save-article"]');
+    await extensionPage.waitForTimeout(3000);
+  });
+
+  test("User tries to add an article with the correct URL format", async () => {
+    await extensionPage.$eval(
+      "input[id=ext-url]",
+      (input, value) => (input.value = value),
+      ""
+    );
+    await extensionPage.type(
+      'input[id="ext-url"]',
+      "https://www.nu.nl/verkiezingen-vs/6092489/trump-accepteert-verkiezingsuitslag-en-is-woedend-op-capitool-bestormers.html"
+    );
+    await extensionPage.type(
+      'input[id="ext-title"]',
+      "Trump is woedend op Capitool-bestormers"
+    );
+    await extensionPage.click('button[id="ext-save-article"]');
+    await extensionPage.waitForTimeout(3500);
+  });
+
+  test("User scrolls down in Dasboard", async () => {
+    for(let i = 0; i < 20; i++){
+        await webPage.keyboard.press('ArrowDown');
+      }
+  });
+
+  test("User logs out", async () => {
+    await extensionPage.click('button[id="ext-logout"]');
+    await extensionPage.waitForTimeout(3000);
+  });
+});
