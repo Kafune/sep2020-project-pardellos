@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 const User = require("../models/User");
 const puppeteer = require("puppeteer");
 
-describe("Laterlezer extension e2e tests", () => {
+xdescribe("Laterlezer extension e2e tests", () => {
   let extensionBrowser,webBrowser, extensionPage, webPage;
 
   jest.setTimeout(100000);
