@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom'
-import { registerUser, loginUser } from '../serverCommunication'
+import { registerUser, loginUser, onOpenSocket } from '../serverCommunication'
 
 import banner from './../img/wallpaper.jpg';
 
@@ -20,6 +20,7 @@ export default function Register(props) {
         const input = <input type={type} name={name} onChange={e => setValue(e.target.value)} required />
         return [value, input];
     }
+      
 
     const onSubmitForm = (e) => {
         const minPasswordLength = 7;
@@ -41,8 +42,10 @@ export default function Register(props) {
                                                 props.handleEmailState(email);
                                                 props.handleFirstnameState(response.firstname)
                                                 props.handleLastnameState(response.lastname)
+                                                onOpenSocket(email)
                                                 props.handleLoginState(true);
                                                 history.push('/dashboard')
+                                                window.location.reload();
                                             }
                                         })
                                 })
@@ -59,6 +62,9 @@ export default function Register(props) {
             M.toast({ html: 'Passwords are not matching' })
         }
     }
+
+
+    
 
     return (
         <div id="register">
