@@ -35,6 +35,7 @@ describe("user related unit tests", () => {
       firstname: testFirstName,
       lastname: testLastName,
       password: testPassword,
+      tags: {}
     });
   });
 
@@ -76,15 +77,35 @@ describe("user related unit tests", () => {
   });
 
   test("add tag to user", async () => {
-    let testUser = await User.findOne({
+    await User.findOne({
       email: testEmail,
-    }).lean();
-
-    let expectedTags = ["test", "tag", "voetbal", "sport"];
-
-    testUser.tags.push("test", "tag", "voetbal", "sport");
-
-    expect(testUser.tags).toEqual(expectedTags);
+    }, (err, user) => {
+        if (err) {
+          console.log(err)
+        } else {
+          let testTags = {
+            tagName: "/",
+            subTags: [{
+              tagName: "Test",
+              parent: "/",
+              index: 1,
+              subTags: [{
+                tagName: "Corona",
+                parent: "Test",
+                index: 2
+              }]
+            },
+            {
+              tagName: "Nieuws",
+              parent: "/",
+              index: 1
+            }]
+          }
+          user.tags = testTags
+          user.save();
+          expect(user.tags).toEqual(testTags);
+        }
+    })
   });
 
   test("check for duplicate tags", async () => {
