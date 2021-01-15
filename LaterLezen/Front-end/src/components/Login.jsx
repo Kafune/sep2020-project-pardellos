@@ -21,7 +21,6 @@ export default function Login(props) {
                     props.handleLastnameState(response.lastname)
                     props.handleTagsState(response.tags)
                     history.push('/dashboard')
-                    window.location.reload();
                 }
             })
             .catch(() => {

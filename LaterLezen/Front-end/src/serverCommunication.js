@@ -267,32 +267,6 @@ export function openWebSocket() {
   return ws
 }
 
-export function onOpenSocket(email) {
-  let ws = openWebSocket();
-  ws.onerror = function error() {
-    console.log("websocket error");
-  };
-  ws.onopen = function open() {
-    console.log("Websocket connection has been established");
-    console.log(email);
-    let data = {
-      email: email,
-      request: "webappUserAdd",
-    };
-    ws.send(JSON.stringify(data));
-  };
-  ws.onclose = function close() {};
-  ws.onmessage = (msg) =>  {
-    switch (msg.data) {
-      case "connected":
-        console.log(msg.data);
-        break;
-      case "refresh article data":
-        window.location.reload();
-    }
-  };
-}
-
 export function getWebSocket() {
   if( ws ) {
     return ws;
