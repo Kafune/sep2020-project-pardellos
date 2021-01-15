@@ -1,6 +1,7 @@
 {
   "name": "laterlezen",
   "version": "1.0.0",
+  "description": "back end quizzer",
   "main": "app.js",
   "dependencies": {
     "@postlight/mercury-parser": "^2.2.0",

@@ -1,8 +1,5 @@
-.App {
-  overflow-wrap: break-word;
-}
 
-.round-icon {
+.round-icon{
   margin: 0.5rem;
   border-radius: 50% !important;
   margin-left: 5%;
@@ -16,7 +13,7 @@
 
 .round-icon.default {
   background-color: #fff;
-  border: 2px solid #458aff;
+  border: 2px solid #458aff
 }
 
 .round-icon.default:hover {
@@ -24,16 +21,16 @@
 }
 
 .round-icon.typewriter {
-  background-color: #e0d3af;
-  border: 2px solid #458aff;
+  background-color: #E0D3AF;
+  border: 2px solid #458aff
 }
 .round-icon.typewriter:hover {
-  background-color: #e0d3af;
+  background-color: #E0D3AF;
 }
 
 .round-icon.dark {
   background-color: #000;
-  border: 2px solid #458aff;
+  border: 2px solid #458aff
 }
 
 .round-icon.dark:hover {
@@ -41,25 +38,25 @@
 }
 
 .round-icon.bluegrey {
-  background-color: #dbe1f1;
-  border: 2px solid #458aff;
+  background-color: #DBE1F1;
+  border: 2px solid #458aff
 }
 
 .round-icon.bluegrey:hover {
-  background-color: #dbe1f1;
+  background-color: #DBE1F1;
 }
 
 .round-icon.darkblue {
   background-color: #043046;
-  border: 2px solid #458aff;
+  border: 2px solid #458aff
 }
 
 .round-icon.darkblue:hover {
   background-color: #043046;
 }
 
-.blue-border {
-  border: 1px solid #448aff;
+.blue-border{
+  border: 1px solid #448AFF
 }
 
 .no-scroll {
@@ -79,7 +76,7 @@
 .preference-button h5 {
   font-size: 1.5rem !important;
 }
-.inner-content {
+.inner-content{
   position: absolute;
   bottom: 65px;
   width: inherit;
@@ -107,7 +104,7 @@
 }
 
 .readArticle .author {
-  border-top: 1px solid rgba(160, 160, 160, 0.2);
+  border-top: 1px solid rgba(160,160,160,0.2);
   display: block;
   margin-top: 20px;
 }
@@ -117,11 +114,11 @@
 }
 
 .hover-show i {
-  display: none;
+  display: none
 }
 
 .hover-show:hover i {
-  display: inline;
+  display: inline
 }
 
 .article .input-field.inline {
@@ -135,7 +132,7 @@
   right: 6%;
 }
 .edit-button .btn {
-  margin: 5px 0;
+  margin: 5px 0
 }
 
 .cancel-button {
@@ -144,12 +141,14 @@
   right: 10%;
 }
 .cancel-button .btn {
-  margin: 5px 0;
+  margin: 5px 0
 }
 
-.article input {
-  color: #000 !important;
-  font-size: x-large !important;
+.article input
+{
+    color: #000 !important;
+    font-size:x-large !important;
+ 
 }
 
 .hidden {
