@@ -2,7 +2,6 @@ const port = 4000;
 const serverHostname = `${window.location.hostname}:${port}`;
 const serverFetchBase = `${window.location.protocol}//${serverHostname}`;
 let ws;
-let theSocket;
 
 export async function saveArticle(url, tags, title) {
   const body = {
@@ -34,7 +33,8 @@ export async function getAllArticles() {
     mode: "cors",
   };
 
-  return fetch(serverFetchBase + `/user/articles`, fetchOptions);
+  return fetch(serverFetchBase + `/user/articles`, fetchOptions)
+ 
 }
 
 export async function getArticleByUser() {
@@ -46,7 +46,7 @@ export async function getArticleByUser() {
     credentials: "include",
     mode: "cors",
   };
-  return fetch(serverFetchBase + `/user/articles`, fetchOptions);
+  return fetch(serverFetchBase + `/user/articles`, fetchOptions)
 }
 
 export async function loginUser(email, password) {
@@ -268,8 +268,8 @@ export function openWebSocket() {
 }
 
 export function getWebSocket() {
-  if( theSocket ) {
-    return theSocket;
+  if( ws ) {
+    return ws;
   }
   else {
     throw new Error("The websocket has not been opened yet.")

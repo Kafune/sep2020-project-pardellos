@@ -61,23 +61,18 @@ websocketServer.on("connection", (socket, req) => {
   console.log("Client has connected");
   socket.send("connected");
   socket.on("message", (message) => {
-    let req = JSON.parse(message);
-    switch (req.request) {
-      case "extensionClientAdd":
-        websocketServer.clients.forEach((client) => {
-          if (client.email === req.email && client.userType === req.userType && req.request === 'extensionClientAdd') {
-            console.log('user already exists, not added to websocketserver')
-          } else {
-            socket.email = message.email;
-            socket.userType = "extension";
-            console.log("user with " + req.email + " has been added");
-          }
-        });
-        break;
+    let data = JSON.parse(message);
+    switch (data.request) {
+      case "webappUserAdd":
+         console.log(data.email)
+            socket.email = data.email;
+            console.log("user with " + data.email + " has been added");
+      break;
       case "refresh article data":
         console.log('er is een refresh bericht binnengekomen')
         websocketServer.clients.forEach((client) => {
-          if (client.email === req.email && client.userType === "webappuser") {
+          if (client.email === data.email) {
+            console.log("Er is een client gevonden! er wordt een refresh bericht verstuurd.")
             client.send("refresh article data");
           }
         });

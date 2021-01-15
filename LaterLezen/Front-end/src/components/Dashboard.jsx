@@ -37,7 +37,6 @@ export default function Dashboard(props) {
         setArticles(result.articles);
       });
   }
-  
 
   return (
     <div className="readArticle">

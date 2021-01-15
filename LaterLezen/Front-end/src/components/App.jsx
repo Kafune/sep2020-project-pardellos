@@ -13,7 +13,12 @@ import M from "materialize-css";
 import background from "../img/pfp_background.jpg";
 import pfp from "../img/default_pfp.png";
 
-import { checkAuthenticated } from "../serverCommunication";
+import {
+  checkAuthenticated,
+  getArticleByUser,
+  getWebSocket,
+  openWebSocket,
+} from "../serverCommunication";
 
 export default class App extends React.Component {
   constructor(props) {
@@ -35,16 +40,43 @@ export default class App extends React.Component {
       .then((response) => response.json())
       .then((response) => {
         if (response.isAuthenticated === true) {
-          this.handleLoginState(true);
           this.handleEmailState(response.user.email);
           this.handleFirstnameState(response.user.firstname);
           this.handleLastnameState(response.user.lastname);
           this.handleTagsState(response.user.tags);
+          this.onOpenSocket(response.user.email);
+          this.handleLoginState(true);
         }
       })
       .catch((e) => {
         M.toast({ html: "Unauthorized user, please login first" });
       });
+  }
+
+  onOpenSocket(email) {
+    let ws = openWebSocket();
+    ws.onerror = function error() {
+      console.log("websocket error");
+    };
+    ws.onopen = function open() {
+      console.log("Websocket connection has been established");
+      console.log(email);
+      let data = {
+        email: email,
+        request: "webappUserAdd",
+      };
+      ws.send(JSON.stringify(data));
+    };
+    ws.onclose = function close() {};
+    ws.onmessage = (msg) =>  {
+      switch (msg.data) {
+        case "connected":
+          console.log(msg.data);
+          break;
+        case "refresh article data":
+          window.location.reload();
+      }
+    };
   }
 
   handleLoginState(value) {

@@ -71,9 +71,11 @@ export default function Article(props) {
             })
             .then(() => M.toast({ html: "Article succesfully saved" }))
             .then(() => {
+            console.log('hij moet nu een bericht gaan sturen als het goed is')
             let ws = getWebSocket();
             let message = {
-              request: 'refresh article data'
+              request: 'refresh article data',
+              email: email
             }
               ws.send(JSON.stringify(message))
             })

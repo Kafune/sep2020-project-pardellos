@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useHistory, Link } from 'react-router-dom'
-import { loginUser } from '../serverCommunication'
+import { loginUser, getAllArticles, } from '../serverCommunication'
 
 import M from "materialize-css";
 
