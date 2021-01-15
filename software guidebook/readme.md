@@ -137,7 +137,7 @@ Door het lezen van dit hoofdstuk krijg je een beter beeld van hoe de structuur v
     - date_published. De datum wanneer het artikel is gepubliceerd
     - word_count. Het aantal woorden in de artikel. Telt de hele content mee.
     - tags. De gebruiker kan tags toewijzen aan een artikel om het artikel makkelijker terug te vinden. Ondersteunt hierarchisch structuur met parent tags en children tags.
-    - read. Status of de gebruiker een artikel heeft gelezen
+     - tagids. Met tag ids zijn parent en sub tags uit elkaar te houden, dus als er 2 sub tags in verschillende parent tags zijn  die dezelfde naam hebben, dan zorgt de id ervoor dat beide subtags alsnog uniek zijn.
     - createdAt. De tijdstip waneer de auteur een artikel heeft opgeslagen
     ```
 
@@ -228,7 +228,37 @@ Bij het component: "Register" zijn er een aantal velden die gecontroleerd worden
 
 #### Nested Tags
 
-In de webapplicatie worden nested tags op meerdere plekken gebruikt. Nested Tags worden namelijk getoond bij aangemaakte artikelen en bij het zoeken op tags. Maar ook bij het aanmaken van tags wordt er gebruik gemaakt van functionaliteit van nested tags.
+In de webapplicatie worden nested tags op meerdere plekken gebruikt. Nested tags worden namelijk getoond bij de opgeslagen artikelen, maar ook bij de gebruiker zelf. Tijdens het opslaan van een artikel is er de mogelijkheid om tags toe te voegen met oneindige sub-tags. Deze ingevulgde tags worden in een array van Strings met meerdere `[String]` meegegeven. 
+
+Dit is een voorbeeld van hoe deze Nested Tags meegestuurd worden naar de serverCommunication, en daarna naar de betreffende Back-End route:
+
+```js
+import { saveArticle } from "../serverCommunication"; //importeer de API functie
+
+let tags = [										  //de [String] met [String] van tags
+    ['TagA', 'SubTagA', 'SubSubTagA'], 
+    ['TagB', 'SubTagB', 'SubSubTagB'], 
+    ['TagC', 'SubTagC', 'SubSubTagC']
+]
+
+function handleSaveArticle(tags) {		  			  //handler die saveArticle zal runnen
+	saveArticle(tags)
+}
+```
+
+Vanuit het `user.js` bestand wordt dit allemaal geregeld in de `handleUserNestedTags` functie . Deze functie bevat een recursieve functie die de sub-tags aan de hoofd-tag plakt en daarna deze functie opnieuw uitvoert totdat er geen sub-tags meer zijn om toe te voegen. In het geval dat er wel nog toe te voegen sub-tags zijn, zullen deze als parameter weer meegegeven worden aan de functie. Vandaar dat deze functie `recursive` is oftewel, een zelf herhalende functie. Alle toegevoegde tags noemen wij een `node`, deze nodes bevatten de `tagName`, `parent`, `index`, `_id` en`subTags`. 
+
+Hier een kleine beschrijving van de node elementen:
+
+- tagName: Dit is de naam van de tag.
+- parent: Dit is de naam van de parent tag, hierdoor weet de `node` waarin de `tree` hij zich bevindt. Wanneer een tag een hoofd-tag is bevat het de parent: '/'.
+- index: Dit is een int waarde die de index van de `node` bepaald.
+- _id: Dit is een unieke en automatische gegenereerde `String` , deze komt in de front-end van pas om de juiste tag te pakken.
+- subTags: Dit is een array van Strings met alle sub-tags die ook dezelfde elementen bevatten als de hoofd-tag.
+
+Naast dat de Nested Tags in de `saveArticle.js` component voorkomen, komen ze ook terug in de `searchArticle.js` component. Hier kan de gebruiker zoeken op gebruikte tags van de gebruiker. Deze tags worden eerst opgehaald doormiddel van een `useEffect`, daarin zullen de opgehaalde tags gezet worden in een `useState` om uiteindelijk in gemapped te worden met checkboxes. 
+
+Omdat wij niet meteen alle tags willen zien, maar het daadwerkelijk via lagen willen aantonen, hebben wij een `printTree` functie geschreven. Deze functie neemt als parameter de hele boom op en de huidige `treeNode` (de tag waarop geklikt wordt), en returned de `subTags` van de betreffende `treeNode`. 
 
 ### Extensie
 
@@ -308,7 +338,7 @@ Voer na de installatie het volgende uit:
 npm start
 ```
 
-De webapplicatie draait, maar geeft een foutmelding terug dat 'M' niet gedefineerd is. Open index.js, en sla dit bestand op zonder wijzigingen aan te brengen. De webapplicatie laat nu de homepagina zien. De webapplicatie kan data opvragen van de server zolang de server draait. Na elke wijziging ververst de webapplicatie zichzelf, waardoor alle wijzigingen meteen zichtbaar zijn. 
+De webapplicatie draait nu en de gebruiker kan op de website door naar http://localhost:3000/ te gaan. De webapplicatie kan data opvragen van de server zolang de server draait. Na elke wijziging ververst de webapplicatie zichzelf, waardoor alle wijzigingen meteen zichtbaar zijn.
 
 ### Back-end server
 
@@ -331,7 +361,7 @@ Voer na de installatie het volgende uit:
 npm run dev
 ```
 
-De server staat nu aan. De server accepteert requests van de webapplicatie zolang de server de request ondersteund, en de verbinding naar de mongo database correct is meegegeven. Stel de database connectie in de MONGO_URI in binnen het config.env bestand, te vinden in:
+De server staat nu aan. De server draait op poort 4000. De server accepteert requests van de webapplicatie zolang de server de request ondersteund, en de verbinding naar de mongo database correct is meegegeven. Stel de database connectie in de MONGO_URI in binnen het config.env bestand, te vinden in:
 ```
 Back-end \ config \ config.env
 ```
@@ -371,4 +401,11 @@ Klik op uitgepakte extensie laden
 Navigeer naar de map waarin de extensie is geinstalleerd, Selecteer de build map en klik op open
 ![chrome-extension-install-4.png](chrome-extension-install-4.png)
 
-De extensie is nu toegevoegd aan de browser. De extensie kan nu artikelen van externe websites toevoegen.
+De extensie is nu toegevoegd aan de browser. De extensie kan nu artikelen van externe websites toevoegen. Om een artikel toe te voegen via de extensie, moet de gebruiker een bestaande Laterlezer account hebben. Dit is aan te maken via de website van Laterlezer.
+
+Het is ook mogelijk om de extensie apart op te starten met:
+```node
+npm start
+```
+
+Dit kan handig zijn als een ontwikkelaar wijzigingen wilt aanbrengen aan de extensie zonder elke keer de extensie opnieuw op te bouwen. Het is uiteraard niet mogelijk om extensie specifieke code te testen op deze manier, zoals het ophalen van de huidige URL in een bepaalde tabblad.
