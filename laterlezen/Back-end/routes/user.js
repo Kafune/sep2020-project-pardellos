@@ -139,6 +139,19 @@ router.get(
   }
 );
 
+router.get("/article/:id", (req, res) => {
+  const id = req.params.id;
+  Article.findOne({ _id: id }, (err, article) => {
+    if (!article)
+      res.status(400).json({
+        error: true,
+      });
+    else {
+      res.send(article);
+    }
+  });
+});
+
 router.post(
   "/article",
   passport.authenticate("jwt", {

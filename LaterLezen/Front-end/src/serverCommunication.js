@@ -140,7 +140,7 @@ export async function searchArticleByID(id) {
     mode: "cors",
   };
   return fetch(
-    serverFetchBase + `/articles/article/${id}`,
+    serverFetchBase + `/user/article/${id}`,
     fetchOptions
   ).then((response) => response.json());
 }
