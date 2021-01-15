@@ -364,6 +364,141 @@ router.get(
   }
 );
 
+router.put(
+  "/search",
+  passport.authenticate("jwt", {
+    session: false,
+  }),
+  async (req, res) => {
+    let query = req.body.query;
+    let searchContent = req.body.searchContent;
+
+    let searchFields = {};
+
+    if (query) {
+      searchFields = {
+        $or: [
+          { title: { $regex: new RegExp(query, "i") } },
+          { excerpt: { $regex: new RegExp(query, "i") } },
+          { author: { $regex: new RegExp(query, "i") } },
+          { domain: { $regex: new RegExp(query, "i") } },
+        ],
+      };
+
+      if (searchContent) {
+        searchFields.$or.push({ content: { $regex: new RegExp(query, "i") } });
+      }
+    }
+
+    User.findById({
+      _id: req.user._id,
+    })
+      .populate({
+        path: "articles",
+        match: searchFields,
+      })
+      .exec((err, document) => {
+        if (err)
+          res.status(500).json({
+            message: {
+              msgBody: "Error has occured",
+              msgError: true,
+            },
+          });
+        else {
+          res.send(document.articles);
+        }
+      });
+  }
+);
+
+router.put(
+  "/tags",
+  passport.authenticate("jwt", {
+    session: false,
+  }),
+  (req, res) => {
+    let tags = req.body.tagids;
+    console.log(tags);
+
+    User.findById({
+      _id: req.user._id,
+    })
+      .populate({
+        path: "articles",
+        match: {
+          tagids: {
+            $all: tags,
+          },
+        },
+      })
+      .exec((err, document) => {
+        if (err) {
+          res.status(500).json({
+            message: {
+              msgBody: "Error has occured",
+              msgError: true,
+            },
+          });
+        } else {
+          res.status(200).json({
+            articles: document.articles,
+            authenticated: true,
+          });
+        }
+      });
+  }
+);
+
+router.get(
+  "/sources/",
+  passport.authenticate("jwt", {
+    session: false,
+  }),
+  async (req, res) => {
+    User.findById({
+      _id: req.user._id,
+    })
+      .populate("articles", "domain")
+      .exec((err, document) => {
+        if (err)
+          res.status(500).json({
+            message: {
+              msgBody: "Error has occured",
+              msgError: true,
+            },
+          });
+        else {
+          res.send(document.articles);
+        }
+      });
+  }
+);
+
+router.get(
+  "/authors/",
+  passport.authenticate("jwt", {
+    session: false,
+  }), async (req, res) => {
+
+    User.findById({
+      _id: req.user._id
+    })
+      .populate('articles', 'author')
+      .exec((err, document) => {
+        if (err)
+          res.status(500).json({
+            message: {
+              msgBody: "Error has occured",
+              msgError: true,
+            },
+          });
+        else {
+          res.send(document.articles)
+        }
+      });
+  });
+
 function handleUserNestedTags(data, userTags) {
   let usedids = [];
 

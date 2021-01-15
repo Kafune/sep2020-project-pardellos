@@ -230,7 +230,7 @@ export async function getAuthors() {
     credentials: "include",
     mode: "cors",
   };
-  return fetch(serverFetchBase + `/articles/authors`, fetchOptions);
+  return fetch(serverFetchBase + `/user/authors`, fetchOptions);
 }
 
 export async function findArticle(query, searchContent) {
@@ -248,7 +248,7 @@ export async function findArticle(query, searchContent) {
     mode: 'cors',
     body: JSON.stringify(body)
   }
-  return fetch(serverFetchBase + `/articles/search`, fetchOptions)
+  return fetch(serverFetchBase + `/user/search`, fetchOptions)
   .then((response) => response.json())
 }
 
@@ -261,5 +261,5 @@ export async function getSources() {
     credentials: "include",
     mode: "cors",
   };
-  return fetch(serverFetchBase + `/articles/sources`, fetchOptions);
+  return fetch(serverFetchBase + `/user/sources`, fetchOptions);
 }
