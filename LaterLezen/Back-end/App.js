@@ -34,7 +34,6 @@ app.use(bodyParser.json());
 // Routes
 app.use("/testing", require("./routes/testing"));
 app.use("/user", require("./routes/user"));
-app.use("/articles", require("./routes/articles"));
 
 // Websocket initialization
 
