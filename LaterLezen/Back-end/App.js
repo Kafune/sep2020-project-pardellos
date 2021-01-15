@@ -1,3 +1,4 @@
+// Import node_moduels
 const path = require("path");
 const express = require("express");
 const app = express();
@@ -33,6 +34,7 @@ app.use(bodyParser.json());
 // Routes
 app.use("/testing", require("./routes/testing"));
 app.use("/user", require("./routes/user"));
+app.use("/articles", require("./routes/articles"));
 
 // Websocket initialization
 
