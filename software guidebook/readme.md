@@ -4,23 +4,50 @@
 Aangezien het lezen van de code van de LaterLezer niet het hele verhaal verteld en de redenatie achter het design van LaterLezen niet in code te beschrijven is, is ervoor gekozen om een software guidebook te schrijven. Dit maakt het gemakkelijk voor de programmeurs die verder willen bouwen op de bestaande applicatie. In dit software guidebook staat dan ook beschreven hoe de LaterLezer applicatie in elkaar steekt. 
 
 ## Table of Contents
-- [Software Guidebook](#software-guidebook)
   * [Context](#context)
   * [Functioneel Overzicht](#functioneel-overzicht)
   * [Kwaliteitsattributen](#kwaliteitsattributen)
   * [Beperkingen](#beperkingen)
   * [Principes](#principes)
   * [Software-architectuur](#software-architectuur)
-    + [API component view](#API-component-view)
+    + [API component view](#api-component-view)
+    + [Extension view](#extension-view)
+    + [Database view](#database-view)
+    + [Web app component](#web-app-component)
+    + [Web app user flow](#web-app-user-flow)
+      - [Homepagina](#homepagina)
+      - [Registratie](#registratie)
+      - [Artikel opslaan](#artikel-opslaan)
+      - [Dashboard](#dashboard)
+      - [Artikel lezen en thema veranderen](#artikel-lezen-en-thema-veranderen)
       - [Artikel meta data bewerken](#artikel-meta-data-bewerken)
+      - [Overzicht artikel zoeken](#overzicht-artikel-zoeken)
+      - [Zoeken op tags](#zoeken-op-tags)
       - [Zoeken op verschillende meta data](#zoeken-op-verschillende-meta-data)
+    + [LaterLezer app Deployment](#laterLezer-app-deployment)
   * [Code](#code)
+    + [Webapplicatie](#webapplicatie)
+      - [Navigatie binnen de applicatie](#navigatie-binnen-de-applicatie)
+      - [Opslaan van data](#opslaan-van-data)
+      - [Renderen van HTML](#renderen-van-html)
+      - [Registratie](#registratie)
+      - [Nested Tags](#nested-tags)
+    + [Extensie](#extensie)
+      - [Werking extensie](#werking-extensie)
+      - [Server communicatie](#server-communicatie)
+      - [Persistent login](#persistent-login)
   * [Infrastructuur-architectuur](#infrastructuur-architectuur)
   * [Deployment](#deployment)
+      - [Back-end dependencies](#back-end-dependencies)
+      - [Front-end dependencies](#front-end-dependencies)
+      - [Extensie dependencies](#extensie-dependencies)
   * [Werking en ondersteuning](#werking-en-ondersteuning)
     + [Front-end webapplicatie](#front-end-webapplicatie)
     + [Back-end server](#back-end-server)
-    + [Extensie](#extensie)
+    + [Extensie](#extensie-1)
+
+<small><i><a href='http://ecotrust-canada.github.io/markdown-toc/'>Table of contents generated with markdown-toc</a></i></small>
+
 
 
 ## Context
@@ -195,7 +222,7 @@ Door het lezen van dit hoofdstuk krijg je een beter beeld van hoe de structuur v
    #### **Zoeken op verschillende meta data**
    Als de gebruiker ervoor kiest om een artikel te zoeken op basis van: auteursnaam,titel,descriptie of bron, dan haalt het search article component alle artikelen op die voldoen aan de ingegeven zoekterm. Er is ook een optie om te zoeken op basis van content door te klikken op de checkbox: "Enable search by content". Als dit aangevinkt wordt is het mogelijk om te zoeken op teksten uit het artikel. De API ondersteunt ook de mogelijkheid om op een gedeelte van de auteursnaam,titel,descriptie, bron te zoeken. Na het invullen van de gewenste zoekterm, zoekt de API op artikelen die voldoen aan de gegeven zoekterm. De search article component roept de functie in Servercommunication aan, die vervolgens een fetch request naar de API doet om de juiste artikelen op te halen. Na het verzoek van de search article component, krijgt dit component de relevante artikelen terug van de API. De resultaten worden overzichtelijk getoond in een lijstweergave met kaarten.
 
-    ### LaterLezer app - Deployment
+    ### LaterLezer app Deployment
     ![c4-modellen-Deployment.png](c4-modellen-Deployment.png)
 
     De webapplicatie en de API worden op dit moment op de servers gedraaid van de huidige ontwikkelaars van Laterlezer. Door de webapplicatie aan te zetten krijgt de gebruiker toegang op de website van Laterlezer. De webapplicatie hoeft niet aan te staan om gebruik te maken van de Laterlezer extensie. De gebruiker kan via de website requests naar de API te sturen via de website, bijvoorbeeld door in te loggen, een nieuw account te registreren, artikelen op te halen, artikelen op te zoeken etc. De extensie kan alleen een API call doen om in te loggen, of om een artikel op te slaan. Afhankelijk van de type request stuurt de API een mongoose query naar de database toe. De database zit niet in de lokale omgeving van de ontwikkelaars. Het is een cloud database van mongoDB die in Noord Virginia in de Verenigde Staten plaatsvindt. De database voert de query uit, en stuurt de resultaat daarvan weer terug naar de API. De API stuurt vervolgens de resultaat of een bericht naar de App of naar de extensie toe. Wat de App en de extensie met dat bericht doet, is terug te vinden in de hoofdstukken [Web app component](#Web-app-component) en [Extension view](#Extension-view)
