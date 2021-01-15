@@ -1,5 +1,4 @@
 const mongoose = require("mongoose");
-
 const passport = require("passport");
 const User = require("../models/User");
 const Article = require("../models/Article");
@@ -44,23 +43,18 @@ describe("user related unit tests", () => {
     await mongoose.disconnect();
   });
 
-  //check if email follows format
   test("email format", async () => {
     let testUser = await User.findOne({
       email: testEmail,
     }).lean();
-
     let emailFormat = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
-
     expect(testUser.email).toMatch(emailFormat);
   });
 
-  //check if pass is not saved as plain text
   test("password hashing", async () => {
     let testUser = await User.findOne({
       email: testEmail,
     }).lean();
-
     expect(testUser.password).not.toBe("test");
   });
 
@@ -68,11 +62,9 @@ describe("user related unit tests", () => {
     let testUser = await User.findOne({
       email: testEmail,
     });
-
     let newArticle = new Article(testArticle);
     testUser.articles.push(newArticle);
     testUser.save();
-
     expect(testUser.articles[0].title).toBe("Dit is een titel");
   });
 
@@ -122,11 +114,8 @@ describe("user related unit tests", () => {
       "bt",
     ];
     let concatTags = inputTags.concat(inputTags);
-
     const allUniqueTags = new Set(concatTags);
-
     concatTags = [...allUniqueTags];
-
     expect(concatTags).toEqual(["bt", "cd", "ab", "ba", "ac"]);
   });
 
@@ -144,7 +133,6 @@ describe("user related unit tests", () => {
     ) {
       testUser.preferences = preference;
     }
-
     expect(testUser.preferences).toEqual(preference);
   });
 
@@ -153,7 +141,6 @@ describe("user related unit tests", () => {
       email: testEmail,
     }).lean();
     let preference = "orange";
-
     if (
       preference === "default" ||
       preference === "typewriter" ||
@@ -163,7 +150,6 @@ describe("user related unit tests", () => {
     ) {
       testUser.preferences = preference;
     }
-
     expect(testUser.preferences).toEqual("default");
   });
 });

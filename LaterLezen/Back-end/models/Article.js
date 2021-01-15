@@ -30,15 +30,6 @@ const ArticleSchema = new mongoose.Schema({
   },
   tags: [],
   tagids: [],
-  status: {
-    type: String,
-    default: "public",
-    enum: ["public", "private"],
-  },
-  read: {
-    type: Boolean,
-    default: false,
-  },
   createdAt: {
     type: Date,
     default: Date.now,
