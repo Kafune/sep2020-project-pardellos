@@ -187,6 +187,7 @@ export default function Article(props) {
             Save
           </button>
           <button
+            id="ext-logout"
             className="waves-effect waves-light btn"
             onClick={() => {
               handleLogout();
