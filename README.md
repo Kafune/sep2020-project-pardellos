@@ -10,7 +10,7 @@
 
 ## Installatie van project
 
-[Deployment](https://github.com/HANICA-DWA/sep2020-project-pardellos/blob/Development/software%20guidebook/readme.md)
+[Deployment](https://github.com/HANICA-DWA/sep2020-project-pardellos/blob/Development/software%20guidebook/readme.md#deployment)
 
 ## Leden
 
