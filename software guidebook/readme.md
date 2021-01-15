@@ -137,7 +137,7 @@ Door het lezen van dit hoofdstuk krijg je een beter beeld van hoe de structuur v
     - date_published. De datum wanneer het artikel is gepubliceerd
     - word_count. Het aantal woorden in de artikel. Telt de hele content mee.
     - tags. De gebruiker kan tags toewijzen aan een artikel om het artikel makkelijker terug te vinden. Ondersteunt hierarchisch structuur met parent tags en children tags.
-    - read. Status of de gebruiker een artikel heeft gelezen
+    - tagids. Met tag ids zijn parent en sub tags uit elkaar te houden, dus als er 2 sub tags in verschillende parent tags zijn  die dezelfde naam hebben, dan zorgt de id ervoor dat beide subtags alsnog uniek zijn.
     - createdAt. De tijdstip waneer de auteur een artikel heeft opgeslagen
     ```
 
@@ -308,7 +308,7 @@ Voer na de installatie het volgende uit:
 npm start
 ```
 
-De webapplicatie draait, maar geeft een foutmelding terug dat 'M' niet gedefineerd is. Open index.js, en sla dit bestand op zonder wijzigingen aan te brengen. De webapplicatie laat nu de homepagina zien. De webapplicatie kan data opvragen van de server zolang de server draait. Na elke wijziging ververst de webapplicatie zichzelf, waardoor alle wijzigingen meteen zichtbaar zijn. 
+De webapplicatie draait nu en de gebruiker kan op de website door naar http://localhost:3000/ te gaan. De webapplicatie kan data opvragen van de server zolang de server draait. Na elke wijziging ververst de webapplicatie zichzelf, waardoor alle wijzigingen meteen zichtbaar zijn. 
 
 ### Back-end server
 
@@ -331,7 +331,7 @@ Voer na de installatie het volgende uit:
 npm run dev
 ```
 
-De server staat nu aan. De server accepteert requests van de webapplicatie zolang de server de request ondersteund, en de verbinding naar de mongo database correct is meegegeven. Stel de database connectie in de MONGO_URI in binnen het config.env bestand, te vinden in:
+De server staat nu aan. De server draait op poort 4000. De server accepteert requests van de webapplicatie zolang de server de request ondersteund, en de verbinding naar de mongo database correct is meegegeven. Stel de database connectie in de MONGO_URI in binnen het config.env bestand, te vinden in:
 ```
 Back-end \ config \ config.env
 ```
@@ -371,4 +371,11 @@ Klik op uitgepakte extensie laden
 Navigeer naar de map waarin de extensie is geinstalleerd, Selecteer de build map en klik op open
 ![chrome-extension-install-4.png](chrome-extension-install-4.png)
 
-De extensie is nu toegevoegd aan de browser. De extensie kan nu artikelen van externe websites toevoegen.
+De extensie is nu toegevoegd aan de browser. De extensie kan nu artikelen van externe websites toevoegen. Om een artikel toe te voegen via de extensie, moet de gebruiker een bestaande Laterlezer account hebben. Dit is aan te maken via de website van Laterlezer.
+
+Het is ook mogelijk om de extensie apart op te starten met:
+```node
+npm start
+```
+
+Dit kan handig zijn als een ontwikkelaar wijzigingen wilt aanbrengen aan de extensie zonder elke keer de extensie opnieuw op te bouwen. Het is uiteraard niet mogelijk om extensie specifieke code te testen op deze manier, zoals het ophalen van de huidige URL in een bepaalde tabblad.
