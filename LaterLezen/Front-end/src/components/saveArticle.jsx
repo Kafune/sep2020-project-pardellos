@@ -170,7 +170,7 @@ export default function SaveArticle(props) {
       {usedTags.map((element, i) => {
         let tagName = element.tagName;
         for (let index = 0; index < element.index; index++) {
-          tagName = "‎‎‎‏‏‎    " + tagName;
+          tagName = "‎‎‎‏‏‎-" + tagName;
         }
         return (
           <h4 key={i}>
