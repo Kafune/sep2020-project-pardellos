@@ -9,7 +9,6 @@ export default function SaveArticle(props) {
   const [tags, setTags] = useState([]);
   const [currentTags, setCurrentTags] = useState([]);
   const [usedTags, setUsedTags] = useState([]);
-  const [tagState, setTagState] = useState();
 
   let tempArray = [];
 
@@ -115,28 +114,6 @@ export default function SaveArticle(props) {
     }
   }
 
-  const handleRemovePastTag = (index) => {
-    const List = [...usedTags];
-    List.splice(index, 1);
-    setUsedTags(List);
-  };
-
-  function handleAddPastTag(element, i) {
-    var tagArray = [];
-    var allTags = [];
-    allTags.forEach((data) => {
-      if (data.parent === element.tagName) {
-        if (data.parent !== "/") {
-          handleAddPastTag(data.parent, i);
-        }
-      }
-    });
-    tagArray.push(element.tagName);
-
-    setTags([...tags, tagArray]);
-    handleRemovePastTag(i);
-  }
-
   return (
     <div className="readArticle">
       <h2 class="center">Save Web Article</h2>
@@ -156,6 +133,7 @@ export default function SaveArticle(props) {
       />
       <div
         class="chips chips-placeholder chips-autocomplete tooltipped"
+        id="chipsDiv"
         data-position="bottom"
         data-tooltip="[Tag requirements] Allow chars: A-Z / 0-9 / _  / - / Max length: 15 chars"
       ></div>
@@ -197,14 +175,6 @@ export default function SaveArticle(props) {
         return (
           <h4 key={i}>
             {tagName + " "}
-            <button
-              className="btn-floating btn-small waves-effect waves-light green"
-              onClick={() => {
-                handleAddPastTag(element, i);
-              }}
-            >
-              <i class="material-icons">add</i>
-            </button>
           </h4>
         );
       })}

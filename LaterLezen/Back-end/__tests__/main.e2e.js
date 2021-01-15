@@ -76,7 +76,7 @@ describe("Laterlezer e2e tests", () => {
 
   test("User clicks the hamburger menu and selects the option to save an article", async () => {
     let url =
-      "https://www.nu.nl/politiek/6095197/horeca-krijgt-wellicht-extra-steun-maar-is-geen-bouwsteen-van-economie.html";
+      "https://www.nu.nl/politiek/6102049/wilders-gaf-donatie-van-175000-euro-voor-rechtszaak-niet-door-aan-kamer.html";
     let title = "horeca krijgt wellicht extra steun";
     let title2 =
       "Kamer laakt vaccinatiechaos, oppositie wil meer betrokkenheid van Rutte";
@@ -93,7 +93,8 @@ describe("Laterlezer e2e tests", () => {
     await thePage.waitForTimeout(1500);
     await thePage.type('input[id="url"]', url);
     await thePage.type('input[id="title"]', title);
-    await thePage.waitForTimeout(1000);
+    await thePage.waitForTimeout(2500);
+
     await thePage.click('#chipsDiv [class="input"]');
     await thePage.type('#chipsDiv [class="input"]', "Horeca");
     await thePage.keyboard.press("Enter");
@@ -308,7 +309,7 @@ describe("Laterlezer e2e tests", () => {
     await thePage.click('button[id="searchButton"]');
     await thePage.waitForTimeout(3500);
     await thePage.waitForTimeout(1000);
-    for (let i = 0; i < 60; i++) {
+    for (let i = 0; i < 60; i++) { 
       await thePage.keyboard.press("ArrowDown");
     }
     await thePage.waitForTimeout(2500);

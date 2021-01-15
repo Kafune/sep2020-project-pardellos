@@ -2,8 +2,8 @@ const mongoose = require("mongoose");
 const User = require("../models/User");
 const puppeteer = require("puppeteer");
 
-xdescribe("Laterlezer extension e2e tests", () => {
-  let theBrowser, thePage;
+describe("Laterlezer extension e2e tests", () => {
+  let extensionBrowser,webBrowser, extensionPage, webPage;
 
   jest.setTimeout(100000);
   const testEmail = "extensietest@test.com";
@@ -27,64 +27,89 @@ xdescribe("Laterlezer extension e2e tests", () => {
       lastname: testLastName,
       password: testPassword,
     });
-    theBrowser = await puppeteer.launch({
+    extensionBrowser = await puppeteer.launch({
       headless: false,
       slowMo: 5,
       defaultViewport: null,
-      devtools: true,
-      args: [`--window-size=1920,1080`],
+      devtools: false,
+      args: ["--window-size=700,800", "--window-position=0,0"]  
     });
-    thePage = await theBrowser.newPage();
-    await thePage.goto("http://localhost:3001/");
+    extensionPage = await extensionBrowser.newPage();
+    await extensionPage.goto("http://localhost:3001/");
+
+    webBrowser = await puppeteer.launch({
+      headless: false,
+      slowMo: 5,
+      defaultViewport: null,
+      devtools: false,
+      args: ["--window-size=700,800", "--window-position=730,0"]   
+    });
+    webPage = await webBrowser.newPage();
+    await webPage.goto("http://localhost:3000/login");
   });
 
   afterAll(async () => {
     await User.deleteOne({ email: testEmail });
     await mongoose.disconnect();
 
-    await theBrowser.close();
+    await extensionBrowser.close();
+    await webBrowser.close();
   });
 
-  test("User logs in with empty password", async () => {
-    await thePage.type('input[class="email"]', testEmail);
+  test("User logs in webapplication", async () => {
 
-    await thePage.click('button[id="ext-login-button"]');
-    await thePage.waitForTimeout(3000);
+    await webPage.waitForTimeout(1500);
+    await webPage.type("input[id=email]", testEmail);
+    await webPage.type("input[id=password]", testPassword);
+    await webPage.click('a[id="login"]');
+  });  
+
+  test("User logs in with empty password", async () => {
+    await extensionPage.type('input[class="email"]', testEmail);
+
+    await extensionPage.click('button[id="ext-login-button"]');
+    await extensionPage.waitForTimeout(3000);
   });
 
   test("User logs in with the correct credentials", async () => {
-    await thePage.type('input[class="password"]', testPassword);
-    await thePage.click('button[id="ext-login-button"]');
-    await thePage.waitForTimeout(3000);
+    await extensionPage.type('input[class="password"]', testPassword);
+    await extensionPage.click('button[id="ext-login-button"]');
+    await extensionPage.waitForTimeout(3000);
   });
   test("User tries to add an article with the wrong URL format", async () => {
     const wrongURL = "dit is geen geldige url!";
 
-    await thePage.type('input[id="ext-url"]', wrongURL);
-    await thePage.click('button[id="ext-save-article"]');
-    await thePage.waitForTimeout(3000);
+    await extensionPage.type('input[id="ext-url"]', wrongURL);
+    await extensionPage.click('button[id="ext-save-article"]');
+    await extensionPage.waitForTimeout(3000);
   });
 
   test("User tries to add an article with the correct URL format", async () => {
-    await thePage.$eval(
+    await extensionPage.$eval(
       "input[id=ext-url]",
       (input, value) => (input.value = value),
       ""
     );
-    await thePage.type(
+    await extensionPage.type(
       'input[id="ext-url"]',
       "https://www.nu.nl/verkiezingen-vs/6092489/trump-accepteert-verkiezingsuitslag-en-is-woedend-op-capitool-bestormers.html"
     );
-    await thePage.type(
+    await extensionPage.type(
       'input[id="ext-title"]',
       "Trump is woedend op Capitool-bestormers"
     );
-    await thePage.click('button[id="ext-save-article"]');
-    await thePage.waitForTimeout(3000);
+    await extensionPage.click('button[id="ext-save-article"]');
+    await extensionPage.waitForTimeout(3500);
+  });
+
+  test("User scrolls down in Dasboard", async () => {
+    for(let i = 0; i < 20; i++){
+        await webPage.keyboard.press('ArrowDown');
+      }
   });
 
   test("User logs out", async () => {
-    await thePage.click('button[id="ext-logout"]');
-    await thePage.waitForTimeout(3000);
+    await extensionPage.click('button[id="ext-logout"]');
+    await extensionPage.waitForTimeout(3000);
   });
 });
