@@ -156,6 +156,7 @@ export default function SaveArticle(props) {
       />
       <div
         class="chips chips-placeholder chips-autocomplete tooltipped"
+        id="chipsDiv"
         data-position="bottom"
         data-tooltip="[Tag requirements] Allow chars: A-Z / 0-9 / _  / - / Max length: 15 chars"
       ></div>
