@@ -1,144 +1,134 @@
 import React, { useState, useEffect } from "react";
-import {
-  searchArticleByTags,
-  findArticle,
-  checkAuthenticated,
-} from "../serverCommunication";
+import { searchArticleByTags } from "../serverCommunication";
 import { Link } from "react-router-dom";
 import M from "materialize-css";
 
 export default function SearchArticle(props) {
   const [tags, setTags] = useState([]);
   const [isChecked, setIsChecked] = useState(false);
-  const [selectedTags, setSelectedTags] = useState([]);
-  const [tagIds, setTagIds] = useState([]);
+  const [selectedTags, setSelectedTags] = useState([])
   const [articles, setArticles] = useState(props.articles);
   const [tagCounter, setTagCounter] = useState(0);
-  const [showSearch, setShowSearch] = useState(0);
-  const [tagState, setTagState] = useState();
-  const [query, setQuery] = useState("");
-  const [searchContent, setSearchContent] = useState(false);
+  const [author, setAuthor] = useState('')
+  const [showSearch, setShowSearch] = useState(0)
+  const [tagState, setTagState] = useState(tags)
 
   useEffect(() => {
-    checkAuthenticated()
-      .then((response) => {
-        if (response.isAuthenticated === true) {
-          setTags(response.user.tags)
-          setTagState(response.user.tags);
-        }
-      })
-      .catch((e) => {
-        M.toast({ html: "Unauthorized user, please login first" });
-      });
-  }, []);
-
+    setTags(props.tags)
+    setTagState(props.tags)
+    console.log(props.tags)
+  }, [props.tags])
 
   function printTree(treeNode, indent = "") {
-    let tempArray = [];
-    treeNode.subTags.forEach((element) => {
-      tempArray.push(element);
+    let tempArray = []
+    treeNode.subTags.forEach(element => {
+      tempArray.push(element)
     });
 
-    setTagState(tempArray);
+    setTagState(tempArray)
   }
 
   function handleSelectTag(index, event) {
-    printTree(tagState[index]);
-    handleCheckBox(event);
-    setIsChecked(false);
+    printTree(tagState[index])
+    handleCheckBox(event)
+    setIsChecked(false)
   }
 
   function handleSearchArticleByTag() {
-    searchArticleByTags(tagIds)
+    searchArticleByTags(selectedTags)
       .then((response) => {
+        console.log(response)
         setArticles(response.articles);
       });
   }
 
   function handleClearTags() {
-    setIsChecked("");
-    setSelectedTags([]);
-    setArticles([]);
-    setTagIds([]);
-    printTree(tags);
+    setIsChecked('');
+    setSelectedTags([])
+    setArticles([])
+    printTree(tags)
   }
 
   const handleCheckBox = (e) => {
     setIsChecked({ ...isChecked, [e.target.id]: true });
     selectedTags.push(e.target.name)
-    tagIds.push(e.target.id)
     setTagCounter(tagCounter + 1)
   };
 
-  const escapeRegExp = (string) => {
-    return string.replace(/[.*+\-?^${​​}​​()|[\]\\]/g, "\\$&");
+  const handleSearchByAuthor = () => {
+    findAuthor(author)
+      .then((result) => result.json())
+      .then((response) => setArticles(response))
   };
 
-  const handleSearch = () => {
-    const sanitizedSearch = escapeRegExp(query);
-    findArticle(sanitizedSearch, searchContent)
-      .then(result => {
-        if (result.length <= 0) {
-          M.toast({ html: "No article found!" })
-        } else {
-          setArticles(result);
-        }
-      });
+  const getAllAuthors = () => {
+    getAuthors()
+      .then((response) => response.json())
+      .then((result) => result.filter((values) => values.author != ""))
+      .then((result) => populateAutocomplete(result))
+      .then((result) => {
+        var elems = document.querySelector(".autocomplete");
+        let options = {
+          data: result,
+          onAutocomplete: (value) => {
+            setAuthor(value);
+          },
+        };
+        M.Autocomplete.init(elems, options);
+      })
+  };
+
+  const populateAutocomplete = (result) => {
+    let authors = {};
+
+    result.forEach((element) => {
+      authors[element.author] = null;
+    });
+
+    return authors;
   };
 
   const handleSearchState = (state) => {
-    printTree(tags);
-    handleClearTags();
-    setShowSearch(state);
-  };
+    printTree(tags)
+    handleClearTags()
+    setShowSearch(state)
+    if (state == 2) {
+      getAllAuthors()
+    }
+  }
 
   return (
     <div>
       <h2 class="center">Search Article</h2>
       <div className="row">
-        <button
-          className="btn btn blue"
-          id="searchByTags"
-          onClick={() => handleSearchState(1)}
-        >
-          Search by tags
-        </button>
+        <button className="btn btn blue" id="searchByTags" onClick={() => handleSearchState(1)}>Search by tags</button>
         <div className="col">
-          <button
-            className="btn btn blue"
-            id="metaData"
-            onClick={() => handleSearchState(2)}
-          >
-            Search by metadata
-          </button>
+          <button className="btn btn blue" onClick={() => handleSearchState(2)}>Search by author</button>
         </div>
       </div>
       {(() => {
         switch (showSearch) {
           case 0:
-            return null;
+            return (
+              null
+            );
           case 1:
             return (
               <div>
                 <div class="row">
                   <h3>Select your tag(s)</h3>
                   {tagState.map((element, i) => {
-                    return (
-                      <div>
-                        <p>
-                          <label>
-                            <input
-                              name={element.tagName}
-                              type="checkbox"
-                              onClick={(e) => handleSelectTag(i, e)}
-                              id={element._id}
-                              checked={isChecked}
-                            />
-                            <span>{element.tagName}</span>
-                          </label>
-                        </p>
-                      </div>
-                    );
+                    return <div>
+                      <p>
+                        <label>
+                          <input name={element.tagName} type="checkbox" onClick={(e) => handleSelectTag(i, e)}
+                            id={element._id}
+                            checked={isChecked}
+                          />
+                          <span>{element.tagName}</span>
+                        </label>
+                      </p>
+                    </div>
                   })}
                 </div>
                 <div class="row">
@@ -151,7 +141,7 @@ export default function SearchArticle(props) {
                       }}
                     >
                       Search
-                    </button>
+              </button>
                   </div>
                   <button
                     className="waves-effect waves-light btn-small blue accent-2"
@@ -161,50 +151,44 @@ export default function SearchArticle(props) {
                     }}
                   >
                     Clear tags
-                  </button>
+              </button>
                 </div>
-                <h3>Selected tag(s):</h3>
-                {selectedTags.map((element) => {
-                  return <li>{element}</li>;
-                })}
               </div>
             );
           case 2:
             return (
               <div>
-                <div className="row">
-                  <h3>Search article</h3>
-                  <div class="s8 search input-field">
-                    <input
-                      type="text"
-                      id="searchArticle"
-                      placeholder="Search"
-                      onChange={(e) => setQuery(e.target.value)}
-                      value={query}
-                    />
+                 {/* <div>
+                  <div className="row">
+                    <h3>Search by author</h3>
+                    <div class="s8 search input-field">
+                      <input
+                        class="autocomplete"
+                        type="text"
+                        id="autocomplete-input"
+                        placeholder="Search"
+                        onChange={(e) => setAuthor(e.target.value)}
+                        value={author}
+                      />
+                    </div>
                   </div>
-                  <label>
-                    <input
-                      type="checkbox"
-                      id="contentSearch"
-                      onClick={() => setSearchContent(!searchContent)}
-                    />
-                    <span>Include search by content</span>
-                  </label>
-                </div>
-                <button
-                  className="waves-effect waves-light btn-small blue accent-2"
-                  id="searchButton"
-                  onClick={handleSearch}
-                >
-                  Search
-                </button>
+                  <button
+                    className="waves-effect waves-light btn-small blue accent-2"
+                    onClick={() => handleSearchByAuthor()}
+                  >
+                    Search
+                    </button>
+               </div> */}
               </div>
             );
           default:
             return null;
         }
       })()}
+      <h3>Selected tag(s):</h3>
+      {selectedTags.map((element) => {
+        return <li>{element}</li>
+      })}
       <div class="row">
         {articles.map((data) => {
           return (
@@ -221,12 +205,17 @@ export default function SearchArticle(props) {
                   <Link to={`/article/${data._id}`}>
                     <a id="seeArticle" class="btn green">
                       Read article
-                    </a>
+                            </a>
+                  </Link>
+                  <Link to={`/edit/${data._id}`}>
+                    <a id="editArticle" class="btn blue">
+                      Edit article
+                            </a>
                   </Link>
                   <p>
                     Tags:{" "}
                     {data.tags.map((element, i) => {
-                      return <li key={i}>{element + " "}</li>;
+                      return <li key={i}>{element + " "}</li>
                     })}
                   </p>
                 </div>
@@ -235,6 +224,6 @@ export default function SearchArticle(props) {
           );
         })}
       </div>
-    </div>
+    </div >
   );
 }

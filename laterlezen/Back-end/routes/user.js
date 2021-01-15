@@ -403,4 +403,40 @@ function handleUserNestedTags(data, userTags) {
   return usedids;
 }
 
+router.put(
+  "/tags",
+  passport.authenticate("jwt", {
+    session: false,
+  }),
+  (req, res) => {
+    let tags = req.body.tags;
+
+    User.findById({
+      _id: req.user._id,
+    })
+      .populate({
+        path: "articles",
+        match: {
+          "tags": tags
+        },
+      })
+      .exec((err, document) => {
+        if (err) {
+          res.status(500).json({
+            message: {
+              msgBody: "Error has occured",
+              msgError: true,
+            },
+          });
+        }
+        else {
+          res.status(200).json({
+            articles: document.articles,
+            authenticated: true,
+          });
+        }
+      });
+  }
+);
+
 module.exports = router;

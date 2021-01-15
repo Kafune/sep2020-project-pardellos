@@ -127,7 +127,6 @@ export async function searchArticleByTags(tagids) {
   };
   return fetch(serverFetchBase + `/user/tags`, fetchOptions)
   .then((response) => response.json())
-
 }
 
 export async function searchArticleByID(id) {
