@@ -1,7 +1,6 @@
 /*global chrome*/
 import React, { useState, useEffect } from "react";
-import TagList from "./TagsList";
-import { saveArticle, logoutUser } from "../serverCommunication";
+import { saveArticle, logoutUser, getWebSocket } from "../serverCommunication";
 import M from "materialize-css";
 
 export default function Article(props) {
@@ -10,22 +9,10 @@ export default function Article(props) {
   const [tags, setTags] = useState([]);
   const [currentTags, setCurrentTags] = useState([]);
   const [disableURLInput, setDisableURLInput] = useState(false);
-  // const [selectedTags, setSelectedTags] = useState([]);
-  // const [filteredTags, setFilteredTags] = useState([props.tags]);
-
-
 
   useEffect(() => {
-    handleGetUrl()
-  })
-  // useEffect(() => {
-  //   setFilteredTags([...props.tags])
-  // }, [props.tags]);
-
-  // useEffect(() => {
-  //   let filtered = props.tags.filter((name) => name.includes(filter));
-  //   setFilteredTags(filtered);
-  // }, [filter]);
+    handleGetUrl();
+  });
 
   useEffect(() => {
     handleTagChips();
@@ -51,25 +38,11 @@ export default function Article(props) {
     setUrl(e.target.value);
   }
 
-  // function handleFilterChange(e) {
-  //   e.preventDefault();
-  //   setFilter(e.target.value);
-  // }
-
   function handleTitleChange(e) {
     e.preventDefault();
     setTitle(e.target.value);
   }
 
-  // function handleTagSelect(value) {
-  //   if (selectedTags.includes(value)) {
-  //     setSelectedTags((oldArray) =>
-  //       oldArray.filter((currentValues) => currentValues !== value)
-  //     );
-  //   } else {
-  //     setSelectedTags((oldArray) => [...oldArray, value]);
-  //   }
-  // }
   function handleSaveArticle(url, title, email, tags) {
     let noErrors = true;
     if (
@@ -87,15 +60,19 @@ export default function Article(props) {
           });
         });
         if (noErrors === true) {
-          console.log(tags);
           saveArticle(url, title, email, tags)
             .then((response) => {
               response.json();
             })
-            .then((response) => {
-              console.log(response);
-            })
-            .then(() => M.toast({ html: "Article succesfully saved" }));
+            .then(() => M.toast({ html: "Article succesfully saved" }))
+            .then(() => {
+              let ws = getWebSocket();
+              let message = {
+                request: "refresh article data",
+                email: email,
+              };
+              ws.send(JSON.stringify(message));
+            });
         }
       } else {
         M.toast({ html: "Please enter atleast one tag" });
@@ -105,25 +82,19 @@ export default function Article(props) {
     }
   }
 
+  function handleLogout() {
+    logoutUser().then(() => {
+      props.handleEmailState("");
+      props.handleLoginState(false);
+    });
+  }
+
   function handleGetUrl(e) {
     e.preventDefault();
-  }
-
-
-  function handleLogout() {
-    logoutUser()
-      .then(() => {
-        props.handleEmailState("")
-        props.handleLoginState(false)
-      })
-  }
-
-  function handleGetUrl() {
     if (chrome.tabs !== undefined) {
       chrome.tabs.query({ active: true, lastFocusedWindow: true }, (tabs) => {
         let url = tabs[0].url;
         setUrl(url);
-        console.log(url);
       });
       setDisableURLInput(true);
     }
@@ -180,7 +151,7 @@ export default function Article(props) {
             }}
           >
             Add
-        </button>
+          </button>
           <h5>Used Tags:</h5>
           {tags.map((element, i) => {
             return (
@@ -207,7 +178,7 @@ export default function Article(props) {
             }}
           >
             Save
-        </button>
+          </button>
           <button
             id="ext-logout"
             className="waves-effect waves-light btn"
@@ -216,7 +187,7 @@ export default function Article(props) {
             }}
           >
             Logout
-        </button>
+          </button>
         </div>
       </div>
     </div>

@@ -1,6 +1,7 @@
 const port = 4000;
 const serverHostname = `${window.location.hostname}:${port}`;
 const serverFetchBase = `${window.location.protocol}//${serverHostname}`;
+let ws;
 
 export async function saveArticle(url, tags, title) {
   const body = {
@@ -18,9 +19,10 @@ export async function saveArticle(url, tags, title) {
     body: JSON.stringify(body),
   };
 
-  return fetch(serverFetchBase + `/user/article`, fetchOptions)
-  .then(response => response.json())
-
+  return fetch(
+    serverFetchBase + `/user/article`,
+    fetchOptions
+  ).then((response) => response.json());
 }
 
 export async function getAllArticles() {
@@ -63,8 +65,9 @@ export async function loginUser(email, password) {
     mode: "cors",
     body: JSON.stringify(body),
   };
-  return fetch(serverFetchBase + `/user/login`, fetchOptions)
-  .then((response) => response.json())
+  return fetch(serverFetchBase + `/user/login`, fetchOptions).then((response) =>
+    response.json()
+  );
 }
 
 export async function logoutUser() {
@@ -95,7 +98,7 @@ export async function registerUser(email, password, firstname, lastname) {
     mode: "cors",
     body: JSON.stringify(body),
   };
-  return fetch(serverFetchBase + `/user/register`, fetchOptions)
+  return fetch(serverFetchBase + `/user/register`, fetchOptions);
 }
 
 export async function checkAuthenticated() {
@@ -107,8 +110,10 @@ export async function checkAuthenticated() {
     credentials: "include",
     mode: "cors",
   };
-  return fetch(serverFetchBase + `/user/authenticated`, fetchOptions)
-  .then((response) => response.json())
+  return fetch(
+    serverFetchBase + `/user/authenticated`,
+    fetchOptions
+  ).then((response) => response.json());
 }
 
 export async function searchArticleByTags(tagids) {
@@ -125,9 +130,9 @@ export async function searchArticleByTags(tagids) {
     mode: "cors",
     body: JSON.stringify(body),
   };
-  return fetch(serverFetchBase + `/user/tags`, fetchOptions)
-  .then((response) => response.json())
-
+  return fetch(serverFetchBase + `/user/tags`, fetchOptions).then((response) =>
+    response.json()
+  );
 }
 
 export async function searchArticleByID(id) {
@@ -221,18 +226,6 @@ export async function confirmArticleChanges(
   return fetch(serverFetchBase + `/user/article`, fetchOptions);
 }
 
-export async function getAuthors() {
-  const fetchOptions = {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    credentials: "include",
-    mode: "cors",
-  };
-  return fetch(serverFetchBase + `/user/authors`, fetchOptions);
-}
-
 export async function findArticle(query, searchContent) {
   const body = {
     query: query,
@@ -244,12 +237,14 @@ export async function findArticle(query, searchContent) {
     headers: {
       "Content-Type": "application/json",
     },
-    credentials: 'include',
-    mode: 'cors',
-    body: JSON.stringify(body)
-  }
-  return fetch(serverFetchBase + `/user/search`, fetchOptions)
-  .then((response) => response.json())
+    credentials: "include",
+    mode: "cors",
+    body: JSON.stringify(body),
+  };
+  return fetch(
+    serverFetchBase + `/user/search`,
+    fetchOptions
+  ).then((response) => response.json());
 }
 
 export async function getSources() {
@@ -262,4 +257,35 @@ export async function getSources() {
     mode: "cors",
   };
   return fetch(serverFetchBase + `/user/sources`, fetchOptions);
+}
+
+export function onOpenSocket(email) {
+  let ws = new WebSocket(`ws://${serverHostname}`);
+  ws.onerror = function error() {};
+  ws.onopen = function open() {
+    let data = {
+      email: email,
+      request: "webappUserAdd",
+    };
+    ws.send(JSON.stringify(data));
+  };
+  ws.onclose = function close() {};
+  ws.onmessage = (msg) => {
+    switch (msg.data) {
+      case "connected":
+        break;
+      case "refresh article data":
+        window.location.reload();
+        break;
+      default:
+    }
+  };
+}
+
+export function getWebSocket() {
+  if (ws) {
+    return ws;
+  } else {
+    throw new Error("The websocket has not been opened yet.");
+  }
 }

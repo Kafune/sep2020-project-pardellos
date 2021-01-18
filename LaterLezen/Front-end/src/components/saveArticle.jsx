@@ -1,6 +1,8 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable jsx-a11y/anchor-is-valid */
+/* eslint-disable jsx-a11y/alt-text */
 import React, { useState, useEffect } from "react";
-import { saveArticle, checkAuthenticated } from "../serverCommunication";
-
+import { saveArticle } from "../serverCommunication";
 import M from "materialize-css";
 
 export default function SaveArticle(props) {
@@ -55,16 +57,6 @@ export default function SaveArticle(props) {
       secondaryPlaceholder: "+ Sub Tag...",
     });
   }
-
-  const handleAddFields = () => {
-    setTags([...tags, { tag: "" }]);
-  };
-
-  const handleRemoveFields = (index) => {
-    const values = [...tags];
-    values.splice(index, 1);
-    setTags(values);
-  };
 
   function handleSaveArticle(url, tags, title) {
     let noErrors = true;
@@ -172,11 +164,7 @@ export default function SaveArticle(props) {
         for (let index = 0; index < element.index; index++) {
           tagName = "‎‎‎‏‏‎-" + tagName;
         }
-        return (
-          <h4 key={i}>
-            {tagName + " "}
-          </h4>
-        );
+        return <h4 key={i}>{tagName + " "}</h4>;
       })}
       <button
         className="waves-effect waves-light btn-small blue accent-2"

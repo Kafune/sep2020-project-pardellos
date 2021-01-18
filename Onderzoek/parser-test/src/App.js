@@ -10,7 +10,6 @@ function App() {
       mode: 'no-cors'
     })
       .then(response => response.json())
-      .then(response => console.log(response))
       .catch(err => console.log('Error: ', err))
   }
   return (

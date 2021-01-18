@@ -1,19 +1,15 @@
-import React, { useEffect, useState } from "react";
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable jsx-a11y/anchor-is-valid */
+/* eslint-disable jsx-a11y/alt-text */
+import React, { useState } from "react";
 import { useHistory, Link } from "react-router-dom";
 import { loginUser } from "../serverCommunication";
-
 import M from "materialize-css";
 
 export default function Login(props) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const history = useHistory();
-
-  useEffect(() => {
-    if (props.appState.logged_in) {
-      history.push("/dashboard");
-    }
-  });
 
   function handleLoginUser(email, password) {
     loginUser(email, password)
@@ -25,6 +21,7 @@ export default function Login(props) {
           props.handleLastnameState(response.lastname);
           props.handleTagsState(response.tags);
           history.push("/dashboard");
+          window.location.reload();
         }
       })
       .catch(() => {

@@ -18,13 +18,10 @@ const server = http.createServer((req, res) => {
 
   mercury.parse(articleURL)
   .then(response => res.end(JSON.stringify(response)))
-  .catch(err => console.log('Error: ', err))
 
   extract(articleURL).then((article) => {
     res.end(JSON.stringify(article))
-  }).catch((err) => {
-    console.log(err);
-  });
+  })
 
 });
 

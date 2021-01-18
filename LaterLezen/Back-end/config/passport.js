@@ -34,11 +34,8 @@ passport.use(
     },
     (email, password, done) => {
       User.findOne({ email }, (err, user) => {
-        // Something wrong with DB
         if (err) return done(err);
-        // No user found
         if (!user) return done(null, false);
-        // User found, check password
         user.comparePassword(password, done);
       });
     }

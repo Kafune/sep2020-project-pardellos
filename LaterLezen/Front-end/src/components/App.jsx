@@ -1,7 +1,7 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
+/* eslint-disable jsx-a11y/alt-text */
 import React from "react";
 import { Link, Switch, Route } from "react-router-dom";
-import { checkAuthenticated } from "../serverCommunication";
-
 import Dashboard from "./Dashboard";
 import SaveArticle from "./saveArticle";
 import SearchArticle from "./searchArticle";
@@ -9,12 +9,11 @@ import Login from "./Login";
 import Register from "./Register";
 import Logout from "./Logout";
 import DisplayArticle from "./displayArticle";
-
 import "../../src/App.css";
 import M from "materialize-css";
-
 import background from "../img/pfp_background.jpg";
 import pfp from "../img/default_pfp.png";
+import { checkAuthenticated, onOpenSocket } from "../serverCommunication";
 
 export default class App extends React.Component {
   constructor(props) {
@@ -35,11 +34,12 @@ export default class App extends React.Component {
     checkAuthenticated()
       .then((response) => {
         if (response.isAuthenticated === true) {
-          this.handleLoginState(true);
           this.handleEmailState(response.user.email);
           this.handleFirstnameState(response.user.firstname);
           this.handleLastnameState(response.user.lastname);
           this.handleTagsState(response.user.tags);
+          onOpenSocket(response.user.email);
+          this.handleLoginState(true);
         }
       })
       .catch((e) => {

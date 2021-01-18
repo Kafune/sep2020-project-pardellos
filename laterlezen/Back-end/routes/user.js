@@ -5,7 +5,6 @@ const passportConfig = require("../config/passport");
 const JWT = require("jsonwebtoken");
 const Mercury = require("@postlight/mercury-parser");
 const ObjectID = require("mongodb").ObjectID;
-const { PerformanceObserver, performance } = require("perf_hooks");
 const { extract } = require("article-parser");
 const User = require("../models/User");
 const Article = require("../models/Article");
@@ -419,8 +418,6 @@ router.put(
   }),
   (req, res) => {
     let tags = req.body.tagids;
-    console.log(tags);
-
     User.findById({
       _id: req.user._id,
     })
@@ -479,12 +476,12 @@ router.get(
   "/authors/",
   passport.authenticate("jwt", {
     session: false,
-  }), async (req, res) => {
-
+  }),
+  async (req, res) => {
     User.findById({
-      _id: req.user._id
+      _id: req.user._id,
     })
-      .populate('articles', 'author')
+      .populate("articles", "author")
       .exec((err, document) => {
         if (err)
           res.status(500).json({
@@ -494,10 +491,11 @@ router.get(
             },
           });
         else {
-          res.send(document.articles)
+          res.send(document.articles);
         }
       });
-  });
+  }
+);
 
 function handleUserNestedTags(data, userTags) {
   let usedids = [];

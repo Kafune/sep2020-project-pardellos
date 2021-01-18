@@ -3,7 +3,7 @@ const User = require("../models/User");
 const puppeteer = require("puppeteer");
 
 xdescribe("Laterlezer extension e2e tests", () => {
-  let extensionBrowser,webBrowser, extensionPage, webPage;
+  let extensionBrowser, webBrowser, extensionPage, webPage;
 
   jest.setTimeout(100000);
   const testEmail = "extensietest@test.com";
@@ -32,7 +32,7 @@ xdescribe("Laterlezer extension e2e tests", () => {
       slowMo: 5,
       defaultViewport: null,
       devtools: false,
-      args: ["--window-size=700,800", "--window-position=0,0"]  
+      args: ["--window-size=700,800", "--window-position=0,0"],
     });
     extensionPage = await extensionBrowser.newPage();
     await extensionPage.goto("http://localhost:3001/");
@@ -42,7 +42,7 @@ xdescribe("Laterlezer extension e2e tests", () => {
       slowMo: 5,
       defaultViewport: null,
       devtools: false,
-      args: ["--window-size=700,800", "--window-position=730,0"]   
+      args: ["--window-size=700,800", "--window-position=730,0"],
     });
     webPage = await webBrowser.newPage();
     await webPage.goto("http://localhost:3000/login");
@@ -57,12 +57,11 @@ xdescribe("Laterlezer extension e2e tests", () => {
   });
 
   test("User logs in webapplication", async () => {
-
     await webPage.waitForTimeout(1500);
     await webPage.type("input[id=email]", testEmail);
     await webPage.type("input[id=password]", testPassword);
     await webPage.click('a[id="login"]');
-  });  
+  });
 
   test("User logs in with empty password", async () => {
     await extensionPage.type('input[class="email"]', testEmail);
@@ -103,9 +102,9 @@ xdescribe("Laterlezer extension e2e tests", () => {
   });
 
   test("User scrolls down in Dasboard", async () => {
-    for(let i = 0; i < 20; i++){
-        await webPage.keyboard.press('ArrowDown');
-      }
+    for (let i = 0; i < 20; i++) {
+      await webPage.keyboard.press("ArrowDown");
+    }
   });
 
   test("User logs out", async () => {

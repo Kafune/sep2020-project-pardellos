@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
-import { registerUser, loginUser } from "../serverCommunication";
+import { registerUser, loginUser, onOpenSocket } from "../serverCommunication";
 
 import M from "materialize-css";
 
@@ -50,8 +50,10 @@ export default function Register(props) {
                   props.handleEmailState(email);
                   props.handleFirstnameState(response.firstname);
                   props.handleLastnameState(response.lastname);
+                  onOpenSocket(email);
                   props.handleLoginState(true);
                   history.push("/dashboard");
+                  window.location.reload();
                 }
               });
             });

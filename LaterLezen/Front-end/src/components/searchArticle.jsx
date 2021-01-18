@@ -1,3 +1,5 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
+/* eslint-disable jsx-a11y/alt-text */
 import React, { useState, useEffect } from "react";
 import {
   searchArticleByTags,
@@ -23,7 +25,7 @@ export default function SearchArticle(props) {
     checkAuthenticated()
       .then((response) => {
         if (response.isAuthenticated === true) {
-          setTags(response.user.tags)
+          setTags(response.user.tags);
           setTagState(response.user.tags);
         }
       })
@@ -31,7 +33,6 @@ export default function SearchArticle(props) {
         M.toast({ html: "Unauthorized user, please login first" });
       });
   }, []);
-
 
   function printTree(treeNode, indent = "") {
     let tempArray = [];
@@ -49,10 +50,9 @@ export default function SearchArticle(props) {
   }
 
   function handleSearchArticleByTag() {
-    searchArticleByTags(tagIds)
-      .then((response) => {
-        setArticles(response.articles);
-      });
+    searchArticleByTags(tagIds).then((response) => {
+      setArticles(response.articles);
+    });
   }
 
   function handleClearTags() {
@@ -65,9 +65,9 @@ export default function SearchArticle(props) {
 
   const handleCheckBox = (e) => {
     setIsChecked({ ...isChecked, [e.target.id]: true });
-    selectedTags.push(e.target.name)
-    tagIds.push(e.target.id)
-    setTagCounter(tagCounter + 1)
+    selectedTags.push(e.target.name);
+    tagIds.push(e.target.id);
+    setTagCounter(tagCounter + 1);
   };
 
   const escapeRegExp = (string) => {
@@ -76,14 +76,13 @@ export default function SearchArticle(props) {
 
   const handleSearch = () => {
     const sanitizedSearch = escapeRegExp(query);
-    findArticle(sanitizedSearch, searchContent)
-      .then(result => {
-        if (result.length <= 0) {
-          M.toast({ html: "No article found!" })
-        } else {
-          setArticles(result);
-        }
-      });
+    findArticle(sanitizedSearch, searchContent).then((result) => {
+      if (result.length <= 0) {
+        M.toast({ html: "No article found!" });
+      } else {
+        setArticles(result);
+      }
+    });
   };
 
   const handleSearchState = (state) => {
