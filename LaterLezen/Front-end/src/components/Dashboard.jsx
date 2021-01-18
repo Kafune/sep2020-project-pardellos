@@ -1,17 +1,11 @@
 import React, { useState, useEffect } from "react";
-import {
-  getArticle,
-  getAllArticles,
-  getArticleByUser,
-  openWebSocket, getWebSocket
-} from "../serverCommunication";
-import { Link, Redirect } from "react-router-dom";
+import { getArticleByUser } from "../serverCommunication";
+import { Link } from "react-router-dom";
 
 export default function Dashboard(props) {
   const [firstname, setFirstname] = useState(props.firstname);
   const [lastname, setLastname] = useState(props.lastname);
   const [articles, setArticles] = useState(props.articles);
-  const [id, setId] = useState();
 
   useEffect(() => {
     handleGetArticles();
@@ -21,14 +15,6 @@ export default function Dashboard(props) {
     setFirstname(props.firstname);
     setLastname(props.lastname);
   }, [props.firstname][props.lastname]);
-
-  useEffect(() => {
-    let ws = openWebSocket();
-    ws.onopen = () => { console.log('connected') };
-    ws.onclose = () => { };
-    ws.onmessage = msg => (console.log(msg))
-    ws.onerror = () => { console.log('Error bij het openen van de websocket') };
-  }, []);
 
   function handleGetArticles() {
     getArticleByUser()
@@ -50,7 +36,9 @@ export default function Dashboard(props) {
               <div class="card blue-grey darken-1 dashboard-article">
                 <div class="card-image">
                   <img src={data.lead_image_url} />
-                  <span class="card-title">{data.title}</span>
+                  <div class="col">
+                    <span class="card-title">{data.title}</span>
+                  </div>
                 </div>
                 <div class="card-content">
                   <p>{data.excerpt}</p>
@@ -60,7 +48,7 @@ export default function Dashboard(props) {
                   <span>
                     Tags:{" "}
                     {data.tags.map((element, i) => {
-                      return <li key={i}>{element + " "}</li>
+                      return <li key={i}>{element + " "}</li>;
                     })}
                   </span>
                   <div class="row">

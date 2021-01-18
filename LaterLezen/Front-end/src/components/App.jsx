@@ -1,5 +1,7 @@
 import React from "react";
 import { Link, Switch, Route } from "react-router-dom";
+import { checkAuthenticated } from "../serverCommunication";
+
 import Dashboard from "./Dashboard";
 import SaveArticle from "./saveArticle";
 import SearchArticle from "./searchArticle";
@@ -7,18 +9,12 @@ import Login from "./Login";
 import Register from "./Register";
 import Logout from "./Logout";
 import DisplayArticle from "./displayArticle";
-import EditArticle from "./editArticle";
+
 import "../../src/App.css";
 import M from "materialize-css";
+
 import background from "../img/pfp_background.jpg";
 import pfp from "../img/default_pfp.png";
-
-import {
-  checkAuthenticated,
-  getArticleByUser,
-  getWebSocket,
-  openWebSocket,
-} from "../serverCommunication";
 
 export default class App extends React.Component {
   constructor(props) {
@@ -27,7 +23,7 @@ export default class App extends React.Component {
       firstname: "",
       lastname: "",
       email: "",
-      logged_in: false,
+      logged_in: "",
       articles: [],
       tags: [],
       theme: "default",
@@ -37,46 +33,18 @@ export default class App extends React.Component {
   componentDidMount() {
     M.AutoInit();
     checkAuthenticated()
-      .then((response) => response.json())
       .then((response) => {
         if (response.isAuthenticated === true) {
+          this.handleLoginState(true);
           this.handleEmailState(response.user.email);
           this.handleFirstnameState(response.user.firstname);
           this.handleLastnameState(response.user.lastname);
           this.handleTagsState(response.user.tags);
-          this.onOpenSocket(response.user.email);
-          this.handleLoginState(true);
         }
       })
       .catch((e) => {
         M.toast({ html: "Unauthorized user, please login first" });
       });
-  }
-
-  onOpenSocket(email) {
-    let ws = openWebSocket();
-    ws.onerror = function error() {
-      console.log("websocket error");
-    };
-    ws.onopen = function open() {
-      console.log("Websocket connection has been established");
-      console.log(email);
-      let data = {
-        email: email,
-        request: "webappUserAdd",
-      };
-      ws.send(JSON.stringify(data));
-    };
-    ws.onclose = function close() {};
-    ws.onmessage = (msg) =>  {
-      switch (msg.data) {
-        case "connected":
-          console.log(msg.data);
-          break;
-        case "refresh article data":
-          window.location.reload();
-      }
-    };
   }
 
   handleLoginState(value) {
@@ -121,7 +89,7 @@ export default class App extends React.Component {
         <nav>
           <div class="nav-wrapper blue accent-2">
             <div class="container">
-              <a class="brand-logo center">LaterLezen</a>
+              <div class="brand-logo center">LaterLezen</div>
             </div>
             {this.state.logged_in ? (
               <a
@@ -132,12 +100,12 @@ export default class App extends React.Component {
                 <i class="material-icons">menu</i>
               </a>
             ) : (
-              <ul class="right hide-on-med-and-down">
+              <ul class="right">
                 <li>
                   <Link to="/login">Login</Link>
                 </li>
                 <li>
-                  <Link to="register">Register</Link>
+                  <Link to="/register">Register</Link>
                 </li>
               </ul>
             )}
@@ -193,25 +161,7 @@ export default class App extends React.Component {
               </a>
             </li>
           </Link>
-          {/* <Link to="/tags">
-            <li>
-              <a>
-                <i class="material-icons" id="tags">
-                  label
-                </i>
-                Manage tags
-              </a>
-            </li>
-          </Link> */}
           <div class="inner-content">
-            <li>
-              <a>
-                <i class="material-icons" id="settings">
-                  settings
-                </i>
-                Settings
-              </a>
-            </li>
             <Link to="/logout">
               <li>
                 <a>
@@ -227,24 +177,38 @@ export default class App extends React.Component {
         <div class="container">
           <Switch>
             <Route path="/dashboard">
-              <Dashboard
-                email={this.state.email}
-                firstname={this.state.firstname}
-                lastname={this.state.lastname}
-                articles={this.state.articles}
-              />
+              {this.state.logged_in ? (
+                <Dashboard
+                  appState={this.state}
+                  firstname={this.state.firstname}
+                  lastname={this.state.lastname}
+                  articles={this.state.articles}
+                />
+              ) : (
+                ""
+              )}
             </Route>
             <Route path="/save/web">
-              <SaveArticle />
+              {this.state.logged_in ? (
+                <SaveArticle tags={this.state.tags} appState={this.state} />
+              ) : (
+                ""
+              )}
             </Route>
             <Route path="/search">
-              <SearchArticle
-                tags={this.state.tags}
-                articles={this.state.articles}
-              />
+              {this.state.logged_in ? (
+                <SearchArticle
+                  appState={this.state}
+                  tags={this.state.tags}
+                  articles={this.state.articles}
+                />
+              ) : (
+                ""
+              )}
             </Route>
             <Route path="/login">
               <Login
+                appState={this.state}
                 handleLoginState={setLoginStatus}
                 handleEmailState={setEmailState}
                 handleFirstnameState={setFirstnameState}
@@ -265,10 +229,11 @@ export default class App extends React.Component {
               <Logout handleLoginState={setLoginStatus} />
             </Route>
             <Route path="/article/:id">
-              <DisplayArticle articleID={this.state.article_id} />
-            </Route>
-            <Route path="/edit/:id">
-              <EditArticle />
+              {this.state.logged_in ? (
+                <DisplayArticle articleID={this.state.article_id} />
+              ) : (
+                ""
+              )}
             </Route>
           </Switch>
         </div>

@@ -309,7 +309,7 @@ xdescribe("Laterlezer e2e tests", () => {
     await thePage.click('button[id="searchButton"]');
     await thePage.waitForTimeout(3500);
     await thePage.waitForTimeout(1000);
-    for (let i = 0; i < 60; i++) { 
+    for (let i = 0; i < 60; i++) {
       await thePage.keyboard.press("ArrowDown");
     }
     await thePage.waitForTimeout(2500);

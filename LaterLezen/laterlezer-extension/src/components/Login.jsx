@@ -1,12 +1,11 @@
 /*global chrome*/
-import React, { useState, useEffect,getWebSocket } from "react";
+import React, { useState, useEffect } from "react";
 import M from "materialize-css";
-import { loginUser, onOpenSocket } from "../serverCommunication";
+import { loginUser } from "../serverCommunication";
 
 export default function Login(props) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-
 
   function handleLoginUser(email, password) {
     loginUser(email, password)
@@ -15,7 +14,6 @@ export default function Login(props) {
         if (response.isAuthenticated === true) {
           props.handleEmailState(email);
           props.setTags(response.tags);
-          onOpenSocket(email);
           props.handleLoginState(true);
         }
       })

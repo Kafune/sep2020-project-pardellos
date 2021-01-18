@@ -2,15 +2,10 @@
 import React from "react";
 import Login from "./Login";
 import Article from "./Article";
-import "materialize-css/dist/css/materialize.min.css";
-import M from "materialize-css";
+import 'materialize-css/dist/css/materialize.min.css';
+import M from "materialize-css";  
 
-import {
-  checkAuthenticated,
-  openWebSocket,
-  getWebSocket,
-  onOpenSocket
-} from "../serverCommunication";
+import { checkAuthenticated } from "../serverCommunication";
 
 export default class App extends React.Component {
   constructor(props) {
@@ -24,17 +19,18 @@ export default class App extends React.Component {
 
   componentDidMount() {
     M.AutoInit();
-    console.log(this.state);
+    console.log(this.state)
     checkAuthenticated()
       .then((response) => response.json())
-      .then((response) => {
-        console.log(response);
+      .then(response => {
+        console.log(response)
         if (response.isAuthenticated === true) {
+          this.handleLoginState(true);
           this.handleEmailState(response.user.email);
           this.handleTagState(response.user.tags);
-          onOpenSocket(this.state.email);
-          this.handleLoginState(true);
         }
+        console.log(this.state)
+
       })
       .catch((e) => {
         M.toast({ html: "Unauthorized user, please login first" });
@@ -73,21 +69,10 @@ export default class App extends React.Component {
 
     return (
       <div class="container">
-        {this.state.isLoggedIn === true ? (
-          <Article
-            tags={this.state.tags}
-            email={this.state.email}
-            handleEmailState={currentEmailState}
-            handleLoginState={currentLoginState}
-            isLoggedIn={this.state.isLoggedIn}
-          />
-        ) : (
-          <Login
-            setTags={setTags}
-            handleLoginState={currentLoginState}
-            handleEmailState={currentEmailState}
-          />
-        )}
+        {this.state.isLoggedIn === true
+          ? <Article tags={this.state.tags} email={this.state.email} handleEmailState={currentEmailState} handleLoginState={currentLoginState} />
+          : <Login setTags={setTags} handleLoginState={currentLoginState} handleEmailState={currentEmailState} />
+        }
       </div>
     );
   }

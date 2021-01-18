@@ -1,108 +1,63 @@
-const baseurl = `http://localhost:4000`
-const port = 4000;
-const serverHostname = `${window.location.hostname}:${port}`;
-let ws;
+const baseurl = `http://localhost:4000`;
 
 export async function loginUser(email, password) {
-
   const body = {
     email: email,
-    password: password
-  }
+    password: password,
+  };
 
   const fetchOptions = {
-    method: 'POST',
+    method: "POST",
     headers: {
-      'Content-Type': 'application/json'
+      "Content-Type": "application/json",
     },
-    credentials: 'include',
-    mode: 'cors',
-    body: JSON.stringify(body)
-  }
-  return fetch(baseurl + `/user/login`, fetchOptions)
+    credentials: "include",
+    mode: "cors",
+    body: JSON.stringify(body),
+  };
+  return fetch(baseurl + `/user/login`, fetchOptions);
 }
 
 export async function checkAuthenticated() {
   const fetchOptions = {
-    method: 'GET',
+    method: "GET",
     headers: {
-      'Content-Type': 'application/json'
+      "Content-Type": "application/json",
     },
-    credentials: 'include',
-    mode: 'cors'
-  }
-  return fetch(baseurl + `/user/authenticated`, fetchOptions)
+    credentials: "include",
+    mode: "cors",
+  };
+  return fetch(baseurl + `/user/authenticated`, fetchOptions);
 }
 
 export async function logoutUser() {
   const fetchOptions = {
-    method: 'GET',
+    method: "GET",
     headers: {
-      'Content-Type': 'application/json'
+      "Content-Type": "application/json",
     },
-    credentials: 'include',
-    mode: 'cors'
-  }
-  return fetch(baseurl + `/user/logout`, fetchOptions)
+    credentials: "include",
+    mode: "cors",
+  };
+  return fetch(baseurl + `/user/logout`, fetchOptions);
 }
 export async function saveArticle(url, title, email, tags) {
   const body = {
     url: url,
     title: title,
     email: email,
-    tags: tags
+    tags: tags,
   };
   console.log(email);
   const fetchOptions = {
-    method: 'POST',
+    method: "POST",
     headers: {
-      'Content-Type': 'application/json'
+      "Content-Type": "application/json",
     },
-    credentials: 'include',
-    mode: 'cors',
-    body: JSON.stringify(body)
-  }
-
-  return fetch(baseurl + `/user/article`, fetchOptions)
-}
-
-// Websocket initialization
-export function openWebSocket() {
-  if (ws){
-    ws.onerror = null;
-    ws.onopen  = null;
-    ws.onclose = null;
-    ws.close();
-  }
-  console.log("Opening socket for", `ws://${serverHostname}`);
-  ws = new WebSocket(`ws://localhost:4000`);
-  return ws
-}
-
-export function getWebSocket() {
-  if( ws ) {
-    return ws;
-  }
-  else {
-    throw new Error("The websocket has not been opened yet.")
-  }
-}
-
-export function onOpenSocket() {
-  let ws = openWebSocket();
-  ws.onerror = function error() {
-    console.log("websocket error");
+    credentials: "include",
+    mode: "cors",
+    body: JSON.stringify(body),
   };
-  ws.onopen = function open() {
-    console.log("Websocket connection has been established");
-  };
-  ws.onclose = function close() {
-    console.log("Websocket connection has been closed.");
-  };
-  ws.onmessage = function message(msg) {
-    switch (msg.data) {
-      case "connected":
-        console.log("Hai");
-    }
-  };
+
+  return fetch(baseurl + `/user/article`, fetchOptions);
 }
