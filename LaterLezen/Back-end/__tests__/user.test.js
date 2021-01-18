@@ -3,7 +3,7 @@ const passport = require("passport");
 const User = require("../models/User");
 const Article = require("../models/Article");
 
-xdescribe("user related unit tests", () => {
+describe("user related unit tests", () => {
   const testArticle = {
     tags: [],
     url:

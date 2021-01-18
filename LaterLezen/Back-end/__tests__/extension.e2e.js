@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 const User = require("../models/User");
 const puppeteer = require("puppeteer");
 
-xdescribe("Laterlezer extension e2e tests", () => {
+describe("Laterlezer extension e2e tests", () => {
   let extensionBrowser, webBrowser, extensionPage, webPage;
 
   jest.setTimeout(100000);
@@ -26,6 +26,10 @@ xdescribe("Laterlezer extension e2e tests", () => {
       firstname: testFirstName,
       lastname: testLastName,
       password: testPassword,
+      tags: {
+        tagName: "/",
+        subTags: [],
+      },
     });
     extensionBrowser = await puppeteer.launch({
       headless: false,

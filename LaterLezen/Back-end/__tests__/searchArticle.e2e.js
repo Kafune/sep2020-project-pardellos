@@ -1,11 +1,31 @@
 const fetch = require("node-fetch");
+const mongoose = require("mongoose");
 const puppeteer = require("puppeteer");
+const User = require("../models/User");
 jest.setTimeout(250000);
 
 xdescribe("Laterlezer e2e tests", () => {
   it("Test Search Article component", () => {});
   let theBrowser, thePage;
   beforeAll(async () => {
+    await mongoose.connect(
+      "mongodb+srv://Glenn:LaterLezen@laterlezen.tkmyn.mongodb.net/LaterLezen?retryWrites=true&w=majority",
+      {
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+        useFindAndModify: false,
+      }
+    );
+    await User.create({
+      email: "b@b.nl",
+      firstname: "a",
+      lastname: "b",
+      password: "12345678",
+      tags: {
+        tagName: "/",
+        subTags: [],
+      },
+    });
     theBrowser = await puppeteer.launch({
       headless: false,
       slowMo: 1,
@@ -17,6 +37,8 @@ xdescribe("Laterlezer e2e tests", () => {
   });
 
   afterAll(async () => {
+    await User.deleteOne({ email: "b@b.nl" });
+    await mongoose.disconnect();
     await fetch("http://localhost:4000/testing/reset");
     await theBrowser.close();
   });

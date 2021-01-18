@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 const Article = require("../models/Article");
 const User = require("../models/User");
 
-xdescribe("Article Model Tests", () => {
+describe("Article Model Tests", () => {
   beforeAll(async () => {
     await mongoose.connect(
       "mongodb+srv://Glenn:LaterLezen@laterlezen.tkmyn.mongodb.net/LaterLezen?retryWrites=true&w=majority",
