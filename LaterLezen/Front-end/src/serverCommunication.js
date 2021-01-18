@@ -1,6 +1,7 @@
 const port = 4000;
 const serverHostname = `${window.location.hostname}:${port}`;
 const serverFetchBase = `${window.location.protocol}//${serverHostname}`;
+let ws;
 
 export async function saveArticle(url, tags, title) {
   const body = {
@@ -8,6 +9,7 @@ export async function saveArticle(url, tags, title) {
     tags: tags,
     title: title,
   };
+  console.log(tags)
   const fetchOptions = {
     method: "POST",
     headers: {
@@ -18,9 +20,7 @@ export async function saveArticle(url, tags, title) {
     body: JSON.stringify(body),
   };
 
-  return fetch(serverFetchBase + `/user/article`, fetchOptions)
-  .then(response => response.json())
-
+  return fetch(serverFetchBase + `/user/article`, fetchOptions);
 }
 
 export async function getAllArticles() {
@@ -33,7 +33,8 @@ export async function getAllArticles() {
     mode: "cors",
   };
 
-  return fetch(serverFetchBase + `/user/articles`, fetchOptions);
+  return fetch(serverFetchBase + `/user/articles`, fetchOptions)
+ 
 }
 
 export async function getArticleByUser() {
@@ -45,7 +46,7 @@ export async function getArticleByUser() {
     credentials: "include",
     mode: "cors",
   };
-  return fetch(serverFetchBase + `/user/articles`, fetchOptions);
+  return fetch(serverFetchBase + `/user/articles`, fetchOptions)
 }
 
 export async function loginUser(email, password) {
@@ -63,8 +64,7 @@ export async function loginUser(email, password) {
     mode: "cors",
     body: JSON.stringify(body),
   };
-  return fetch(serverFetchBase + `/user/login`, fetchOptions)
-  .then((response) => response.json())
+  return fetch(serverFetchBase + `/user/login`, fetchOptions);
 }
 
 export async function logoutUser() {
@@ -95,7 +95,7 @@ export async function registerUser(email, password, firstname, lastname) {
     mode: "cors",
     body: JSON.stringify(body),
   };
-  return fetch(serverFetchBase + `/user/register`, fetchOptions)
+  return fetch(serverFetchBase + `/user/register`, fetchOptions);
 }
 
 export async function checkAuthenticated() {
@@ -107,8 +107,7 @@ export async function checkAuthenticated() {
     credentials: "include",
     mode: "cors",
   };
-  return fetch(serverFetchBase + `/user/authenticated`, fetchOptions)
-  .then((response) => response.json())
+  return fetch(serverFetchBase + `/user/authenticated`, fetchOptions);
 }
 
 export async function searchArticleByTags(tagids) {
@@ -125,9 +124,7 @@ export async function searchArticleByTags(tagids) {
     mode: "cors",
     body: JSON.stringify(body),
   };
-  return fetch(serverFetchBase + `/user/tags`, fetchOptions)
-  .then((response) => response.json())
-
+  return fetch(serverFetchBase + `/user/tags`, fetchOptions);
 }
 
 export async function searchArticleByID(id) {
@@ -139,10 +136,7 @@ export async function searchArticleByID(id) {
     credentials: "include",
     mode: "cors",
   };
-  return fetch(
-    serverFetchBase + `/user/article/${id}`,
-    fetchOptions
-  ).then((response) => response.json());
+  return fetch(serverFetchBase + `/articles/article/${id}`, fetchOptions);
 }
 
 export async function deleteArticleByID(id) {
@@ -178,7 +172,7 @@ export async function savePreference(theme) {
   return fetch(serverFetchBase + `/user/preference/`, fetchOptions);
 }
 
-export async function requestPreferences() {
+export async function getPreference() {
   const fetchOptions = {
     method: "GET",
     headers: {
@@ -187,10 +181,7 @@ export async function requestPreferences() {
     credentials: "include",
     mode: "cors",
   };
-  return fetch(
-    serverFetchBase + `/user/preference/`,
-    fetchOptions
-  ).then((response) => response.json());
+  return fetch(serverFetchBase + `/user/preference/`, fetchOptions);
 }
 
 export async function confirmArticleChanges(
@@ -223,43 +214,90 @@ export async function confirmArticleChanges(
 
 export async function getAuthors() {
   const fetchOptions = {
-    method: "GET",
+    method: 'GET',
     headers: {
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json'
     },
-    credentials: "include",
-    mode: "cors",
-  };
-  return fetch(serverFetchBase + `/user/authors`, fetchOptions);
+    credentials: 'include',
+    mode: 'cors'
+  }
+  return fetch(serverFetchBase + `/articles/authors`, fetchOptions)
 }
 
 export async function findArticle(query, searchContent) {
   const body = {
     query: query,
-    searchContent: searchContent,
-  };
+    searchContent: searchContent
+  }
 
   const fetchOptions = {
-    method: "PUT",
+    method: 'PUT',
     headers: {
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json'
     },
     credentials: 'include',
     mode: 'cors',
     body: JSON.stringify(body)
   }
-  return fetch(serverFetchBase + `/user/search`, fetchOptions)
-  .then((response) => response.json())
+  return fetch(serverFetchBase + `/articles/search`, fetchOptions)
 }
 
 export async function getSources() {
   const fetchOptions = {
-    method: "GET",
+    method: 'GET',
     headers: {
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json'
     },
-    credentials: "include",
-    mode: "cors",
+    credentials: 'include',
+    mode: 'cors'
+  }
+  return fetch(serverFetchBase + `/articles/sources`, fetchOptions)
+}
+
+// Websocket initialization
+export function openWebSocket() {
+  if (ws){
+    ws.onerror = null;
+    ws.onopen  = null;
+    ws.onclose = null;
+    ws.close();
+  }
+  console.log("Opening socket for", `ws://${serverHostname}`);
+  ws = new WebSocket(`ws://${serverHostname}`);
+  return ws
+}
+
+export function onOpenSocket(email) {
+  let ws = openWebSocket();
+  ws.onerror = function error() {
+    console.log("websocket error");
   };
-  return fetch(serverFetchBase + `/user/sources`, fetchOptions);
+  ws.onopen = function open() {
+    console.log("Websocket connection has been established");
+    console.log(email);
+    let data = {
+      email: email,
+      request: "webappUserAdd",
+    };
+    ws.send(JSON.stringify(data));
+  };
+  ws.onclose = function close() {};
+  ws.onmessage = (msg) =>  {
+    switch (msg.data) {
+      case "connected":
+        console.log(msg.data);
+        break;
+      case "refresh article data":
+        window.location.reload();
+    }
+  };
+}
+
+export function getWebSocket() {
+  if( ws ) {
+    return ws;
+  }
+  else {
+    throw new Error("The websocket has not been opened yet.")
+  }
 }
