@@ -89,8 +89,7 @@ export default function Article(props) {
     });
   }
 
-  function handleGetUrl(e) {
-    e.preventDefault();
+  function handleGetUrl() {
     if (chrome.tabs !== undefined) {
       chrome.tabs.query({ active: true, lastFocusedWindow: true }, (tabs) => {
         let url = tabs[0].url;
