@@ -46,9 +46,6 @@ Aangezien het lezen van de code van de LaterLezer niet het hele verhaal verteld 
     + [Back-end server](#back-end-server)
     + [Extensie](#extensie-1)
 
-<small><i><a href='http://ecotrust-canada.github.io/markdown-toc/'>Table of contents generated with markdown-toc</a></i></small>
-
-
 
 ## Context
 
